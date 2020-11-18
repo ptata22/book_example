@@ -1,6 +1,16 @@
 book_filename: "book_example"
-delete_merged_file: true
 language:
   ui:
     chapter_name: "Chapter "
 output_dir: docs
+css: style.css
+new_session: yes # this knits each chapter separately in a new session
+delete_merged_file: true
+rmd_files: [ "index.Rmd",
+             "01-intro.Rmd",
+             "02-literature.Rmd",
+             "03-method.Rmd",
+             "04-application.Rmd",
+             "05-summary.Rmd",
+             "06-references.Rmd",
+            ]
