@@ -2,7 +2,12 @@ fig:nice-fig
 tab:nice-tab
 prerequisites
 intro
-literature
+overview-of-analysis-datasets
+adae-adverse-events-analysis-data
+adlbhy-laboratory-results-hys-rule-analysis-data
+adqsadas-adas-cog-data
+adqscibc-cibc-data
+adqsnpix-npi-x-item-analysis-data
 methods
 applications
 example-one

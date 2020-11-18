@@ -24,7 +24,7 @@
 <meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2020-11-08" />
+<meta name="date" content="2020-11-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="literature.html"/>
+<link rel="next" href="overview-of-analysis-datasets.html"/>
 <script src="libs/header-attrs-2.4.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -137,7 +137,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
 <li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
+<li class="chapter" data-level="3" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html"><i class="fa fa-check"></i><b>3</b> <strong>Overview of Analysis Datasets</strong></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html#adae-adverse-events-analysis-data"><i class="fa fa-check"></i><b>3.1</b> ADAE – Adverse Events Analysis Data</a></li>
+<li class="chapter" data-level="3.2" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html#adlbhy-laboratory-results-hys-rule-analysis-data"><i class="fa fa-check"></i><b>3.2</b> ADLBHY – Laboratory Results Hy’s Rule Analysis Data</a></li>
+<li class="chapter" data-level="3.3" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html#adqsadas-adas-cog-data"><i class="fa fa-check"></i><b>3.3</b> ADQSADAS – ADAS-COG Data</a></li>
+<li class="chapter" data-level="3.4" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html#adqscibc-cibc-data"><i class="fa fa-check"></i><b>3.4</b> ADQSCIBC – CIBC Data</a></li>
+<li class="chapter" data-level="3.5" data-path="overview-of-analysis-datasets.html"><a href="overview-of-analysis-datasets.html#adqsnpix-npi-x-item-analysis-data"><i class="fa fa-check"></i><b>3.5</b> ADQSNPIX – NPI-X Item Analysis Data</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
 <li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
 <ul>
@@ -170,8 +177,121 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 2</span> Introduction</h1>
 <p>You can label chapter and section titles using <code>{#label}</code> after them, e.g., we can reference Chapter <a href="intro.html#intro">2</a>. If you do not manually label them, there will be automatic labels anyway, e.g., Chapter <a href="methods.html#methods">4</a>.</p>
 <p>Figures and tables with captions will be placed in <code>figure</code> and <code>table</code> environments, respectively.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="intro.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
-<span id="cb2-2"><a href="intro.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<p><strong><em>What is R?</em></strong> *</p>
+<p>R is a free language and environment for statistical computing and graphics. You can perform a variety of tasks using R language. Some are as follows -</p>
+<ul>
+<li>Exploring and Manipulating Data</li>
+<li>Building and validating predictive models</li>
+<li>Applying machine learning and text mining algorithms</li>
+<li>Creating visual appealing graphs</li>
+<li>Connecting with Databases</li>
+<li>Building online dynamic reports or dashboards</li>
+<li>Send emails or push notification via R</li>
+</ul>
+<p><strong><em>What is RStudio and its benefits over standard R?</em></strong></p>
+<p>RStudio was built to make your life easy as a R programmer. It is available in open source for FREE. Unlike standard R, it supports various premium features such as intelligent code completion, syntax highlighting, structured R documentation, interactive debugging tool etc.</p>
+<p><strong><em>Some Useful RStudio Shortcuts</em></strong></p>
+<ol style="list-style-type: decimal">
+<li>Press CTRL + Enter to submit code</li>
+<li>Press CTRL + SHIFT + C to comment/ uncomment code</li>
+<li>Press CTRL + SHIFT + N to create a new R script</li>
+</ol>
+<p>###Basics of R Programming###</p>
+<ol style="list-style-type: decimal">
+<li>Write your first equation in R Enter 5*3 in the RStudio code editor window and hit CTRL + ENTER in RStudio (or press F5 in standard R)</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="intro.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Write your first equation in R </span></span>
+<span id="cb2-2"><a href="intro.html#cb2-2" aria-hidden="true" tabindex="-1"></a> <span class="dv">5</span> <span class="sc">*</span> <span class="dv">3</span> </span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p>The [1] tells you the resulting value is the first result</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>The ‘#’ at the beginning of a line signifies a ‘comment’ Try Shift+Cntrl+c on Rstudio NOTE : ‘###’ has different meaning in R-Markdown syntax</p></li>
+<li><p>The operator ‘&lt;-’ is equivalent to ‘=’ sign, you can use either of the operators. NOTE: ‘&lt;-’ is preferred to ‘=’ in R as assignment operator</p></li>
+<li><p>setwd() function assigns a working directory ‘setwd()’ is similar to ‘Libname’ in SAS envirnoment</p></li>
+<li><p>getwd() function shows working directory</p></li>
+<li><p>R uses ‘NA’</p></li>
+</ol>
+<pre class="{.{.{.{.{.{.{.{r#setwd(\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\&quot;c:/users/tatav/onedrive/desktop/pharama_book/book_example/book_example\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\&quot;)}}}}}}}"><code>getwd()</code></pre>
+<p><strong>Study CDISCPilot01 Guide to Analysis Data</strong></p>
+<p><strong>Note on Input Data Sources</strong></p>
+<p>The analysis files for this study were derived from the submitted SDTM files. SDTM files were prepared from CRF data according to version 3.1.2 of the SDTM IG (with amendment 1).</p>
+<p>No non-CRF or non-SDTM data were used to create the ADaM data.</p>
+<p>The datasets include only subjects who were enrolled in the study. Subjects who failed screening criteria were not included in analysis datasets.</p>
+<p><strong>Where to Find Key Data</strong></p>
+<p><strong>Demographics and Populations</strong></p>
+<p>The ADSL (Subject Level Analysis Data) dataset contains all subject-level variables for demographics, subject characteristics, and population flags.</p>
+<p><u><strong>Safety</strong></u></p>
+<p>Key safety data are found in the datasets</p>
+<ul>
+<li><p>ADAE (Adverse Events Analysis Data),</p></li>
+<li><p>ADLBC (Laboratory Results Chemistry Analysis Data),</p></li>
+<li><p>ADLBH (Laboratory Results Hematology Analysis Data),</p></li>
+<li><p>ADLBHY (Laboratory Results Hy’s Rule Analysis Data),</p></li>
+<li><p>ADVS (Vital Signs Analysis Dataset).</p></li>
+<li><p>ADTTE is specifically for safety analyses of the time to the first dermatologic AE. Dermatologic AEs are considered an adverse event of special interest.</p>
+<p><u><strong>Efficacy</strong></u></p>
+<p>Study CDISCPilot01 has two primary endpoints,</p>
+<p>the Alzheimer’s Disease Assessment Scale - Cognitive Subscale, total of 11 items [ADAS-Cog (11)] at Week 24 and the Video-referenced Clinician’s Interview-based Impression of Change (CIBIC+) at Week 24.</p>
+<blockquote>
+<p><strong><code>All ADAS-Cog data, including the first primary endpoint, can be found in the dataset ADQSADAS.</code></strong></p>
+<p><strong><code>All CIBIC+ data, including the second primary endpoint, can be found in the dataset ADQSCIBC.</code></strong></p>
+<p><strong><code>Mean Revised Neuropsychiatric Inventory (NPI-X) data are considered secondary. These data can be found in the dataset ADQSNPIX.</code></strong></p>
+</blockquote>
+<p><strong>Protocol Deviations</strong></p>
+<p>Protocol deviations were not reported in the source database and have not been incorporated into the SDTM data. As a result, such data do not exist among the analysis data.</p>
+<p><strong>Core Variables</strong></p>
+<p>The following core variables were merged from ADSL into all analysis datasets: <u>STUDYID, SITEID, USUBJID, TRTSDT, TRTEDT, AGE, AGEGR1, AGEGR1N, SEX, RACE, and RACEN.</u></p>
+<p>The table below summarizes the treatment variables and population flags that exist among different groups of analysis requirements:</p>
+<table>
+<colgroup>
+<col width="29%" />
+<col width="32%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dataset(s)</th>
+<th>Treatment Variables</th>
+<th><strong>Population Flags</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ADSL</td>
+<td>TRT01P, TRT01PN, TRT01A,TRT01AN</td>
+<td>SAFFL, DSRAEFL,ITTFL, EFFFL,COMP24FL</td>
+</tr>
+<tr class="even">
+<td>ADAE</td>
+<td>TRTA, TRTAN</td>
+<td>SAFFL</td>
+</tr>
+<tr class="odd">
+<td>ADLBH,ADLBC, ADLBHY</td>
+<td>TRTP, TRTPN, TRTA,TRTAN</td>
+<td>SAFFL,COMP24FL,DSRAEFL</td>
+</tr>
+<tr class="even">
+<td>ADVS</td>
+<td>TRTP, TRTPN, TRTA,TRTAN</td>
+<td>SAFFL</td>
+</tr>
+<tr class="odd">
+<td>ADTTE</td>
+<td>TRTP, TRTA, TRTAN</td>
+<td>SAFFL</td>
+</tr>
+<tr class="even">
+<td>ADQSADAS, ADQSNPIX, ADQSCIBC</td>
+<td>TRTP, TRTPN</td>
+<td>ITTFL, EFFFL,COMP24FL</td>
+</tr>
+</tbody>
+</table>
+<p>Treatment variable values are based on the numeric dose level (i.e., 0, 54, 81) to avoid the need for a separate variable that contains the treatment dose.</p></li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="intro.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
+<span id="cb5-2"><a href="intro.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:nice-fig"></span>
 <img src="book_example_files/figure-html/nice-fig-1.png" alt="Here is a nice figure!" width="80%" />
 <p class="caption">
@@ -179,10 +299,10 @@ Figure 2.1: Here is a nice figure!
 </p>
 </div>
 <p>Reference a figure by its code chunk label with the <code>fig:</code> prefix, e.g., see Figure <a href="intro.html#fig:nice-fig">2.1</a>. Similarly, you can reference tables generated from <code>knitr::kable()</code>, e.g., see Table <a href="intro.html#tab:nice-tab">2.1</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="intro.html#cb3-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb3-2"><a href="intro.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(iris, <span class="dv">20</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
-<span id="cb3-3"><a href="intro.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
-<span id="cb3-4"><a href="intro.html#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="intro.html#cb6-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb6-2"><a href="intro.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(iris, <span class="dv">20</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
+<span id="cb6-3"><a href="intro.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-4"><a href="intro.html#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <table>
 <caption><span id="tab:nice-tab">Table 2.1: </span>Here is a nice table!</caption>
 <thead>
@@ -337,8 +457,8 @@ Figure 2.1: Here is a nice figure!
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="intro.html#cb4-1" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>adsl </span>
-<span id="cb4-2"><a href="intro.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(adsl)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="intro.html#cb7-1" aria-hidden="true" tabindex="-1"></a>adsl <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>adsl </span>
+<span id="cb7-2"><a href="intro.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(adsl)</span></code></pre></div>
 <pre><code>##        studyid     usubjid subjid siteid sitegr1                  arm
 ## 1 CDISCPILOT01 01-701-1015   1015    701     701              Placebo
 ## 2 CDISCPILOT01 01-701-1023   1023    701     701              Placebo
@@ -397,7 +517,7 @@ Figure 2.1: Here is a nice figure!
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="literature.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="overview-of-analysis-datasets.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
