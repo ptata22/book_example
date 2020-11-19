@@ -2,12 +2,15 @@ fig:nice-fig
 tab:nice-tab
 prerequisites
 intro
+study-cdisc-pilot01-guide
 overview-of-analysis-datasets
 adae-adverse-events-analysis-data
 adlbhy-laboratory-results-hys-rule-analysis-data
 adqsadas-adas-cog-data
 adqscibc-cibc-data
 adqsnpix-npi-x-item-analysis-data
+adam-datasets-for-study-cdisc-pilot-01
+subject-level-analysis-adsl
 methods
 applications
 example-one

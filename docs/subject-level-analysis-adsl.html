@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>8 Applications | A Minimal Book Example</title>
+  <title>6 Subject-Level Analysis (ADSL) | A Minimal Book Example</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="8 Applications | A Minimal Book Example" />
+  <meta property="og:title" content="6 Subject-Level Analysis (ADSL) | A Minimal Book Example" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8 Applications | A Minimal Book Example" />
+  <meta name="twitter:title" content="6 Subject-Level Analysis (ADSL) | A Minimal Book Example" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="methods.html"/>
-<link rel="next" href="final-words.html"/>
+<link rel="prev" href="adam-datasets-for-study-cdisc-pilot-01.html"/>
+<link rel="next" href="methods.html"/>
 <script src="libs/header-attrs-2.4.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -176,24 +176,427 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="applications" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> Applications</h1>
-<p>Some <em>significant</em> applications are demonstrated in this chapter.</p>
-<div id="example-one" class="section level2" number="8.1">
-<h2><span class="header-section-number">8.1</span> Example one</h2>
-</div>
-<div id="example-two" class="section level2" number="8.2">
-<h2><span class="header-section-number">8.2</span> Example two</h2>
+<div id="subject-level-analysis-adsl" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Subject-Level Analysis (ADSL)</h1>
+<table>
+<tbody>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="2%" />
+<col width="6%" />
+<col width="1%" />
+<col width="4%" />
+<col width="1%" />
+<col width="83%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Label</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Code List / Controlled Terms</strong></th>
+<th><strong>Derived</strong></th>
+<th><strong>Source/Derivation/Comments</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>STUDYID</td>
+<td>Study Identifier</td>
+<td>text</td>
+<td></td>
+<td>1</td>
+<td>DM.STUDYID</td>
+</tr>
+<tr class="even">
+<td>USUBJID</td>
+<td>Unique Subject Identifier</td>
+<td>text</td>
+<td></td>
+<td>1</td>
+<td>DM.USUBJID</td>
+</tr>
+<tr class="odd">
+<td>SUBJID</td>
+<td>Subject Identifier for the Study</td>
+<td>text</td>
+<td></td>
+<td>1</td>
+<td>DM.SUBJID</td>
+</tr>
+<tr class="even">
+<td>SITEID</td>
+<td>Study Site Identifier</td>
+<td>text</td>
+<td></td>
+<td>1</td>
+<td>DM.SITEID</td>
+</tr>
+<tr class="odd">
+<td>ARM</td>
+<td>Description of Planned Arm</td>
+<td>text</td>
+<td>ARM</td>
+<td>1</td>
+<td>DM.ARM</td>
+</tr>
+<tr class="even">
+<td>TRT01P</td>
+<td>Planned Treatment for Period 01</td>
+<td>text</td>
+<td>ARM</td>
+<td>1</td>
+<td>DM.ARM</td>
+</tr>
+<tr class="odd">
+<td>TRT01PN</td>
+<td>Planned Treatment for Period 01 (N)</td>
+<td>integer</td>
+<td>ARMN</td>
+<td>1</td>
+<td>Numeric code for TRT01P which corresponds to the randomized dose</td>
+</tr>
+<tr class="even">
+<td>TRT01A</td>
+<td>Actual Treatment for Period 01</td>
+<td>text</td>
+<td>ARM</td>
+<td>1</td>
+<td>TRT01A=TRT01P, i.e., no difference between actual and randomized treatment in this study.</td>
+</tr>
+<tr class="odd">
+<td>TRT01AN</td>
+<td>Actual Treatment for Period 01 (N)</td>
+<td>integer</td>
+<td>ARMN</td>
+<td>1</td>
+<td>Numeric code for TRT01A which corresponds to the randomized dose</td>
+</tr>
+<tr class="even">
+<td>AGE</td>
+<td>Age</td>
+<td>integer</td>
+<td></td>
+<td>1</td>
+<td>DM.AGE</td>
+</tr>
+<tr class="odd">
+<td>AGEU</td>
+<td>Age Units</td>
+<td>text</td>
+<td>AGEU</td>
+<td>1</td>
+<td>DM.AGEU</td>
+</tr>
+<tr class="even">
+<td>RACE</td>
+<td>Race</td>
+<td>text</td>
+<td>RACE</td>
+<td>1</td>
+<td>DM.RACE</td>
+</tr>
+<tr class="odd">
+<td>RACEN</td>
+<td>Race (N)</td>
+<td>integer</td>
+<td>RACEN</td>
+<td>1</td>
+<td>Numeric code for RACE</td>
+</tr>
+<tr class="even">
+<td>SEX</td>
+<td>Sex</td>
+<td>text</td>
+<td>SEX</td>
+<td>1</td>
+<td>DM.SEX</td>
+</tr>
+<tr class="odd">
+<td>ETHNIC</td>
+<td>Ethnicity</td>
+<td>text</td>
+<td>ETHNIC</td>
+<td>1</td>
+<td>DM.ETHNIC</td>
+</tr>
+<tr class="even">
+<td>DTHFL</td>
+<td>Subject Died?</td>
+<td>text</td>
+<td>Y_BLANK</td>
+<td>1</td>
+<td>DM.DTHFL</td>
+</tr>
+<tr class="odd">
+<td>RFSTDTC</td>
+<td>Subject Reference Start Date/Time</td>
+<td>datetime</td>
+<td>ISO8601</td>
+<td>1</td>
+<td>DM.RFSTDTC</td>
+</tr>
+<tr class="even">
+<td>RFENDTC</td>
+<td>Subject Reference End Date/Time</td>
+<td>datetime</td>
+<td>ISO8601</td>
+<td>1</td>
+<td>DM.RFENDTC</td>
+</tr>
+<tr class="odd">
+<td>SITEGR1</td>
+<td>Pooled Site Group 1</td>
+<td>text</td>
+<td></td>
+<td>2</td>
+<td>refer to SAP, Section 7.1 - if not pooled then SITEGR1=SITEID. If pooled, SITEGR1 will be 900</td>
+</tr>
+<tr class="even">
+<td>TRTSDT</td>
+<td>Date of First Exposure to Treatment</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date</td>
+</tr>
+<tr class="odd">
+<td>TRTEDT</td>
+<td>Date of Last Exposure to Treatment</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>The date of final dose (from the CRF) is EX.EXENDTC on the subject’s last EX record. If the date of final dose is missing for the subject and the subject discontinued after visit 3, use the date of discontinuation as the date of last dose. Convert the date to a SAS date.</td>
+</tr>
+<tr class="even">
+<td>TRTDUR</td>
+<td>Duration of Treatment (days)</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>TRTEDT-TRTSDT+1</td>
+</tr>
+<tr class="odd">
+<td>AVGDD</td>
+<td>Avg Daily Dose (as planned)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>CUMDOSE/TRTDUR</td>
+</tr>
+<tr class="even">
+<td>CUMDOSE</td>
+<td>Cumulative Dose (as planned)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>For ARMN=0 or 1: CUMDOSE=TRT01PN*TRTDUR. — For ARMN=2: CUMDOSE will be based on 54mg per day for the # of days subj was in 1st dosing interval (i.e., visit4date-TRTSTDT+1 if 1st interval completed, TRTEDT-TRTSTDT+1 if subj discontinued &lt;=visit 4 and &gt; visit 3), 81mg per day for the # of days subj was in 2nd dosing interval (i.e., visit12date-visit4date if 2nd interval completed, TRTEDT-visit4date if subj discontinued &lt;= visit 12 and &gt; visit 4), and 54mg per day for the # of days subj was in 3rd dosing interval (i.e., TRTEDT - visit12date if subj continued after visit 12).</td>
+</tr>
+<tr class="odd">
+<td>AGEGR1</td>
+<td>Pooled Age Group 1</td>
+<td>text</td>
+<td>AGEGR1</td>
+<td>2</td>
+<td>Character variable derived from ADSL.AGEGR1N</td>
+</tr>
+<tr class="even">
+<td>AGEGR1N</td>
+<td>Pooled Age Group 1 (N)</td>
+<td>integer</td>
+<td>AGEGR1N</td>
+<td>2</td>
+<td>AGEGR1 = 1 if AGE &lt;65. AGEGR1 = 2 if AGE 65-80. AGEGR1 = 3 if AGE &gt;80.</td>
+</tr>
+<tr class="odd">
+<td>SAFFL</td>
+<td>Safety Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if ITTFL=‘Y’ and TRTSDT ne missing. N otherwise</td>
+</tr>
+<tr class="even">
+<td>ITTFL</td>
+<td>Intent-To-Treat Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if ARMCD ne ’ ’. N otherwise</td>
+</tr>
+<tr class="odd">
+<td>EFFFL</td>
+<td>Efficacy Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if SAFFL=’Y AND subject has at least one record in QS for ADAS-Cog with VISITNUM&gt;3 AND at least one record in QS for CIBIC+ with VISITNUM&gt;3, N otherwise</td>
+</tr>
+<tr class="even">
+<td>COMP8FL</td>
+<td>Completers of Week 8 Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if subject has a SV.VISITNUM=8 and ENDDT &gt;= date of visit 8, N otherwise</td>
+</tr>
+<tr class="odd">
+<td>COMP16FL</td>
+<td>Completers of Week 16 Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if subject has a SV.VISITNUM=10 and ENDDT&gt;=date of visit 10, N otherwise</td>
+</tr>
+<tr class="even">
+<td>COMP24FL</td>
+<td>Completers of Week 24 Population Flag</td>
+<td>text</td>
+<td>YN</td>
+<td>2</td>
+<td>Y if subject has a SV.VISITNUM=12 and ENDDT&gt;= date of visit 12 , N otherwise</td>
+</tr>
+<tr class="odd">
+<td>DISCONFL</td>
+<td>Did the Subject Discontinue the Study?</td>
+<td>text</td>
+<td>Y_BLANK</td>
+<td>2</td>
+<td>Y if DCREASCD ^= ‘Completed.’ Null otherwise</td>
+</tr>
+<tr class="even">
+<td>DSRAEFL</td>
+<td>Discontinued due to AE?</td>
+<td>text</td>
+<td>Y_BLANK</td>
+<td>2</td>
+<td>Y if DCREASCD=‘Adverse Event.’ Null otherwise</td>
+</tr>
+<tr class="odd">
+<td>BMIBL</td>
+<td>Baseline BMI (kg/m^2)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>WEIGHTBL / ((HEIGHTBL*100)**2)</td>
+</tr>
+<tr class="even">
+<td>BMIBLGR1</td>
+<td>Pooled Baseline BMI Group 1</td>
+<td>text</td>
+<td>BMICAT</td>
+<td>2</td>
+<td>BMIBLGR1=Normal if . &lt; BMIBL &lt;25. BMIBLGR1=Overweight if 25 &lt;=BMIBL &lt;30. BMIBLGR1=Obese if BMIBL &gt;=30</td>
+</tr>
+<tr class="odd">
+<td>HEIGHTBL</td>
+<td>Baseline Height (cm)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>VSSTRESN when VS.VSTESTCD=‘HEIGHT’ and VS.VISITNUM=1</td>
+</tr>
+<tr class="even">
+<td>WEIGHTBL</td>
+<td>Baseline Weight (kg)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>VSSTRESN when VS.VSTESTCD=‘WEIGHT’ and VS.VISITNUM=3</td>
+</tr>
+<tr class="odd">
+<td>EDUCLVL</td>
+<td>Years of Education</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>SC.SCSTRESN where SC.SCTESTCD=YEARSEDU</td>
+</tr>
+<tr class="even">
+<td>DISONSDT</td>
+<td>Date of Onset of Disease</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>MH.MHSTDTC where MHCAT=‘PRIMARY DIAGNOSIS’ converted to SAS date</td>
+</tr>
+<tr class="odd">
+<td>DURDIS</td>
+<td>Duration of Disease (Months)</td>
+<td>float</td>
+<td></td>
+<td>2</td>
+<td>number of months between VISIT1DT and DISONSET</td>
+</tr>
+<tr class="even">
+<td>DURDSGR1</td>
+<td>Pooled Disease Duration Group 1</td>
+<td>text</td>
+<td>DURDISC</td>
+<td>2</td>
+<td>grouping DURDIS values as &lt;12 and &gt;=12</td>
+</tr>
+<tr class="odd">
+<td>VISIT1DT</td>
+<td>Date of Visit 1</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>SV.SVSTDTC when SV.VISITNUM=1, converted to SAS date</td>
+</tr>
+<tr class="even">
+<td>VISNUMEN</td>
+<td>End of Trt Visit (Vis 12 or Early Term.)</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>if DS.VISITNUM=13 where DSTERM=‘PROTCOL COMPLETED’ then VISNUMEN=12, otherwise VISNUMEN=DS.VISITNUM where DSTERM=‘PROTCOL COMPLETED’</td>
+</tr>
+<tr class="odd">
+<td>RFENDT</td>
+<td>Date of Discontinuation/Completion</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>RFENDTC converted to SAS date</td>
+</tr>
+<tr class="even">
+<td>DCDECOD</td>
+<td>Standardized Disposition Term</td>
+<td>text</td>
+<td>DISCCD</td>
+<td>2</td>
+<td>DS.DSDECOD where DSCAT=‘DISPOSITION EVENT’</td>
+</tr>
+<tr class="odd">
+<td>DCREASCD</td>
+<td>Reason for Discontinuation</td>
+<td>text</td>
+<td>DISCREAS</td>
+<td>2</td>
+<td>Grouping of DCDECOD values to support summarizing study completion status and reason for discontinuation</td>
+</tr>
+<tr class="even">
+<td>MMSETOT</td>
+<td>MMSE Total</td>
+<td>integer</td>
+<td></td>
+<td>2</td>
+<td>sum of QS.QSORRES values for the subject</td>
+</tr>
+</tbody>
+</table>
 
-</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="final-words.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="adam-datasets-for-study-cdisc-pilot-01.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
