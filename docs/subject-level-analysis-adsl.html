@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="adam-datasets-for-study-cdisc-pilot-01.html"/>
-<link rel="next" href="adsl-derivations-derived-1-level.html"/>
+<link rel="next" href="Variable.html"/>
 <script src="libs/header-attrs-2.4.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -148,7 +148,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="adam-datasets-for-study-cdisc-pilot-01.html"><a href="adam-datasets-for-study-cdisc-pilot-01.html"><i class="fa fa-check"></i><b>5</b> ADaM Datasets for Study CDISC PILOT 01</a></li>
 <li class="chapter" data-level="6" data-path="subject-level-analysis-adsl.html"><a href="subject-level-analysis-adsl.html"><i class="fa fa-check"></i><b>6</b> Subject-Level Analysis (ADSL)</a></li>
-<li class="chapter" data-level="7" data-path="adsl-derivations-derived-1-level.html"><a href="adsl-derivations-derived-1-level.html"><i class="fa fa-check"></i><b>7</b> Adsl derivations Derived = 1 level</a></li>
+<li class="chapter" data-level="7" data-path="Variable.html"><a href="Variable.html"><i class="fa fa-check"></i><b>7</b> Adsl derivations Derived = 1 level</a></li>
 <li class="chapter" data-level="8" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>8</b> Methods</a></li>
 <li class="chapter" data-level="9" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>9</b> Applications</a>
 <ul>
@@ -365,7 +365,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>Date of Last Exposure to Treatment</td>
 <td>integer</td>
 <td></td>
-<td>2</td>
+<td>3</td>
 <td>The date of final dose (from the CRF) is EX.EXENDTC on the subject’s last EX record. If the date of final dose is missing for the subject and the subject discontinued after visit 3, use the date of discontinuation as the date of last dose. Convert the date to a SAS date.</td>
 </tr>
 <tr class="even">
@@ -389,7 +389,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>Cumulative Dose (as planned)</td>
 <td>float</td>
 <td></td>
-<td>2</td>
+<td>3</td>
 <td>For ARMN=0 or 1: CUMDOSE=TRT01PN*TRTDUR. — For ARMN=2: CUMDOSE will be based on 54mg per day for the # of days subj was in 1st dosing interval (i.e., visit4date-TRTSTDT+1 if 1st interval completed, TRTEDT-TRTSTDT+1 if subj discontinued &lt;=visit 4 and &gt; visit 3), 81mg per day for the # of days subj was in 2nd dosing interval (i.e., visit12date-visit4date if 2nd interval completed, TRTEDT-visit4date if subj discontinued &lt;= visit 12 and &gt; visit 4), and 54mg per day for the # of days subj was in 3rd dosing interval (i.e., TRTEDT - visit12date if subj continued after visit 12).</td>
 </tr>
 <tr class="odd">
@@ -429,7 +429,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>Efficacy Population Flag</td>
 <td>text</td>
 <td>YN</td>
-<td>2</td>
+<td>3</td>
 <td>Y if SAFFL=’Y AND subject has at least one record in QS for ADAS-Cog with VISITNUM&gt;3 AND at least one record in QS for CIBIC+ with VISITNUM&gt;3, N otherwise</td>
 </tr>
 <tr class="even">
@@ -549,7 +549,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>End of Trt Visit (Vis 12 or Early Term.)</td>
 <td>integer</td>
 <td></td>
-<td>2</td>
+<td>3</td>
 <td>if DS.VISITNUM=13 where DSTERM=‘PROTCOL COMPLETED’ then VISNUMEN=12, otherwise VISNUMEN=DS.VISITNUM where DSTERM=‘PROTCOL COMPLETED’</td>
 </tr>
 <tr class="odd">
@@ -565,7 +565,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td>Standardized Disposition Term</td>
 <td>text</td>
 <td>DISCCD</td>
-<td>2</td>
+<td>3</td>
 <td>DS.DSDECOD where DSCAT=‘DISPOSITION EVENT’</td>
 </tr>
 <tr class="odd">
@@ -594,7 +594,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="adam-datasets-for-study-cdisc-pilot-01.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="adsl-derivations-derived-1-level.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="Variable.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

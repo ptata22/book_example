@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Minimal Book Example</title>
+  <title>7 Adsl derivations Derived = 1 level | A Minimal Book Example</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Minimal Book Example" />
+  <meta property="og:title" content="7 Adsl derivations Derived = 1 level | A Minimal Book Example" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Minimal Book Example" />
+  <meta name="twitter:title" content="7 Adsl derivations Derived = 1 level | A Minimal Book Example" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="intro.html"/>
+<link rel="prev" href="subject-level-analysis-adsl.html"/>
+<link rel="next" href="methods.html"/>
 <script src="libs/header-attrs-2.4.6/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -177,20 +177,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">A Minimal Book Example</h1>
-<p class="author"><em>Yihui Xie</em></p>
-<p class="date"><em>2020-11-19</em></p>
-</div>
-<div id="prerequisites" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Prerequisites</h1>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports, e.g., a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<p>The <strong>bookdown</strong> package can be installed from CRAN or Github:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;bookdown&quot;</span> <span class="st">&quot;clinicalfd&quot;</span>)</span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or the development version</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github(&quot;rstudio/bookdown&quot;)</span></span></code></pre></div>
-<p>Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading <code>#</code>.</p>
-<p>To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.</p>
+<div id="Variable" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Adsl derivations Derived = 1 level</h1>
+<p>List of Variables Derived = 1</p>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="10%" />
+<col width="25%" />
+<col width="59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Variable</strong></th>
+<th><strong>Label</strong></th>
+<th><strong>Source/Derivation/Comments</strong></th>
+<th>R Dplyr Snippet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>STUDYID</td>
+<td>Study Identifier</td>
+<td>DM.STUDYID</td>
+<td><code>select ( dm , studyid)</code></td>
+</tr>
+<tr class="even">
+<td>USUBJID</td>
+<td>Unique Subject Identifier</td>
+<td>DM.USUBJID</td>
+<td><code>select ( dm , usubjid)</code></td>
+</tr>
+<tr class="odd">
+<td>SUBJID</td>
+<td>Subject Identifier for the Study</td>
+<td>DM.SUBJID</td>
+<td><code>select ( dm , subjid)</code></td>
+</tr>
+<tr class="even">
+<td>SITEID</td>
+<td>Study Site Identifier</td>
+<td>DM.SITEID</td>
+<td><code>select ( dm , siteid)</code></td>
+</tr>
+<tr class="odd">
+<td>ARM</td>
+<td>Description of Planned Arm</td>
+<td>DM.ARM</td>
+<td><code>select ( dm , arm)</code></td>
+</tr>
+<tr class="even">
+<td>TRT01P</td>
+<td>Planned Treatment for Period 01</td>
+<td>DM.ARM</td>
+<td><code>select ( dm , arm)</code></td>
+</tr>
+<tr class="odd">
+<td>TRT01A</td>
+<td>Actual Treatment for Period 01</td>
+<td>TRT01A=TRT01P, i.e., no difference between actual and randomized treatment in this study.</td>
+<td><code>mutate ( dm , TRT01A= ARM)</code></td>
+</tr>
+<tr class="even">
+<td>TRT01AN</td>
+<td>Actual Treatment for Period 01 (N)</td>
+<td>Numeric code for TRT01A which corresponds to the randomized dose</td>
+<td><code>mutate( trt01pn  =ifelse( (arm %in% "Placebo" ) , 0 , ifelse( (arm %in% Xanomeline Low Dose" ) , 54, ifelse( (arm %in% "Xanomeline High Dose" ) , 81 , NA)))</code></td>
+</tr>
+<tr class="odd">
+<td>AGE</td>
+<td>Age</td>
+<td>DM.AGE</td>
+<td><code>select ( dm , age)</code></td>
+</tr>
+<tr class="even">
+<td>RACE</td>
+<td>Race</td>
+<td>DM.RACE</td>
+<td><code>select ( dm , race)</code></td>
+</tr>
+<tr class="odd">
+<td>RACEN</td>
+<td>Race (N)</td>
+<td>Numeric code for RACE</td>
+<td><code>case_when( race %in% "WHITE" ~ 1 , race %in% "BLACK OR AFRICAN AMERICAN" ~ 2 ,                           race %in% "AMERICAN INDIAN OR ALASKA NATIVE" ~ 6 ,                              race %in% "ASIAN" ~ 7 )</code></td>
+</tr>
+<tr class="even">
+<td>SEX</td>
+<td>Sex</td>
+<td>DM.SEX</td>
+<td><code>select(dm,sex)</code></td>
+</tr>
+<tr class="odd">
+<td>ETHNIC</td>
+<td>Ethnicity</td>
+<td>DM.ETHNIC</td>
+<td><code>select(dm,ethnic)</code></td>
+</tr>
+<tr class="even">
+<td>DTHFL</td>
+<td>Subject Died?</td>
+<td>DM.DTHFL</td>
+<td><code>select(dm,dthfl)</code></td>
+</tr>
+<tr class="odd">
+<td>RFSTDTC</td>
+<td>Subject Reference Start Date/Time</td>
+<td>DM.RFSTDTC</td>
+<td><code>select(dm,rfstdtc)</code></td>
+</tr>
+<tr class="even">
+<td>RFENDTC</td>
+<td>Subject Reference End Date/Time</td>
+<td>DM.RFENDTC</td>
+<td><code>select(dm,rfendtc)</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Variable.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dm &lt;- clinicalfd::dm </span></span>
+<span id="cb9-2"><a href="Variable.html#cb9-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">names</span>(clinicalfd<span class="sc">::</span>dm )</span></code></pre></div>
+<pre><code>##  [1] &quot;studyid&quot;  &quot;domain&quot;   &quot;usubjid&quot;  &quot;subjid&quot;   &quot;rfstdtc&quot;  &quot;rfendtc&quot; 
+##  [7] &quot;rfxstdtc&quot; &quot;rfxendtc&quot; &quot;rficdtc&quot;  &quot;rfpendtc&quot; &quot;dthdtc&quot;   &quot;dthfl&quot;   
+## [13] &quot;siteid&quot;   &quot;age&quot;      &quot;ageu&quot;     &quot;sex&quot;      &quot;race&quot;     &quot;ethnic&quot;  
+## [19] &quot;armcd&quot;    &quot;arm&quot;      &quot;actarmcd&quot; &quot;actarm&quot;   &quot;country&quot;  &quot;dmdtc&quot;   
+## [25] &quot;dmdy&quot;</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="Variable.html#cb11-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>dm</span>
+<span id="cb11-2"><a href="Variable.html#cb11-2" aria-hidden="true" tabindex="-1"></a>dm  <span class="ot">&lt;-</span> dplyr <span class="sc">::</span> <span class="fu">filter</span>(dm ,arm <span class="sc">!=</span><span class="st">&quot;Screen Failure&quot;</span> )</span>
+<span id="cb11-3"><a href="Variable.html#cb11-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> ( dm , usubjid , siteid,arm) <span class="co"># Select </span></span>
+<span id="cb11-4"><a href="Variable.html#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="Variable.html#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#dm_01 &lt;- mutate (dm_01 , usubjid = as.character(usubjid) )</span></span>
+<span id="cb11-6"><a href="Variable.html#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="Variable.html#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="Variable.html#cb11-8" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>( adsl_deri01 , <span class="at">TRT01P =</span> arm) </span>
+<span id="cb11-9"><a href="Variable.html#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Use of Mutate function to create new variable#</span></span></code></pre></div>
 
 </div>
             </section>
@@ -198,8 +365,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="subject-level-analysis-adsl.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
