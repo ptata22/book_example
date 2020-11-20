@@ -54,9 +54,21 @@ List of Variables Derived = 1
 |              |                                    |                                                                                           |                                                                                                                                                                                                                    |
 +--------------+------------------------------------+-------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-```{r}
+
+```r
 # dm <- clinicalfd::dm 
  names(clinicalfd::dm )
+```
+
+```
+##  [1] "studyid"  "domain"   "usubjid"  "subjid"   "rfstdtc"  "rfendtc" 
+##  [7] "rfxstdtc" "rfxendtc" "rficdtc"  "rfpendtc" "dthdtc"   "dthfl"   
+## [13] "siteid"   "age"      "ageu"     "sex"      "race"     "ethnic"  
+## [19] "armcd"    "arm"      "actarmcd" "actarm"   "country"  "dmdtc"   
+## [25] "dmdy"
+```
+
+```r
 dm <- clinicalfd::dm
 dm  <- dplyr :: filter(dm ,arm !="Screen Failure" )
 adsl_deri01 <- dplyr::select ( dm , usubjid , siteid,arm) # Select 
@@ -66,47 +78,10 @@ adsl_deri01 <- dplyr::select ( dm , usubjid , siteid,arm) # Select
 
 adsl_deri01 <- dplyr::mutate( adsl_deri01 , TRT01P = arm) 
 #Use of Mutate function to create new variable#
- 
 ```
 
 ## Adsl Derivation Code part-1
 
-```{r}
-adsl_deri01 <- dm %>% filter (actarmcd !="Scrnfail") %>% 
-  mutate(sitegr1 = siteid , trt01p = arm , trt01a = arm , 
-trt01pn  = ifelse( (arm %in% "Placebo" ) , 0 ,
-           ifelse( (arm %in% "Xanomeline Low Dose" ) , 54,
-           ifelse( (arm %in% "Xanomeline High Dose" ) , 81 , NA))) ,
-           trt01an = trt01pn ,
-           ittfl   = ifelse (trt01pn %in% c(0,54,81) , "Y" , "N" ),
-           agegr1  = case_when( age < 65  ~ "<65" , 
-                              (65 <= age & age <= 80 ) ~ "65-80"  , 
-                               (age > 80 ) ~ ">80"  ),
-
-           
-            agegr1n  = case_when( age < 65  ~ 1  , 
-                                (65 <= age & age <= 80 ) ~ 2  , 
-                                (age > 80 ) ~ 3  ),
-
-           race  = case_when( race %in% "WHITE" ~ "WHITE" , 
-                              race %in% "BLACK OR AFRICAN AMERICAN" ~                                "BLACK OR AFRICAN AMERICAN" ,
-                              
-            race %in% "AMERICAN INDIAN OR ALASKA NATIVE" ~ "AMERICAN INDIAN OR ALASKA NATIVE" ,
-            race %in% "ASIAN" ~ "ASIAN" ) , 
-            racen  = case_when( race %in% "WHITE" ~ 1 , 
-            race %in% "BLACK OR AFRICAN AMERICAN" ~ 2 ,
-            race %in% "AMERICAN INDIAN OR ALASKA NATIVE" ~ 6 ,
-            race %in% "ASIAN" ~ 7 ),
-            sex  =  case_when(sex %in% "F" ~ "Female"  , 
-                             sex %in% "M" ~ "Male"    , 
-                             sex %in% "U" ~  "Unknown" ) , 
-           ethnic  =  case_when(ethnic %in% "NOT HISPANIC OR LATINO" ~ "NOT HISPANIC OR LATINO"  , 
-           ethnic %in% "HISPANIC OR LATINO" ~ "HISPANIC OR LATINO"  , 
-           ethnic %in% "U" ~  "Unknown" )
-)
 
 
-adsl_deri02 <- adsl_deri01 %>%  
-               select (actarmcd , sitegr1, siteid , trt01p , arm , trt01a , trt01pn               ,trt01pn,ittfl,agegr1,age,agegr1n,race,racen,sex,ethnic )
-adsl_deri02
-```
+
