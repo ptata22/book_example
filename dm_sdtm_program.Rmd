@@ -1,0 +1,1027 @@
+---
+title: "Creation of ADaM datasets Subject-Level Analysis (ADSL) "
+author: "Phanikumar s tata"
+date: "9/6/2020"
+output: html_document
+mainfornt: Arial
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("devtools")
+#library(devtools)
+#install_github("sas2r/clinical_fd")
+#install.packages("naniar")              
+#install.packages("tidyverse")
+#install.packages("htmltools")
+#install.packages("reshape2")
+library(clinicalfd)
+library(dplyr)
+library(knitr)
+library(naniar)
+
+#install.packages("diffdf")
+ library(diffdf)
+ 
+ #install.packages("arsenal")
+ library(arsenal)
+ 
+library(reshape2)
+library(gtsummary)
+
+```
+
+```{r,echo=TRUE}
+# knitr::kable(names(dm) , format = "markdown")
+# names(dm)
+# knitr::kable(head (dm))
+```
+
+#Content of SDTM.DM dataset 
+
+\pagebreak
+#Get the names of SDTM.dm data and ADS.adsl 
+
+# Variables present in SDTM.DM
+1. "studyid"  "domain"   "usubjid"  "subjid"   "rfstdtc"  "rfendtc"  "rfxstdtc" \line
+2. "rfxendtc" "rficdtc"  "rfpendtc" "dthdtc"   "dthfl"    "siteid"   "age"     \line
+3. "ageu"     "sex"      "race"     "ethnic"   "armcd"    "arm"      "actarmcd" \line
+4. "actarm"   "country"  "dmdtc"    "dmdy"    \line
+
+\pagebreak
+ 
+# Variables needed in ADSL \line 
+ 1. "studyid"  "usubjid"  "subjid"   "siteid"   "sitegr1"  "arm"      "trt01p"     \line
+ 2. "trt01pn"  "trt01a"   "trt01an"  "trtsdt"   "trtedt"   "trtdur"   "avgdd"     \line
+ 3. "cumdose"  "age"      "agegr1"   "agegr1n"  "ageu"     "race"     "racen"     \line
+ 4. "sex"      "ethnic"   "saffl"    "ittfl"    "efffl"    "comp8fl"  "comp16fl"  \line
+ 5. "comp24fl" "disconfl" "dsraefl"  "dthfl"    "bmibl"    "bmiblgr1" "heightbl"  \line
+ 6. "weightbl" "educlvl"  "disonsdt" "durdis"   "durdsgr1" "visit1dt" "rfstdtc"   \line
+ 7. "rfendtc"  "visnumen" "rfendt"   "dcdecod"  "dcreascd" "mmsetot"              \line
+ 
+\pagebreak
+ 
+# Derivation rule Subject-Level Analysis (ADSL) adsl.xpt
+
+1.STUDYID Study Identifier text 12   DM.STUDYID \line
+
+2.USUBJID Unique Subject Identifier text 11   DM.USUBJID\line
+
+3.SUBJID Subject Identifier for the Study text 4   DM.SUBJID \line
+
+4.SITEID Study Site Identifier text 3   DM.SITEID \line
+
+5.SITEGR1 Pooled Site Group 1 text 3   refer to SAP, Section 7.1 - if not pooled then                   SITEGR1=SITEID. If pooled, SITEGR1 will be 900  \line
+
+6.ARM     Description of Planned Arm text 20  ARM DM.ARM  \line 
+
+7.TRT01P  Planned Treatment for Period 01 text 20  ARM DM.ARM  \line
+
+8.TRT01PN Planned Treatment for Period 01 (N) integer 8  ARMN Numeric code for TRT01P  
+   which corresponds to the randomized dose \line
+
+Code List - ARMN, Reference Name (ARMN)  
+
+    Coded Value     Decode
+    0               Placebo 
+    54              Xanomeline Low Dose 
+    81              Xanomeline High Dose    
+   
+9.TRT01A  Actual Treatment for Period 01 text 20  ARM TRT01A=TRT01P, i.e., no                   difference between actual and randomized treatment in this study.\line 
+
+10.TRT01AN Actual Treatment for Period 01 (N) integer 8  ARMN Numeric code for TRT01A            which corresponds to the randomized dose \line
+
+11.TRTSDT   Date of First Exposure to Treatment integer 8 DATE9.  SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date \line
+
+
+```{r,echo=FALSE}
+
+# Excluding the Screen failure subjects
+
+# Looks lot useful dput(head(dm))
+
+#dm_01  <- dplyr:: filter(dm ,arm !="Screen Failure" )
+
+#dm <- dplyr::mutate (dm_01 , usubjid = as.factor(usubjid))
+#svstdtc <- select ( sv , usubjid  , svstdtc , visitnum )
+#svstdtc <- filter (svstdtc , visitnum == 3.0 )
+
+# Doing an inner join to get svstdtc filed 
+#dm_01 <- dplyr::inner_join( dm_01 , svstdtc , by = "usubjid")
+
+# When Joining two data frames by factors you get a note "Column `usubjid` joining factors with different levels, coercing to character vector" indicating that one of the columns which are being used in your join is clearly a factor and also that factor had clearly the different level in your dataset. 
+
+# Note so if you do not want to loose any of your information then your factors should be converted to character values 
+
+
+dm_01  <- dplyr:: filter(dm ,arm !="Screen Failure" )
+
+# Checking the nature of the variables 
+str(select(dm, usubjid )) 
+str(select(sv, usubjid )) 
+
+svstdtc <- select ( sv , usubjid  , svstdtc , visitnum )
+svstdtc <- dplyr::mutate (svstdtc , usubjid = as.character(usubjid))
+svstdtc <- filter (svstdtc , visitnum == 3.0 )
+
+# Doing an inner join to get svstdtc filed
+dm_01 <- mutate (dm_01 , usubjid = as.character(usubjid) )
+dm_01 <- dplyr::inner_join( dm_01 , svstdtc , by = "usubjid")
+
+
+#summary(dm_01)
+#summary(adsl)
+
+adsl_01 <- dplyr::select(dm_01 , studyid, usubjid , subjid , siteid , arm)
+
+trt01pn <- dplyr::distinct(adsl, trt01pn , trt01p)
+
+#using the Mutate
+adsl_01 <- dplyr :: mutate( adsl_01 , sitegr1 = siteid, trt01p = arm ,TRT01A = arm )
+
+# ifelse function gives you only True or False i.e 0 and 1 only 
+
+adsl_01 <- adsl_01 %>% 
+mutate( trt01pn  =ifelse( (arm %in% "Placebo" ) , 0 ,
+                  ifelse( (arm %in% "Xanomeline Low Dose" ) , 54,
+                  ifelse( (arm %in% "Xanomeline High Dose" ) , 81 , NA)))
+        
+        ) 
+
+adsl_01 <- dplyr :: mutate( adsl_01 ,trt01an = trt01pn )
+
+
+
+
+#Multiple if Else statements can be written similarly to excel's if function
+#Base R syntax
+
+adsl_01$trt01pn_new = ifelse ( adsl_01$arm %in% "Placebo" , 0  ,
+                      ifelse ( adsl_01$arm %in% "Xanomeline Low Dose"  ,  54 ,
+                      ifelse ( adsl_01$arm %in% "Xanomeline High Dose"  ,  81, NA ))) 
+
+# The thing to be observed below is that flag value is difined both numeric and character 1 and Diff , R won't complain 
+
+adsl_01 <- adsl_01 %>% 
+           mutate( compare_flag = ifelse ( trt01pn_new != trt01pn , "Diff" , 1 ))
+
+adsl_01 <- adsl_01 %>% 
+           mutate( compare_flag = ifelse ( trt01pn_new != trt01pn , "Diff" , "Same" ))
+
+# NOTE using singe = rather than == as
+
+#select (-arm)    '-' -ve sign for dropping the Arm variable as we are deriving trt01p 
+adsl_01 <- dplyr::select(adsl_01 , - arm )
+
+head(adsl_01)
+
+```
+
+# Here all the above steps are done in single step using "%>%" pipe operator . Also see the new derived variable sitegr1 is used in the select statement 
+
+```{r label = "all_code"}
+
+svstdtc <- sv %>% 
+           filter(visitnum == 3.0) %>% 
+           mutate (usubjid = as.character(usubjid)) %>% 
+           select (usubjid , svstdtc)
+
+dm_02  <- dplyr:: filter(dm ,arm !="Screen Failure" )
+dm_02  <- dplyr:: mutate (dm ,usubjid = as.character(usubjid) )
+# Doing an inner join to get svstdtc filed 
+
+
+dm_02  <- dplyr::inner_join( dm_02 , svstdtc , by = "usubjid")
+
+
+adsl_02 <- dm_02 %>% 
+  filter (actarmcd !="Scrnfail") %>% 
+  mutate ( 
+    sitegr1 = siteid , trt01p = arm , trt01a = arm, 
+    
+    trt01pn  =ifelse( (arm %in% "Placebo" ) , 0 ,
+                    ifelse( (arm %in% "Xanomeline Low Dose" ) , 54,
+                    ifelse( (arm %in% "Xanomeline High Dose" ) , 81 , NA)))  ,
+    trt01an = trt01pn ,
+    trtsdt = svstdtc ,
+    trtsdtn = as.Date(as.character (trtsdt)),
+                
+    ittfl   = ifelse (trt01pn %in% c(0,54,81) , "Y" , "N" )  , 
+    
+    agegr1  = case_when( age < 65  ~ "<65" , 
+                              (65 <= age & age <= 80 ) ~ "65-80"  , 
+                               (age > 80 ) ~ ">80"  ),
+           
+    agegr1n  = case_when( age < 65  ~ 1  , 
+                                (65 <= age & age <= 80 ) ~ 2  , 
+                                (age > 80 ) ~ 3  ),
+           
+    race  = case_when( race %in% "WHITE" ~ "WHITE" , 
+                              race %in% "BLACK OR AFRICAN AMERICAN" ~ "BLACK OR AFRICAN AMERICAN" ,
+                              race %in% "AMERICAN INDIAN OR ALASKA NATIVE" ~ "AMERICAN INDIAN OR ALASKA NATIVE" ,
+                              race %in% "ASIAN" ~ "ASIAN" 
+                              ) , 
+    racen  = case_when( race %in% "WHITE" ~ 1 , 
+                              race %in% "BLACK OR AFRICAN AMERICAN" ~ 2 ,
+                              race %in% "AMERICAN INDIAN OR ALASKA NATIVE" ~ 6 ,
+                              race %in% "ASIAN" ~ 7 ),
+           
+    sex  =  case_when(sex %in% "F" ~ "Female"  , 
+                             sex %in% "M" ~ "Male"    , 
+                             sex %in% "U" ~  "Unknown" ) , 
+           
+    ethnic  =  case_when(ethnic %in% "NOT HISPANIC OR LATINO" ~ "NOT HISPANIC OR LATINO"  , 
+                                ethnic %in% "HISPANIC OR LATINO" ~ "HISPANIC OR LATINO"    , 
+                                ethnic %in% "U" ~  "Unknown" ),
+    
+    saffl =   case_when ((ittfl %in% "Y" & !is.na(trtsdtn))    ~ "Y" ) 
+    
+  ) %>% 
+  
+  select ( studyid , usubjid , subjid , siteid , sitegr1 , trt01p ,
+           trt01pn , trt01a , trt01an , - svstdtc , trtsdt , age , agegr1 , 
+           agegr1n , race ,racen , sex , ethnic  , ittfl , trt01pn, trtsdtn , saffl)
+
+#head(adsl_02)
+
+```
+ 
+12.TRTEDT Date of Last Exposure to Treatment integer 8 DATE9.  The date of final dose (from the CRF) is EX.EXENDTC on the subject's last EX record. If the date of final dose is missing for the subject and the subject discontinued after visit 3, use the date of discontinuation as the date of last dose. Convert the date to a SAS date.  \line
+
+13. TRTDUR Duration of Treatment (days) integer 8   TRTEDT-TRTSDT+1 \line
+
+```{r label = "TRTEDT Derivation"}
+ex_01 <- arrange (select (ex , usubjid , exseq , extrt , visit, visitnum , exendtc) , 
+                  usubjid , visitnum ) 
+  
+ex_02 <- ex_01 %>% 
+                arrange (usubjid , visitnum) %>% 
+                group_by (usubjid ) %>% 
+                summarise_all (last) %>% 
+                mutate (trtedt = exendtc)
+ 
+ 
+#Getting the records with missing dates  
+ex_02_missing_date <-  filter (ex_02, trtedt < 0   ) 
+
+#Getting the records with non-missing dates 
+ex_03 <- filter (ex_02 , trtedt >0 )
+
+ex_03 <- select (ex_03 , usubjid , trtedt )
+
+ds_disp <- filter ( ds, dscat == "DISPOSITION EVENT") 
+
+
+ex_02_missing_date  <- dplyr::mutate (ex_02_missing_date ,usubjid = as.character(usubjid) )
+ds_disp  <- dplyr:: mutate (ds_disp ,usubjid = as.character(usubjid) )
+ 
+
+ds_disp2  <- dplyr::inner_join( select(ex_02_missing_date,usubjid)  ,
+                                select (ds_disp , usubjid ,dsstdtc ) ,
+                                        by = "usubjid")
+ds_disp2 <-  ds_disp2 %>% 
+               mutate ( trtedt = dsstdtc) %>% 
+               select(usubjid , trtedt)
+
+trtedt <-  rbind (ex_03  , ds_disp2)
+
+#Getting it back to main dataset
+adsl_02  <- dplyr::inner_join( adsl_02 ,
+                               trtedt ,
+                               by = "usubjid")
+ 
+#Numerical dates trtsdtn trtedtn for caliculations 
+#TRTDUR Duration of Treatment (days) integer 8   TRTEDT-TRTSDT+1
+
+adsl_02 <- adsl_02 %>% 
+                 mutate (trtsdtn = as.Date(as.character (trtsdt)) ,
+                         trtedtn = as.Date(trtedt)   ,
+                         trtdur = (trtedtn - trtsdtn ) + 1  
+                         ) 
+
+# For Comparing you do not need to create a new variable as R creates x. and y. variable
+#in the joing table 
+
+# adsl      <- adsl %>% 
+#              mutate(trtedt_prod = trtedt) 
+# 
+# 
+# adsl_trtedt_chk <- dplyr::inner_join( adsl ,
+#                                       trtedt ,
+#                                       by = "usubjid")
+#  
+``` 
+EFFFL Efficacy Population Flag  text 1 ["N" = "No", "Y" = "Yes"]  <YN>
+  
+Y if SAFFL='Y AND subject has at least one record in 
+QS for ADAS-Cog with VISITNUM>3 AND 
+at least one record in QS for CIBIC+ with VISITNUM>3, N otherwise 
+
+```{r}
+# TIP Rename works left to right meaning 
+# new name is on the left while old name is right 
+qs_efffl_all <- qs %>% 
+  filter( (qstestcd %in% c("ACTOT" , "CIBIC")  & visitnum >3)  )
+
+qs_efffl01 <- qs %>% 
+            filter( (qstestcd %in% c("ACTOT")  & visitnum >3)  ) %>% 
+            rename (actot = qstestcd , actot_v = visitnum) %>% 
+            select(usubjid , actot_v , actot)
+ 
+qs_efffl01 <- dplyr::distinct(qs_efffl01, usubjid , .keep_all = TRUE )
+
+
+qs_efffl02 <- qs %>% 
+  filter( (qstestcd %in% c( "CIBIC")  & visitnum >3)  ) %>% 
+  rename ( cibic = qstestcd , cibic_v = visitnum) %>% 
+  select(usubjid , cibic_v , cibic)
+
+qs_efffl02 <- dplyr::distinct(qs_efffl02, usubjid , .keep_all = TRUE )
+
+qs_all <- full_join( qs_efffl01 , qs_efffl02 , by = "usubjid" ) 
+
+#   subject has at least one record in QS for ADAS-Cog with VISITNUM>3
+#   AND at least one record in QS for CIBIC+ with VISITNUM>3, N otherwise
+
+qs_all <- qs_all %>% 
+          filter (  !is.na(actot) & !is.na(cibic) ) %>% 
+          mutate ( qs_flag = 1 , usubjid = as.character(usubjid))
+
+ 
+adsl_02 <-left_join( adsl_02 , qs_all , by = "usubjid" )
+ 
+adsl_02  <- adsl_02 %>%
+           mutate ( qs_flag = coalesce(qs_flag , 0 ) , 
+               efffl  = case_when ((qs_flag == 1 & saffl == "Y")  ~ "Y" ,
+                                   (qs_flag == 0 & saffl == "Y" )  ~ "N" )) 
+
+
+```
+
+COMP8FL Completers of Week 8 Population Flag  text 1 ["N" = "No", "Y" = "Yes"]
+Y if subject has a SV.VISITNUM=8 and ENDDT >= date of visit 8, N otherwise 
+
+COMP16FL Completers of Week 16 Population Flag  text 1 ["N" = "No", "Y" = "Yes"]
+Y if subject has a SV.VISITNUM=10 and ENDDT>=date of visit 10, N otherwise 
+
+COMP24FL Completers of Week 24 Population Flag  text 1 ["N" = "No", "Y" = "Yes"]
+Y if subject has a SV.VISITNUM=12 and ENDDT>= date of visit 12 , N otherwise 
+
+```{r}
+# adsl_COMP8FL  <- select (adsl , usubjid   , comp8fl ,comp16fl , trtedt  ) %>% 
+#                    mutate(trtedt_p = trtedt ) %>% 
+#                    select ( - trtedt )
+
+svstdtc <- select ( sv , usubjid  , svstdtc , visitnum  )
+
+sv_visits <- sv %>% 
+  mutate ( usubjid = as.character(usubjid), 
+           svstdtn = as.Date(as.character(svstdtc)  )) %>% 
+  select ( usubjid  , svstdtc , visitnum , visit )
+
+
+sv_visit08 <-  sv_visits %>%  filter (visitnum == 8.0 ) %>% 
+              mutate(svstdtc_8 = as.Date(as.character(svstdtc) ) )  %>%
+                        select ( usubjid , svstdtc_8 )
+
+sv_visit10 <-  sv_visits %>%  filter (visitnum == 10.0 ) %>% 
+                mutate(svstdtc_10 = as.Date(as.character(svstdtc) ) )  %>%
+                select ( usubjid , svstdtc_10 )
+
+#For Comparing purpose using wrong visitnum , should be 
+# visitnum == 12.0 
+
+sv_visit12 <-  sv_visits %>%  filter (visitnum == 12.0 ) %>% 
+               mutate(svstdtc_12 = as.Date(as.character(svstdtc) ) )  %>%
+               select ( usubjid , svstdtc_12 )
+
+adsl_trt_edtn  <- select ( adsl_02 , usubjid , trtedtn )
+
+adsl_02_comp  <-   adsl_trt_edtn  %>%
+              full_join( sv_visit08      , by = "usubjid") %>% 
+              full_join(sv_visit10       , by = "usubjid") %>% 
+              full_join(sv_visit12       , by = "usubjid") %>% 
+  
+              mutate( comp8fl = ifelse (trtedtn >= svstdtc_8 , "Y" , "N" ),
+                      comp8fl = coalesce(comp8fl  , "N" ) , 
+                      
+                      comp16fl = ifelse (trtedtn >= svstdtc_10 , "Y" , "N" ),
+                      comp16fl = coalesce(comp16fl  , "N" ) , 
+                      
+                      comp24fl = ifelse (trtedtn >= svstdtc_12 , "Y" , "N" ),
+                      comp24fl = coalesce(comp24fl  , "N" )
+                      
+                      )  %>% 
+                     select (-trtedtn)
+  
+
+# Merging it back to main dataset 
+
+adsl_02   <-   adsl_02  %>%
+              full_join( adsl_02_comp      , by = "usubjid") 
+
+
+
+  
+# 
+# adsl_02_comp  <- sv_visit08 %>%
+#               full_join(adsl_02       , by = "usubjid") %>% 
+#               full_join(sv_visit10    , by = "usubjid") %>% 
+#               full_join(adsl_COMP8FL  , by = "usubjid") %>% 
+#   
+#               mutate( comp8fl_w = ifelse (trtedtn >= svstdtc_8 , "Y" , "N" ),
+#                       comp8fl_w = coalesce(comp8fl_w , "N" ) , 
+#                       
+#                       comp16fl_w = ifelse (trtedtn >= svstdtc_10 , "Y" , "N" ),
+#                       comp16fl_w = coalesce(comp16fl_w , "N" ) 
+#                       
+#                       ) %>% 
+#               select (usubjid , comp16fl ,comp16fl_w  ,trtedt_p, trtedtn , svstdtc_10 )
+```
+
+DISCONFL Did the Subject Discontinue the Study?  text 1 ["Y" = "Yes"]
+Y if DCREASCD ^= 'Completed'. Null otherwise
+
+DSRAEFL Discontinued due to AE?  text 1 ["Y" = "Yes"]
+Y if DCREASCD='Adverse Event'. Null otherwise
+ 
+DTHFL Subject Died?  text 1 ["Y" = "Yes"]
+DM.DTHFL 
+
+```{r}
+
+# DISCONFL Did the Subject Discontinue the Study?  text 1 ["Y" = "Yes"]
+# Y if DCREASCD ^= 'Completed'. Null otherwise
+
+disconfl <- ds %>% 
+            filter ( dsdecod == "COMPLETED") %>% 
+            mutate( disconfl = "Y", usubjid = as.character(usubjid)) %>% 
+            select ( usubjid , disconfl)
+
+# DSRAEFL Discontinued due to AE?  text 1 ["Y" = "Yes"]
+# Y if DCREASCD='Adverse Event'. Null otherwise
+
+dsraefl  <- ds %>% 
+  filter ( dsdecod == "ADVERSE EVENT") %>% 
+  mutate( dsraefl = "Y" , usubjid = as.character(usubjid)) %>% 
+  select ( usubjid , dsraefl)
+
+# DTHFL Subject Died?  text 1 ["Y" = "Yes"]
+# DM.DTHFL 
+
+dthfl02   <- dm %>% 
+  filter (  dthfl == "Y") %>% 
+  mutate( usubjid = as.character(usubjid) ) %>% 
+  select (  usubjid , dthfl )
+  
+
+dthfl   <- ds %>% 
+  filter ( dsdecod == "DEATH") %>% 
+  mutate( dthfl = "Y" , usubjid = as.character(usubjid) ) %>% 
+  select ( usubjid , dthfl)
+
+
+adsl_02 <- mutate (adsl_02 , usubjid = as.character(usubjid))
+
+adsl_02  <-   adsl_02  %>%
+                  full_join( disconfl         , by = "usubjid") %>% 
+                  full_join( dsraefl          , by = "usubjid") %>% 
+                  full_join( dthfl02            , by = "usubjid") 
+                  
+```
+HEIGHTBL Baseline Height (cm)  float 8  Derived: 
+VSSTRESN when VS.VSTESTCD='HEIGHT' and VS.VISITNUM=1
+ 
+WEIGHTBL Baseline Weight (kg)  float 8  Derived: 
+VSSTRESN when VS.VSTESTCD='WEIGHT' and VS.VISITNUM=3 
+
+BMIBL Baseline BMI (kg/m^2)  float 8  Derived: 
+WEIGHTBL / ((HEIGHTBL*100)**2)
+ 
+BMIBLGR1 Pooled Baseline BMI Group 1  text 6 ["<25" = "Normal", "25-<30" = "Overweight", ">=30" = "Obese"]
+
+BMIBLGR1=Normal if . < BMIBL <25. BMIBLGR1=Overweight if 25 <=BMIBL <30. BMIBLGR1=Obese if BMIBL >=30
+
+
+```{r}
+
+# HEIGHTBL Baseline Height (cm)  float 8  Derived: 
+#   VSSTRESN when VS.VSTESTCD='HEIGHT' and VS.VISITNUM=1
+
+heightbl <- vs %>% 
+            filter (vstestcd == "HEIGHT" & visitnum == 1 ) %>% 
+            mutate ( heightbl = vsstresn ) %>% 
+            select ( usubjid , heightbl )%>% 
+          mutate (usubjid = as.character(usubjid))
+
+# WEIGHTBL Baseline Weight (kg)  float 8  Derived: 
+#   VSSTRESN when VS.VSTESTCD='WEIGHT' and VS.VISITNUM=3 
+
+weightbl <- vs %>% 
+  filter (vstestcd == "WEIGHT" & visitnum == 3) %>% 
+         rename (weightbl = vsstresn ) %>% 
+          select ( usubjid , weightbl ) %>% 
+          mutate (usubjid = as.character(usubjid))
+
+# BMIBL Baseline BMI (kg/m^2)  float 8  Derived: 
+# WEIGHTBL / ((HEIGHTBL*100)**2) 
+# Check this derivation *100 
+
+heightbl <- mutate (heightbl , usubjid = as.character(usubjid))
+weightbl <- mutate (weightbl , usubjid = as.character(usubjid))
+
+
+bmi  <-  inner_join(heightbl , weightbl , by = "usubjid" ) 
+
+bmi <- bmi %>% 
+       mutate ( bmi = ((weightbl / (heightbl ^ 2 ) *10000) )  ) 
+
+bmi <- mutate (bmi , usubjid = as.character(usubjid))
+
+
+adsl_02 <- full_join ( adsl_02 , bmi , by = "usubjid")
+
+```
+ 
+
+
+
+# CUMDOSE Cumulative Dose (as planned) float 8
+# For ARMN=0 or 1: CUMDOSE=TRT01PN*TRTDUR. ---
+
+```{r}
+# If treatment arm in 0 or 54 then it is just trt01pn* trtdur
+cumdose_01  <- adsl_02 %>% 
+           filter( ( trt01pn %in% c(0,54) ) ) %>% 
+           mutate ( cumdose = trt01pn * trtdur ) %>% 
+           select ( usubjid , trt01pn , trtdur , cumdose ) 
+
+```
+
+
+```{r}
+
+svstdtc <- select ( sv , usubjid  , svstdtc , visitnum  )
+
+sv_visits <- svstdtc %>% 
+  mutate ( usubjid = as.character(usubjid), 
+           svstdtn = as.Date(as.character(svstdtc)  ))
+
+sv_visit03 <-  sv_visits %>% 
+  filter (visitnum %in% 3.0 ) %>% 
+  mutate(svstdtn_3 = svstdtn ) %>% 
+  select ( -visitnum , -svstdtc , -svstdtn)
+
+sv_visit04 <-  sv_visits %>% 
+  filter (visitnum %in% 4.0 ) %>% 
+  mutate(svstdtn_4 = svstdtn ) %>% 
+  select ( -visitnum , -svstdtc , -svstdtn)
+
+sv_visit09 <-  sv_visits %>% 
+  filter (visitnum %in% 9.0 ) %>% 
+  mutate(svstdtn_9 = svstdtn ) %>% 
+  select ( -visitnum , -svstdtc , -svstdtn)
+
+
+# Doing an inner join to get svstdtc filed
+#TIP when there are more than two dataframess
+# Inner Join this way does not work 
+#sv_visits <- dplyr::inner_join( sv_visit03,
+                                # sv_visit04,
+                                # sv_visit09, 
+                                # by = "usubjid")
+#other way to do merge is 
+# #filter (actarmcd !="Scrnfail") %>% 
+#   mutate ( 
+#     sitegr1 = siteid , trt01p = arm , trt01a = arm, 
+#     trt01pn  =ifelse( (arm %in% "Placebo" ) , 0 ,
+#                       ifelse( (arm %in% "Xanomeline Low Dose" ) , 54,
+#                               ifelse( (arm %in% "Xanomeline High Dose" ) , 81 , NA)))  , 
+#     
+
+adsl_cumdose_03 <- select ( adsl , usubjid , trt01pn , trtdur , cumdose ,trtedt )
+adsl_cumdose_03 <- dplyr:: mutate (adsl_cumdose_03 , usubjid = as.character(usubjid))
+
+sv_visits  <- sv_visit03 %>%
+               inner_join(adsl_cumdose_03 , by = "usubjid") %>% 
+               inner_join(sv_visit04 , by = "usubjid") %>% 
+               inner_join(sv_visit09 , by = "usubjid")
+
+ 
+sv_visits02  <- sv_visits %>% 
+                 
+                mutate ( cumdose_01 = trt01pn * trtdur , 
+                         trt_dur02 = trtedt - svstdtn_4 , 
+                         cumdose_02 = trt_dur02 * trt01pn )   %>% 
+  
+                select (usubjid ,trtdur, trt01pn, svstdtn_3 , svstdtn_4 , svstdtn_9 ,
+                        cumdose_01 ,  cumdose  , trt_dur02  , cumdose_02)
+ 
+```
+
+#Comparing the dataframes 
+
+```{r}
+adsl <- adsl
+adsl_prog  <- adsl %>% 
+              mutate ( comp8fl = as.character(comp8fl) , 
+                       comp16fl = as.character(comp16fl) , 
+                       comp24fl = as.character(comp24fl) , 
+                       efffl = as.character(efffl)  , 
+                       ittfl = as.character(ittfl) , 
+                       trtedt  = as.character(trtedt) , 
+                       agegr1n = as.numeric(agegr1n)
+                       ) %>% 
+                     select (  usubjid , trt01pn , ittfl ,trtedt, 
+                       efffl, trtdur, age, agegr1n  ,comp8fl , comp16fl , comp24fl )
+
+adsl_vali  <- dplyr::select ( adsl_02 , usubjid , trt01pn , trtedt, efffl, 
+                       trtdur , ittfl , agegr1n, comp8fl , comp16fl , comp24fl )
+
+#compare differences using Dplyr 
+
+dplyr:: all_equal( adsl_prog , adsl_vali  , convert = TRUE  , 
+                   , ignore_col_order = TRUE,
+                   ignore_row_order = TRUE )
+
+#dplyr:: setdiff( adsl_prog , adsl_vali)
+
+library (janitor)
+
+#compare differences using Janitor
+ compare_df_cols( adsl_prog , adsl_vali , return = "mismatch")
+ 
+ #install.packages("diffdf")
+ #library(diffdf)
+ 
+ diffdf(adsl_prog , adsl_vali) 
+ 
+ #install.packages("arsenal")
+ #library(arsenal)
+ arsenal::comparedf ( adsl_prog , adsl_vali)
+
+ summary(comparedf ( adsl_prog , adsl_vali))
+
+```
+
+#Cleaner variables proc Compare example to be presented for presentation 
+
+```{r}
+
+# adsl_prog  <- adsl %>% 
+#               mutate ( comp8fl = as.character(comp8fl) , 
+#                        comp16fl = as.character(comp16fl) , 
+#                        comp24fl = as.character(comp24fl) , 
+#                        efffl = as.character(efffl)  , 
+#                        ittfl = as.character(ittfl) , 
+#                        trtedt  = as.character(trtedt) , 
+#                        agegr1n = as.numeric(agegr1n)
+#                        ) %>% 
+#                      select (  usubjid , trt01pn , ittfl ,trtedt, 
+#                        efffl, trtdur, age, agegr1n  ,comp8fl , comp16fl , comp24fl )
+# 
+# adsl_vali  <- dplyr::select ( adsl_02 , usubjid , trt01pn , trtedt, efffl, 
+#                        trtdur , ittfl , agegr1n, comp8fl , comp16fl , comp24fl )
+adsl <- adsl
+
+adsl_prog <- adsl %>% 
+            mutate  (
+                     usbjid = as.character(usubjid), 
+                     ethnic = as.character(ethnic), 
+                     race = as.character(race),
+                     sex = as.character(sex) , 
+                     efffl = as.character(efffl) , 
+                     saffl = as.character(saffl)
+                     ) %>% 
+             select ( usubjid , race , sex , ethnic , saffl , efffl  )
+
+
+
+adsl_vali <- adsl_02 %>% 
+        select ( usubjid , race , sex , ethnic , saffl , efffl )
+
+#compare differences using Dplyr 
+
+# dplyr:: all_equal( adsl_prog , adsl_vali  , convert = TRUE  , 
+#                    , ignore_col_order = TRUE,
+#                    ignore_row_order = TRUE )
+# 
+# dplyr:: setdiff( adsl_prog , adsl_vali)
+# 
+# library (janitor)
+# 
+# #compare differences using Janitor
+#  compare_df_cols( adsl_prog , adsl_vali , return = "mismatch")
+ 
+ #install.packages("diffdf")
+ library(diffdf)
+ 
+ diffdf(adsl_prog , adsl_vali) 
+ 
+ #install.packages("arsenal")
+ library(arsenal)
+ arsenal::comparedf ( adsl_prog , adsl_vali)
+
+ summary(comparedf ( adsl_prog , adsl_vali))
+
+```
+
+```{r}
+# library(knitr)
+#   knitr::opts_chunk$set(tidy = y , 
+#                         fig.width =  10 , 
+#                         fig.height = 5 , 
+#                         fig.align = 'left', 
+#                         warning =  FALSE ,
+#                         message = FALSE , 
+#                         echo = TRUE )
+options (width = 120 )
+
+
+#custom function for std err of the mean 
+ 
+se = function (x) {
+      data = na.omit (x) 
+      sd(data)/ sqrt(length(data))
+}
+
+bmi_by_trt <- adsl %>% 
+              group_by (trt01a) %>% 
+              summarise( 
+                ct = n( ) , 
+                mn = mean (bmibl) , 
+                median = median(bmibl),
+                min = min(bmibl) , 
+                max = max(bmibl) , 
+                range = max-min , 
+                sd = sd (bmibl) , 
+                se = se(bmibl) , 
+                sum = sum(bmibl)
+                ) %>% 
+               ungroup()
+
+# Kurtosis and skew are not working 
+#Adding labels to columns 
+colnames( bmi_by_trt) = 
+  c('BMI' , 'Count' , 'Mean' , 'Median' , 
+    'Min'  , 'Max' , 'Range', 'Std Dev' , 'Std Error' , 
+     'Sum')
+
+kable (bmi_by_trt , format = 'markdown', digits = 4 )
+ 
+
+kable ( (bmi_by_trt_list <- adsl %>% 
+             filter (trt01a %in% "Xanomeline Low Dose" & bmibl %in% NA  ) %>% 
+             select (usubjid , trt01a , bmibl)) , 
+       format = 'markdown',
+       caption = 'Listing Xanomeline Low Dose subjects' ,
+       digits =  4 )
+
+dplyr::tibble(adsl)
+str (dplyr::tibble(adsl))
+
+
+```
+
+
+```{r}
+# R does not produce if any one of the observations is missing 
+bmi_by_trt <- adsl %>% 
+  filter ( !is.na (bmibl) ) %>% 
+              group_by (trt01a) %>% 
+              summarise( 
+                ct = n( ) , 
+                mn = mean (bmibl) , 
+                median = median(bmibl),
+                min = min(bmibl) , 
+                max = max(bmibl) , 
+                range = max-min , 
+                sd = sd (bmibl) , 
+                se = se(bmibl) , 
+                sum = sum(bmibl)
+                ) %>% 
+              ungroup()
+
+# Kurtosis and skew are not working 
+#Adding labels to columns 
+colnames( bmi_by_trt) = 
+  c('Treatment' , 'Count' , 'Mean' , 'Median' , 
+    'Min'  , 'Max' , 'Range', 'Std Dev' , 'Std Error' , 
+     'Sum')
+
+kable (bmi_by_trt , format = 'markdown', 
+       caption = 'Summary statistics for BMI at baseline by Treatment' ,
+       digits = 4 )
+ 
+```
+
+```{r}
+#library(dplyr)
+
+adsl2 <- adsl %>% 
+         mutate ( trt01p = as.character(trt01p) , 
+                  bmibl = as.numeric(bmibl) , 
+                  heightbl = as.numeric(heightbl) , 
+                  educlvl = as.numeric(educlvl) , 
+                  ) %>% 
+             select (trt01p, sex , race , bmibl, heightbl , educlvl) 
+str(adsl2)
+             
+gtsummary::tbl_summary( adsl2 ,
+                        by = trt01p   ) %>% 
+                         add_overall()  %>% 
+                         add_n ( ) %>% 
+                         add_stat_label()  
+
+adsl2 %>%
+                tbl_summary(
+                 # split the table by treatment variable
+                 by = trt01p ,
+                 type = list(c(sex,race) ~ "categorical") ,
+                #change statistics printed in the table
+                statistic = list(all_continuous() ~ "{mean} ({sd})") ,
+                                  all_categorical() ~ "{n} / {N} ({p}%)"
+                 )
+```
+
+
+```{r}
+se = function (x) {
+  data = na.omit (x) 
+  sd(data)/ sqrt(length(data))
+}
+
+bmi_by_trt <- adsl %>% 
+  filter ( !is.na (bmibl) ) %>% 
+  group_by (trt01a) %>% 
+  summarise( 
+    n = n( ) , 
+    mn = round(mean (bmibl) , digits = 2)  , 
+    median = median(bmibl),
+    min = min(bmibl) , 
+    max = max(bmibl) , 
+    range = max-min , 
+    sd = round(sd (bmibl), digits = 2) , 
+    se = round(se(bmibl) , digits = 2) , 
+    sum = sum(bmibl)
+  )
+
+bmi_by_trt <- bmi_by_trt %>% 
+              mutate (mean_sd  = paste0( mn ,"(" , sd  , ")" )) %>% 
+              select( trt01a, n ,sum ,mean_sd, min , median , max , range , se )
+
+   
+bmi_by_trt2 <- reshape2::melt(bmi_by_trt , 
+                    id.vars = c("trt01a" ))
+
+
+bmi_by_trt3 <- bind_cols( 
+                  (bmi_by_trt2 %>% 
+                     filter (trt01a == "Placebo") %>% 
+                     select (variable , trt01a, value, -trt01a ) %>% 
+                     rename (placebo = value ) ) ,
+                  
+                  (bmi_by_trt2 %>% 
+                     filter (trt01a == "Xanomeline Low Dose") %>% 
+                     select ( trt01a, value, -trt01a ) %>% 
+                     rename (lowdose = value ) )  , 
+                  
+                  (bmi_by_trt2 %>% 
+                     filter (trt01a == "Xanomeline High Dose") %>% 
+                     select ( trt01a, value, -trt01a ) %>% 
+                     rename (highdose = value ) )          
+                         )
+
+
+bmi_by_trt_frq <- adsl %>% 
+  filter ( !is.na (sex) ) %>% 
+  group_by (sex , trt01a) %>% 
+  summarise(sex_count = n( ) ) %>% 
+  mutate (sex_freq = paste0 (sex_count, " (" , round((sex_count/ sum(sex_count))*100 , digits = 2  ) , "%)"  ) ,  
+          variable = sex )  %>% 
+   select ( sex, trt01a , sex_freq ) %>% 
+   arrange( trt01a )
+ 
+bmi_by_trt_frq2 <- bind_cols( 
+  (bmi_by_trt_frq %>% 
+     filter (trt01a == "Placebo") %>% 
+     select (sex , trt01a, sex_freq, -trt01a ) %>% 
+     rename (placebo = sex_freq ) ) ,
+  
+  (bmi_by_trt_frq %>% 
+     filter (trt01a == "Xanomeline Low Dose") %>% 
+     select ( trt01a, sex_freq, -trt01a, -sex ) %>% 
+     rename (lowdose = sex_freq , , ldose = sex ) )  , 
+  
+  (bmi_by_trt_frq %>% 
+     filter (trt01a == "Xanomeline High Dose") %>% 
+     select ( trt01a, sex_freq, -trt01a , -sex ) %>% 
+     rename (highdose = sex_freq , hdose = sex ) )             
+)
+
+
+bmi_by_trt_frq2 <- dplyr:: rename( bmi_by_trt_frq2,   variable = sex)
+bmi_by_trt_frq2 <- select (bmi_by_trt_frq2 , -hdose , -ldose)
+
+
+temp_data <- data.frame( matrix(ncol= 3 , nrow = 1 ))          
+c <- c("variable")          
+colnames(temp_data) <- c 
+
+temp_data <- data.frame(matrix(ncol= 4 , nrow = 1 ,
+  dimnames = list(NULL, c("variable" , "placebo", "lowdose", "highdose"
+ )) ))
+
+
+temp_data0 <- dplyr:: mutate( temp_data,   variable = "Sex" , variable = as.character(variable)
+                              , placebo = as.character(placebo)
+                              , lowdose = as.character(lowdose)
+                              , highdose = as.character(highdose)
+                              )
+temp_data1 <- dplyr:: mutate( temp_data,   variable = "Baseline BMI" , variable = as.character(variable)
+                              , placebo = as.character(placebo)
+                              , lowdose = as.character(lowdose)
+                              , highdose = as.character(highdose))
+
+# 
+# temp_data1<- dplyr::tibble(bmi_by_trt3)
+# 
+# bmi_by_trt_frq2 <- dplyr::tibble(bmi_by_trt_frq2)
+
+bmi_by_trt3 <- dplyr:: mutate ( bmi_by_trt3 , variable = as.character(variable)
+                                , placebo = as.character(placebo)
+                                , lowdose = as.character(lowdose)
+                                , highdose = as.character(highdose)) 
+ 
+bmi_by_trt_frq2 <- dplyr:: mutate (  bmi_by_trt_frq2 , variable = as.character(variable)
+                                     , placebo = as.character(placebo)
+                                     , lowdose = as.character(lowdose)
+                                     , highdose = as.character(highdose)) 
+
+ 
+s_stats <- bind_rows (temp_data1, bmi_by_trt3,temp_data0 ,bmi_by_trt_frq2 )
+
+s_stats
+
+```
+
+
+
+```{r}
+
+# bmi_by_trt <- adsl %>% 
+#               group_by(trt01pn) %>% 
+#               summarise_at( c( "trt01pn" , "bmibl" , "educlvl" ) ,
+#                                 mean, median ,
+#                                  na.rm = TRUE) 
+# if applied on a grouped tibble , these operations are not applied to grouping
+# variables. The behavior depends on wheather the selection is implict 
+# (all and if selections ) or explict (at selections) .
+# 
+# Grouping variables covered by explict selections in summarise_at() are always
+# an error . Add -group_cols() to vars () selection to avoid this 
+
+# 
+# 
+# trt01pn <- setdiff ( adsl , group_vars(trt01pn))
+# 
+# bmi_by_trt <- adsl %>% 
+#   
+#   summarise_at( nms ,   mean  )  
+
+# setwd("C:/Users/tatav/OneDrive/Desktop/sas2r")
+#getwd()
+
+# my_logfile = "mY_logfile.txt"
+# my_console_appender = console_appender(layout = default_log_layout())
+# my_file_appender = file_appender( my_logfile , append = TRUE , 
+#                                    layout =  default_log_layout())
+# 
+# my_logger <- log4r::logger(threshold = "INFO" , 
+#                             appenders = list(my_console_appender ,                                                    my_file_appender))
+# 
+# log4r_info <- function(){
+#   log4r::info(my_logger , "Info_message.")
+# }
+# 
+# 
+# log4r_error <- function(){
+#   log4r::error(my_logger , "Error_message.")
+# }
+# 
+# log4r_debug <- function(){
+#   log4r::debug(my_logger , "Debug_message.")
+# }
+# 
+# log4r_debug
+# log4r_info
+# log4r_error
+# 
+# readLines(my_logfile)
+
+# 
+```
+

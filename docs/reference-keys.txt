@@ -16,6 +16,8 @@ overview
 important-functions
 your-turn
 adsl-derivation-code-part-1
+date-of-first-exposure-to-treatment-trtsdt
+date-of-last-exposure-to-treatment-trtedt
 methods
 applications
 example-one
