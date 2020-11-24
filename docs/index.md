@@ -1,7 +1,7 @@
 --- 
 title: "A Minimal Book Example"
 author: "Yihui Xie"
-date: "2020-11-21"
+date: "2020-11-24"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]

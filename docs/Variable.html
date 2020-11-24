@@ -24,7 +24,7 @@
 <meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2020-11-21" />
+<meta name="date" content="2020-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -191,10 +191,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>List of Variables Derived = 1</p>
 <table>
 <colgroup>
-<col width="4%" />
+<col width="3%" />
 <col width="10%" />
 <col width="25%" />
-<col width="59%" />
+<col width="60%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -379,6 +379,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>mutate</p>
 <p>inner_join</p>
 <p>as.Date(as.character(svstdtc) )</p>
+<p>as.Date</p>
+<p><a href="https://www.rdocumentation.org/packages/zoo/versions/1.5-7/topics/as.Date.numeric" title="Date Conversion Functions From Numeric, Integer And Ts Objects Functions to convert numeric and related classes to objects of class &quot;Date&quot; representing calendar dates.">as.Date.numeric</a></p>
 <h2 id="lets-start-programming">Let’s start programming</h2>
 <ol style="list-style-type: decimal">
 <li>Initialize all the Library’s needed for the project</li>
@@ -386,12 +388,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Variable.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#intilizing the Dplyr library</span></span>
 <span id="cb9-2"><a href="Variable.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## -- Attaching packages ------------------------------------------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## -- Attaching packages ------------- tidyverse 1.3.0 --</code></pre>
 <pre><code>## v ggplot2 3.3.2     v purrr   0.3.4
 ## v tibble  3.0.3     v dplyr   1.0.2
 ## v tidyr   1.1.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>## -- Conflicts ---------------------------------------------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ---------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Variable.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clinicalfd)</span></code></pre></div>
@@ -399,1356 +401,332 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Bring in the datasets needed</li>
 </ol>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="Variable.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dm &lt;- clinicalfd::dm </span></span>
-<span id="cb14-2"><a href="Variable.html#cb14-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">names</span>(clinicalfd<span class="sc">::</span>dm )</span></code></pre></div>
-<pre><code>##  [1] &quot;studyid&quot;  &quot;domain&quot;   &quot;usubjid&quot;  &quot;subjid&quot;   &quot;rfstdtc&quot;  &quot;rfendtc&quot; 
-##  [7] &quot;rfxstdtc&quot; &quot;rfxendtc&quot; &quot;rficdtc&quot;  &quot;rfpendtc&quot; &quot;dthdtc&quot;   &quot;dthfl&quot;   
-## [13] &quot;siteid&quot;   &quot;age&quot;      &quot;ageu&quot;     &quot;sex&quot;      &quot;race&quot;     &quot;ethnic&quot;  
-## [19] &quot;armcd&quot;    &quot;arm&quot;      &quot;actarmcd&quot; &quot;actarm&quot;   &quot;country&quot;  &quot;dmdtc&quot;   
-## [25] &quot;dmdy&quot;</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="Variable.html#cb16-1" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>dm</span>
-<span id="cb16-2"><a href="Variable.html#cb16-2" aria-hidden="true" tabindex="-1"></a>dm  <span class="ot">&lt;-</span> dplyr <span class="sc">::</span> <span class="fu">filter</span>(dm ,arm <span class="sc">!=</span><span class="st">&quot;Screen Failure&quot;</span> )</span>
-<span id="cb16-3"><a href="Variable.html#cb16-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> ( dm , usubjid , siteid,arm) <span class="co"># Select </span></span>
-<span id="cb16-4"><a href="Variable.html#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="Variable.html#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#dm_01 &lt;- mutate (dm_01 , usubjid = as.character(usubjid) )</span></span>
-<span id="cb16-6"><a href="Variable.html#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="Variable.html#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="Variable.html#cb16-8" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>( adsl_deri01 , <span class="at">TRT01P =</span> arm) </span>
-<span id="cb16-9"><a href="Variable.html#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Use of Mutate function to create new variable#</span></span></code></pre></div>
+<span id="cb14-2"><a href="Variable.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># names(clinicalfd::dm )</span></span>
+<span id="cb14-3"><a href="Variable.html#cb14-3" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>dm</span>
+<span id="cb14-4"><a href="Variable.html#cb14-4" aria-hidden="true" tabindex="-1"></a>dm  <span class="ot">&lt;-</span> dplyr <span class="sc">::</span> <span class="fu">filter</span>(dm ,arm <span class="sc">!=</span><span class="st">&quot;Screen Failure&quot;</span> )</span>
+<span id="cb14-5"><a href="Variable.html#cb14-5" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> ( dm , usubjid , siteid,arm) <span class="co"># Select </span></span>
+<span id="cb14-6"><a href="Variable.html#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="Variable.html#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#dm_01 &lt;- mutate (dm_01 , usubjid = as.character(usubjid) )</span></span>
+<span id="cb14-8"><a href="Variable.html#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="Variable.html#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="Variable.html#cb14-10" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>( adsl_deri01 , <span class="at">TRT01P =</span> arm) </span>
+<span id="cb14-11"><a href="Variable.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Use of Mutate function to create new variable#</span></span></code></pre></div>
 </div>
 <div id="adsl-derivation-code-part-1" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> Adsl Derivation Code part-1</h2>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="Variable.html#cb17-1" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dm  <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="Variable.html#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (actarmcd <span class="sc">!=</span><span class="st">&quot;Scrnfail&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a href="Variable.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitegr1 =</span> siteid , <span class="at">trt01p =</span> arm , <span class="at">trt01a =</span> arm , </span>
-<span id="cb17-4"><a href="Variable.html#cb17-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid),</span>
-<span id="cb17-5"><a href="Variable.html#cb17-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">trt01pn  =</span> <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Placebo&quot;</span> ) , <span class="dv">0</span> ,</span>
-<span id="cb17-6"><a href="Variable.html#cb17-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline Low Dose&quot;</span> ) , <span class="dv">54</span>,</span>
-<span id="cb17-7"><a href="Variable.html#cb17-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline High Dose&quot;</span> ) , <span class="dv">81</span> , <span class="cn">NA</span>))) ,</span>
-<span id="cb17-8"><a href="Variable.html#cb17-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">trt01an =</span> trt01pn ,</span>
-<span id="cb17-9"><a href="Variable.html#cb17-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ittfl   =</span> <span class="fu">ifelse</span> (trt01pn <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">54</span>,<span class="dv">81</span>) , <span class="st">&quot;Y&quot;</span> , <span class="st">&quot;N&quot;</span> ),</span>
-<span id="cb17-10"><a href="Variable.html#cb17-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">agegr1  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="st">&quot;&lt;65&quot;</span> , </span>
-<span id="cb17-11"><a href="Variable.html#cb17-11" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;65-80&quot;</span>  , </span>
-<span id="cb17-12"><a href="Variable.html#cb17-12" aria-hidden="true" tabindex="-1"></a>                               (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;&gt;80&quot;</span>  ),</span>
-<span id="cb17-13"><a href="Variable.html#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="Variable.html#cb17-14" aria-hidden="true" tabindex="-1"></a>           </span>
-<span id="cb17-15"><a href="Variable.html#cb17-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">agegr1n  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="dv">1</span>  , </span>
-<span id="cb17-16"><a href="Variable.html#cb17-16" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">2</span>  , </span>
-<span id="cb17-17"><a href="Variable.html#cb17-17" aria-hidden="true" tabindex="-1"></a>                                (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">3</span>  ),</span>
-<span id="cb17-18"><a href="Variable.html#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-19"><a href="Variable.html#cb17-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">race  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="st">&quot;WHITE&quot;</span> , </span>
-<span id="cb17-20"><a href="Variable.html#cb17-20" aria-hidden="true" tabindex="-1"></a>                              race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span>                                <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> ,</span>
-<span id="cb17-21"><a href="Variable.html#cb17-21" aria-hidden="true" tabindex="-1"></a>                              </span>
-<span id="cb17-22"><a href="Variable.html#cb17-22" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> ,</span>
-<span id="cb17-23"><a href="Variable.html#cb17-23" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="st">&quot;ASIAN&quot;</span> ) , </span>
-<span id="cb17-24"><a href="Variable.html#cb17-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">racen  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="dv">1</span> , </span>
-<span id="cb17-25"><a href="Variable.html#cb17-25" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span> <span class="dv">2</span> ,</span>
-<span id="cb17-26"><a href="Variable.html#cb17-26" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="dv">6</span> ,</span>
-<span id="cb17-27"><a href="Variable.html#cb17-27" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="dv">7</span> ),</span>
-<span id="cb17-28"><a href="Variable.html#cb17-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">sex  =</span>  <span class="fu">case_when</span>(sex <span class="sc">%in%</span> <span class="st">&quot;F&quot;</span> <span class="sc">~</span> <span class="st">&quot;Female&quot;</span>  , </span>
-<span id="cb17-29"><a href="Variable.html#cb17-29" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;M&quot;</span> <span class="sc">~</span> <span class="st">&quot;Male&quot;</span>    , </span>
-<span id="cb17-30"><a href="Variable.html#cb17-30" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> ) , </span>
-<span id="cb17-31"><a href="Variable.html#cb17-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">ethnic  =</span>  <span class="fu">case_when</span>(ethnic <span class="sc">%in%</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span>  , </span>
-<span id="cb17-32"><a href="Variable.html#cb17-32" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span>  , </span>
-<span id="cb17-33"><a href="Variable.html#cb17-33" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> )</span>
-<span id="cb17-34"><a href="Variable.html#cb17-34" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="Variable.html#cb15-1" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dm  <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="Variable.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (actarmcd <span class="sc">!=</span><span class="st">&quot;Scrnfail&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="Variable.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitegr1 =</span> siteid , <span class="at">trt01p =</span> arm , <span class="at">trt01a =</span> arm , </span>
+<span id="cb15-4"><a href="Variable.html#cb15-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid),</span>
+<span id="cb15-5"><a href="Variable.html#cb15-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">trt01pn  =</span> <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Placebo&quot;</span> ) , <span class="dv">0</span> ,</span>
+<span id="cb15-6"><a href="Variable.html#cb15-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline Low Dose&quot;</span> ) , <span class="dv">54</span>,</span>
+<span id="cb15-7"><a href="Variable.html#cb15-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline High Dose&quot;</span> ) , <span class="dv">81</span> , <span class="cn">NA</span>))) ,</span>
+<span id="cb15-8"><a href="Variable.html#cb15-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">trt01an =</span> trt01pn ,</span>
+<span id="cb15-9"><a href="Variable.html#cb15-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ittfl   =</span> <span class="fu">ifelse</span> (trt01pn <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">54</span>,<span class="dv">81</span>) , <span class="st">&quot;Y&quot;</span> , <span class="st">&quot;N&quot;</span> ),</span>
+<span id="cb15-10"><a href="Variable.html#cb15-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">agegr1  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="st">&quot;&lt;65&quot;</span> , </span>
+<span id="cb15-11"><a href="Variable.html#cb15-11" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;65-80&quot;</span>  , </span>
+<span id="cb15-12"><a href="Variable.html#cb15-12" aria-hidden="true" tabindex="-1"></a>                               (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;&gt;80&quot;</span>  ),</span>
+<span id="cb15-13"><a href="Variable.html#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="Variable.html#cb15-14" aria-hidden="true" tabindex="-1"></a>           </span>
+<span id="cb15-15"><a href="Variable.html#cb15-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">agegr1n  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="dv">1</span>  , </span>
+<span id="cb15-16"><a href="Variable.html#cb15-16" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">2</span>  , </span>
+<span id="cb15-17"><a href="Variable.html#cb15-17" aria-hidden="true" tabindex="-1"></a>                                (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">3</span>  ),</span>
+<span id="cb15-18"><a href="Variable.html#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="Variable.html#cb15-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">race  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="st">&quot;WHITE&quot;</span> , </span>
+<span id="cb15-20"><a href="Variable.html#cb15-20" aria-hidden="true" tabindex="-1"></a>                              race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span>                                <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> ,</span>
+<span id="cb15-21"><a href="Variable.html#cb15-21" aria-hidden="true" tabindex="-1"></a>                              </span>
+<span id="cb15-22"><a href="Variable.html#cb15-22" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> ,</span>
+<span id="cb15-23"><a href="Variable.html#cb15-23" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="st">&quot;ASIAN&quot;</span> ) , </span>
+<span id="cb15-24"><a href="Variable.html#cb15-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">racen  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="dv">1</span> , </span>
+<span id="cb15-25"><a href="Variable.html#cb15-25" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span> <span class="dv">2</span> ,</span>
+<span id="cb15-26"><a href="Variable.html#cb15-26" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="dv">6</span> ,</span>
+<span id="cb15-27"><a href="Variable.html#cb15-27" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="dv">7</span> ),</span>
+<span id="cb15-28"><a href="Variable.html#cb15-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">sex  =</span>  <span class="fu">case_when</span>(sex <span class="sc">%in%</span> <span class="st">&quot;F&quot;</span> <span class="sc">~</span> <span class="st">&quot;Female&quot;</span>  , </span>
+<span id="cb15-29"><a href="Variable.html#cb15-29" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;M&quot;</span> <span class="sc">~</span> <span class="st">&quot;Male&quot;</span>    , </span>
+<span id="cb15-30"><a href="Variable.html#cb15-30" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> ) , </span>
+<span id="cb15-31"><a href="Variable.html#cb15-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">ethnic  =</span>  <span class="fu">case_when</span>(ethnic <span class="sc">%in%</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span>  , </span>
+<span id="cb15-32"><a href="Variable.html#cb15-32" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span>  , </span>
+<span id="cb15-33"><a href="Variable.html#cb15-33" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> )</span>
+<span id="cb15-34"><a href="Variable.html#cb15-34" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div>
 <p><strong>Date of First Exposure to Treatment</strong> <code>SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date</code></p>
 </div>
 <div id="date-of-first-exposure-to-treatment-trtsdt" class="section level3" number="7.3.1">
 <h3><span class="header-section-number">7.3.1</span> <strong>Date of First Exposure to Treatment (TRTSDT)</strong></h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="Variable.html#cb18-1" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>sv   </span>
-<span id="cb18-2"><a href="Variable.html#cb18-2" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> sv_visit3 <span class="sc">%&gt;%</span> </span>
-<span id="cb18-3"><a href="Variable.html#cb18-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(visitnum <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-4"><a href="Variable.html#cb18-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid)) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-5"><a href="Variable.html#cb18-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> (usubjid , svstdtc)</span>
-<span id="cb18-6"><a href="Variable.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="Variable.html#cb18-7" aria-hidden="true" tabindex="-1"></a>sv_visit3</span></code></pre></div>
-<pre><code>##         usubjid    svstdtc
-## 1   01-701-1015 2014-01-02
-## 2   01-701-1023 2012-08-05
-## 3   01-701-1028 2013-07-19
-## 4   01-701-1033 2014-03-18
-## 5   01-701-1034 2014-07-01
-## 6   01-701-1047 2013-02-12
-## 7   01-701-1097 2014-01-01
-## 8   01-701-1111 2012-09-07
-## 9   01-701-1115 2012-11-30
-## 10  01-701-1118 2014-03-12
-## 11  01-701-1130 2014-02-15
-## 12  01-701-1133 2012-10-28
-## 13  01-701-1146 2013-05-20
-## 14  01-701-1148 2013-08-23
-## 15  01-701-1153 2013-09-23
-## 16  01-701-1180 2013-02-12
-## 17  01-701-1181 2013-12-05
-## 18  01-701-1188 2013-02-15
-## 19  01-701-1192 2012-07-22
-## 20  01-701-1203 2013-02-02
-## 21  01-701-1211 2012-11-15
-## 22  01-701-1234 2013-03-30
-## 23  01-701-1239 2014-01-11
-## 24  01-701-1275 2014-02-07
-## 25  01-701-1287 2014-01-25
-## 26  01-701-1294 2013-03-24
-## 27  01-701-1302 2013-08-29
-## 28  01-701-1317 2014-05-22
-## 29  01-701-1324 2012-10-02
-## 30  01-701-1341 2013-01-05
-## 31  01-701-1345 2013-10-08
-## 32  01-701-1360 2013-07-31
-## 33  01-701-1363 2013-05-30
-## 34  01-701-1383 2013-02-04
-## 35  01-701-1387 2014-03-12
-## 36  01-701-1392 2012-10-28
-## 37  01-701-1415 2013-09-23
-## 38  01-701-1429 2013-03-19
-## 39  01-701-1440 2013-08-08
-## 40  01-701-1442 2013-10-26
-## 41  01-701-1444 2013-01-05
-## 42  01-702-1082 2013-07-26
-## 43  01-703-1042 2013-03-02
-## 44  01-703-1076 2013-10-25
-## 45  01-703-1086 2012-09-02
-## 46  01-703-1096 2013-01-25
-## 47  01-703-1100 2013-03-13
-## 48  01-703-1119 2013-02-20
-## 49  01-703-1175 2013-12-20
-## 50  01-703-1182 2013-10-17
-## 51  01-703-1197 2013-06-16
-## 52  01-703-1210 2013-03-16
-## 53  01-703-1258 2012-07-20
-## 54  01-703-1279 2013-05-13
-## 55  01-703-1295 2013-11-21
-## 56  01-703-1299 2012-09-12
-## 57  01-703-1335 2014-03-17
-## 58  01-703-1379 2013-09-22
-## 59  01-703-1403 2012-12-12
-## 60  01-703-1439 2014-03-12
-## 61  01-704-1008 2013-01-13
-## 62  01-704-1009 2013-08-27
-## 63  01-704-1010 2014-02-21
-## 64  01-704-1017 2013-10-06
-## 65  01-704-1025 2013-09-27
-## 66  01-704-1065 2013-10-24
-## 67  01-704-1074 2014-01-22
-## 68  01-704-1093 2013-03-15
-## 69  01-704-1114 2013-01-23
-## 70  01-704-1120 2013-12-02
-## 71  01-704-1127 2013-10-02
-## 72  01-704-1135 2013-10-31
-## 73  01-704-1164 2012-09-19
-## 74  01-704-1218 2012-11-19
-## 75  01-704-1233 2013-03-21
-## 76  01-704-1241 2013-08-25
-## 77  01-704-1260 2012-08-30
-## 78  01-704-1266 2013-10-13
-## 79  01-704-1323 2013-07-08
-## 80  01-704-1325 2014-04-23
-## 81  01-704-1332 2013-12-09
-## 82  01-704-1351 2013-10-12
-## 83  01-704-1388 2012-12-07
-## 84  01-704-1435 2012-11-17
-## 85  01-704-1445 2014-05-11
-## 86  01-705-1018 2013-07-05
-## 87  01-705-1031 2013-11-27
-## 88  01-705-1059 2013-08-05
-## 89  01-705-1186 2014-01-08
-## 90  01-705-1199 2013-09-16
-## 91  01-705-1280 2014-01-17
-## 92  01-705-1281 2013-11-28
-## 93  01-705-1282 2012-12-26
-## 94  01-705-1292 2013-10-14
-## 95  01-705-1303 2013-12-16
-## 96  01-705-1310 2013-11-02
-## 97  01-705-1349 2013-03-10
-## 98  01-705-1377 2014-01-04
-## 99  01-705-1382 2013-05-13
-## 100 01-705-1393 2012-09-07
-## 101 01-705-1431 2013-06-23
-## 102 01-706-1041 2013-12-31
-## 103 01-706-1049 2013-05-14
-## 104 01-706-1384 2012-09-15
-## 105 01-707-1037 2013-12-20
-## 106 01-707-1206 2013-10-28
-## 107 01-708-1019 2013-12-20
-## 108 01-708-1032 2013-02-09
-## 109 01-708-1084 2013-05-09
-## 110 01-708-1087 2012-10-22
-## 111 01-708-1158 2014-02-08
-## 112 01-708-1171 2012-12-06
-## 113 01-708-1178 2013-12-29
-## 114 01-708-1213 2013-02-09
-## 115 01-708-1216 2012-10-24
-## 116 01-708-1236 2013-09-21
-## 117 01-708-1253 2013-05-07
-## 118 01-708-1272 2013-02-06
-## 119 01-708-1286 2013-09-10
-## 120 01-708-1296 2013-06-14
-## 121 01-708-1297 2013-01-25
-## 122 01-708-1316 2013-08-23
-## 123 01-708-1336 2012-12-07
-## 124 01-708-1342 2012-12-29
-## 125 01-708-1347 2013-04-20
-## 126 01-708-1348 2013-08-05
-## 127 01-708-1353 2013-07-04
-## 128 01-708-1372 2013-04-12
-## 129 01-708-1378 2013-09-03
-## 130 01-708-1406 2013-12-26
-## 131 01-708-1428 2013-11-09
-## 132 01-709-1001 2013-10-08
-## 133 01-709-1007 2012-07-31
-## 134 01-709-1020 2012-12-01
-## 135 01-709-1029 2012-12-25
-## 136 01-709-1081 2014-01-18
-## 137 01-709-1088 2014-04-12
-## 138 01-709-1099 2013-10-25
-## 139 01-709-1102 2013-01-15
-## 140 01-709-1168 2013-08-02
-## 141 01-709-1217 2013-03-04
-## 142 01-709-1238 2013-05-15
-## 143 01-709-1259 2013-01-26
-## 144 01-709-1285 2013-03-24
-## 145 01-709-1301 2013-07-19
-## 146 01-709-1306 2014-02-03
-## 147 01-709-1309 2013-06-19
-## 148 01-709-1312 2014-04-20
-## 149 01-709-1326 2013-04-05
-## 150 01-709-1329 2013-08-15
-## 151 01-709-1339 2012-12-23
-## 152 01-709-1424 2013-03-03
-## 153 01-710-1002 2014-01-14
-## 154 01-710-1006 2013-02-10
-## 155 01-710-1021 2013-09-27
-## 156 01-710-1027 2014-02-28
-## 157 01-710-1045 2013-06-03
-## 158 01-710-1053 2012-12-26
-## 159 01-710-1060 2013-01-01
-## 160 01-710-1070 2012-09-08
-## 161 01-710-1077 2013-11-17
-## 162 01-710-1078 2013-09-17
-## 163 01-710-1083 2013-07-22
-## 164 01-710-1137 2013-10-11
-## 165 01-710-1142 2012-10-02
-## 166 01-710-1154 2014-03-29
-## 167 01-710-1166 2012-11-30
-## 168 01-710-1183 2013-11-16
-## 169 01-710-1187 2012-11-10
-## 170 01-710-1235 2012-09-26
-## 171 01-710-1249 2013-12-28
-## 172 01-710-1264 2013-06-13
-## 173 01-710-1270 2014-02-12
-## 174 01-710-1271 2012-09-27
-## 175 01-710-1278 2012-12-24
-## 176 01-710-1300 2012-12-15
-## 177 01-710-1314 2013-04-24
-## 178 01-710-1315 2013-02-27
-## 179 01-710-1354 2012-11-11
-## 180 01-710-1358 2012-09-17
-## 181 01-710-1368 2013-10-23
-## 182 01-710-1385 2012-10-29
-## 183 01-710-1408 2013-01-05
-## 184 01-711-1012 2013-04-03
-## 185 01-711-1036 2012-07-29
-## 186 01-711-1143 2013-04-03
-## 187 01-711-1433 2013-01-27
-## 188 01-713-1043 2013-09-15
-## 189 01-713-1073 2014-03-30
-## 190 01-713-1106 2012-10-31
-## 191 01-713-1141 2013-05-31
-## 192 01-713-1179 2013-08-09
-## 193 01-713-1209 2013-05-27
-## 194 01-713-1256 2012-09-19
-## 195 01-713-1269 2014-01-27
-## 196 01-713-1448 2014-01-19
-## 197 01-714-1035 2014-04-17
-## 198 01-714-1068 2013-08-08
-## 199 01-714-1195 2013-04-26
-## 200 01-714-1288 2013-12-04
-## 201 01-714-1375 2013-02-26
-## 202 01-714-1425 2013-08-15
-## 203 01-715-1085 2013-02-16
-## 204 01-715-1107 2013-02-26
-## 205 01-715-1155 2013-12-13
-## 206 01-715-1207 2012-11-18
-## 207 01-715-1319 2013-02-17
-## 208 01-715-1321 2014-02-11
-## 209 01-715-1397 2013-04-03
-## 210 01-715-1405 2013-07-06
-## 211 01-716-1024 2012-07-09
-## 212 01-716-1026 2014-04-02
-## 213 01-716-1030 2013-12-28
-## 214 01-716-1044 2013-04-27
-## 215 01-716-1063 2013-05-09
-## 216 01-716-1071 2013-06-08
-## 217 01-716-1094 2012-12-19
-## 218 01-716-1103 2014-03-20
-## 219 01-716-1108 2013-02-12
-## 220 01-716-1151 2013-02-01
-## 221 01-716-1157 2013-10-02
-## 222 01-716-1160 2013-04-05
-## 223 01-716-1167 2012-10-08
-## 224 01-716-1177 2014-09-02
-## 225 01-716-1189 2012-10-09
-## 226 01-716-1229 2013-02-20
-## 227 01-716-1298 2013-04-08
-## 228 01-716-1308 2013-08-28
-## 229 01-716-1311 2014-05-14
-## 230 01-716-1364 2013-07-04
-## 231 01-716-1373 2012-12-14
-## 232 01-716-1418 2013-05-05
-## 233 01-716-1441 2014-01-22
-## 234 01-716-1447 2013-12-16
-## 235 01-717-1004 2014-01-14
-## 236 01-717-1109 2014-01-27
-## 237 01-717-1174 2013-01-22
-## 238 01-717-1201 2013-12-19
-## 239 01-717-1344 2014-01-11
-## 240 01-717-1357 2013-05-01
-## 241 01-717-1446 2013-09-01
-## 242 01-718-1066 2013-07-07
-## 243 01-718-1079 2012-09-19
-## 244 01-718-1101 2013-02-17
-## 245 01-718-1139 2013-05-19
-## 246 01-718-1150 2013-01-19
-## 247 01-718-1170 2013-09-16
-## 248 01-718-1172 2013-09-21
-## 249 01-718-1250 2013-09-21
-## 250 01-718-1254 2013-07-10
-## 251 01-718-1328 2013-02-01
-## 252 01-718-1355 2013-02-28
-## 253 01-718-1371 2013-04-26
-## 254 01-718-1427 2012-12-17</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Variable.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nature of usubjid is character and svstdtc is &lt;s3.labelled&gt; </span></span>
-<span id="cb20-2"><a href="Variable.html#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-3"><a href="Variable.html#cb20-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
-<span id="cb20-4"><a href="Variable.html#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-5"><a href="Variable.html#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-6"><a href="Variable.html#cb20-6" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> adsl_deri01 <span class="sc">%&gt;%</span>  </span>
-<span id="cb20-7"><a href="Variable.html#cb20-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">mutate</span>(<span class="at">trtsdt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(svstdtc)) </span>
-<span id="cb20-8"><a href="Variable.html#cb20-8" aria-hidden="true" tabindex="-1"></a>                      ) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-9"><a href="Variable.html#cb20-9" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span> (usubjid , trtsdt, svstdtc , actarmcd , sitegr1, siteid , trt01p                , arm , trt01a , trt01pn ,trt01pn,ittfl,agegr1,age,agegr1n,race               ,racen,sex,ethnic , rfstdtc ,</span>
-<span id="cb20-10"><a href="Variable.html#cb20-10" aria-hidden="true" tabindex="-1"></a>               rfendtc , sex , ethnic , dthfl )</span>
-<span id="cb20-11"><a href="Variable.html#cb20-11" aria-hidden="true" tabindex="-1"></a>adsl_deri02</span></code></pre></div>
-<pre><code>##         usubjid     trtsdt    svstdtc actarmcd sitegr1 siteid
-## 1   01-701-1015 2014-01-02 2014-01-02      Pbo     701    701
-## 2   01-701-1023 2012-08-05 2012-08-05      Pbo     701    701
-## 3   01-701-1028 2013-07-19 2013-07-19   Xan_Hi     701    701
-## 4   01-701-1033 2014-03-18 2014-03-18   Xan_Lo     701    701
-## 5   01-701-1034 2014-07-01 2014-07-01   Xan_Hi     701    701
-## 6   01-701-1047 2013-02-12 2013-02-12      Pbo     701    701
-## 7   01-701-1097 2014-01-01 2014-01-01   Xan_Lo     701    701
-## 8   01-701-1111 2012-09-07 2012-09-07   Xan_Lo     701    701
-## 9   01-701-1115 2012-11-30 2012-11-30   Xan_Lo     701    701
-## 10  01-701-1118 2014-03-12 2014-03-12      Pbo     701    701
-## 11  01-701-1130 2014-02-15 2014-02-15      Pbo     701    701
-## 12  01-701-1133 2012-10-28 2012-10-28   Xan_Hi     701    701
-## 13  01-701-1146 2013-05-20 2013-05-20   Xan_Hi     701    701
-## 14  01-701-1148 2013-08-23 2013-08-23   Xan_Hi     701    701
-## 15  01-701-1153 2013-09-23 2013-09-23      Pbo     701    701
-## 16  01-701-1180 2013-02-12 2013-02-12   Xan_Hi     701    701
-## 17  01-701-1181 2013-12-05 2013-12-05   Xan_Lo     701    701
-## 18  01-701-1188 2013-02-15 2013-02-15   Xan_Lo     701    701
-## 19  01-701-1192 2012-07-22 2012-07-22   Xan_Lo     701    701
-## 20  01-701-1203 2013-02-02 2013-02-02      Pbo     701    701
-## 21  01-701-1211 2012-11-15 2012-11-15   Xan_Lo     701    701
-## 22  01-701-1234 2013-03-30 2013-03-30      Pbo     701    701
-## 23  01-701-1239 2014-01-11 2014-01-11   Xan_Hi     701    701
-## 24  01-701-1275 2014-02-07 2014-02-07   Xan_Hi     701    701
-## 25  01-701-1287 2014-01-25 2014-01-25   Xan_Hi     701    701
-## 26  01-701-1294 2013-03-24 2013-03-24   Xan_Lo     701    701
-## 27  01-701-1302 2013-08-29 2013-08-29   Xan_Hi     701    701
-## 28  01-701-1317 2014-05-22 2014-05-22   Xan_Lo     701    701
-## 29  01-701-1324 2012-10-02 2012-10-02   Xan_Lo     701    701
-## 30  01-701-1341 2013-01-05 2013-01-05   Xan_Lo     701    701
-## 31  01-701-1345 2013-10-08 2013-10-08      Pbo     701    701
-## 32  01-701-1360 2013-07-31 2013-07-31   Xan_Lo     701    701
-## 33  01-701-1363 2013-05-30 2013-05-30      Pbo     701    701
-## 34  01-701-1383 2013-02-04 2013-02-04   Xan_Hi     701    701
-## 35  01-701-1387 2014-03-12 2014-03-12      Pbo     701    701
-## 36  01-701-1392 2012-10-28 2012-10-28      Pbo     701    701
-## 37  01-701-1415 2013-09-23 2013-09-23      Pbo     701    701
-## 38  01-701-1429 2013-03-19 2013-03-19   Xan_Lo     701    701
-## 39  01-701-1440 2013-08-08 2013-08-08      Pbo     701    701
-## 40  01-701-1442 2013-10-26 2013-10-26   Xan_Lo     701    701
-## 41  01-701-1444 2013-01-05 2013-01-05   Xan_Hi     701    701
-## 42  01-702-1082 2013-07-26 2013-07-26   Xan_Lo     702    702
-## 43  01-703-1042 2013-03-02 2013-03-02      Pbo     703    703
-## 44  01-703-1076 2013-10-25 2013-10-25   Xan_Hi     703    703
-## 45  01-703-1086 2012-09-02 2012-09-02   Xan_Lo     703    703
-## 46  01-703-1096 2013-01-25 2013-01-25      Pbo     703    703
-## 47  01-703-1100 2013-03-13 2013-03-13      Pbo     703    703
-## 48  01-703-1119 2013-02-20 2013-02-20   Xan_Lo     703    703
-## 49  01-703-1175 2013-12-20 2013-12-20      Pbo     703    703
-## 50  01-703-1182 2013-10-17 2013-10-17   Xan_Lo     703    703
-## 51  01-703-1197 2013-06-16 2013-06-16   Xan_Lo     703    703
-## 52  01-703-1210 2013-03-16 2013-03-16      Pbo     703    703
-## 53  01-703-1258 2012-07-20 2012-07-20   Xan_Hi     703    703
-## 54  01-703-1279 2013-05-13 2013-05-13   Xan_Lo     703    703
-## 55  01-703-1295 2013-11-21 2013-11-21   Xan_Hi     703    703
-## 56  01-703-1299 2012-09-12 2012-09-12      Pbo     703    703
-## 57  01-703-1335 2014-03-17 2014-03-17   Xan_Hi     703    703
-## 58  01-703-1379 2013-09-22 2013-09-22   Xan_Lo     703    703
-## 59  01-703-1403 2012-12-12 2012-12-12   Xan_Lo     703    703
-## 60  01-703-1439 2014-03-12 2014-03-12   Xan_Hi     703    703
-## 61  01-704-1008 2013-01-13 2013-01-13   Xan_Hi     704    704
-## 62  01-704-1009 2013-08-27 2013-08-27   Xan_Lo     704    704
-## 63  01-704-1010 2014-02-21 2014-02-21      Pbo     704    704
-## 64  01-704-1017 2013-10-06 2013-10-06   Xan_Hi     704    704
-## 65  01-704-1025 2013-09-27 2013-09-27   Xan_Lo     704    704
-## 66  01-704-1065 2013-10-24 2013-10-24   Xan_Hi     704    704
-## 67  01-704-1074 2014-01-22 2014-01-22   Xan_Hi     704    704
-## 68  01-704-1093 2013-03-15 2013-03-15   Xan_Hi     704    704
-## 69  01-704-1114 2013-01-23 2013-01-23   Xan_Lo     704    704
-## 70  01-704-1120 2013-12-02 2013-12-02   Xan_Lo     704    704
-## 71  01-704-1127 2013-10-02 2013-10-02      Pbo     704    704
-## 72  01-704-1135 2013-10-31 2013-10-31   Xan_Lo     704    704
-## 73  01-704-1164 2012-09-19 2012-09-19      Pbo     704    704
-## 74  01-704-1218 2012-11-19 2012-11-19   Xan_Lo     704    704
-## 75  01-704-1233 2013-03-21 2013-03-21      Pbo     704    704
-## 76  01-704-1241 2013-08-25 2013-08-25   Xan_Hi     704    704
-## 77  01-704-1260 2012-08-30 2012-08-30      Pbo     704    704
-## 78  01-704-1266 2013-10-13 2013-10-13   Xan_Hi     704    704
-## 79  01-704-1323 2013-07-08 2013-07-08   Xan_Lo     704    704
-## 80  01-704-1325 2014-04-23 2014-04-23   Xan_Lo     704    704
-## 81  01-704-1332 2013-12-09 2013-12-09   Xan_Hi     704    704
-## 82  01-704-1351 2013-10-12 2013-10-12      Pbo     704    704
-## 83  01-704-1388 2012-12-07 2012-12-07      Pbo     704    704
-## 84  01-704-1435 2012-11-17 2012-11-17      Pbo     704    704
-## 85  01-704-1445 2014-05-11 2014-05-11      Pbo     704    704
-## 86  01-705-1018 2013-07-05 2013-07-05      Pbo     705    705
-## 87  01-705-1031 2013-11-27 2013-11-27   Xan_Lo     705    705
-## 88  01-705-1059 2013-08-05 2013-08-05      Pbo     705    705
-## 89  01-705-1186 2014-01-08 2014-01-08      Pbo     705    705
-## 90  01-705-1199 2013-09-16 2013-09-16   Xan_Lo     705    705
-## 91  01-705-1280 2014-01-17 2014-01-17   Xan_Hi     705    705
-## 92  01-705-1281 2013-11-28 2013-11-28   Xan_Hi     705    705
-## 93  01-705-1282 2012-12-26 2012-12-26      Pbo     705    705
-## 94  01-705-1292 2013-10-14 2013-10-14   Xan_Lo     705    705
-## 95  01-705-1303 2013-12-16 2013-12-16   Xan_Hi     705    705
-## 96  01-705-1310 2013-11-02 2013-11-02   Xan_Hi     705    705
-## 97  01-705-1349 2013-03-10 2013-03-10      Pbo     705    705
-## 98  01-705-1377 2014-01-04 2014-01-04   Xan_Hi     705    705
-## 99  01-705-1382 2013-05-13 2013-05-13   Xan_Lo     705    705
-## 100 01-705-1393 2012-09-07 2012-09-07   Xan_Lo     705    705
-## 101 01-705-1431 2013-06-23 2013-06-23   Xan_Lo     705    705
-## 102 01-706-1041 2013-12-31 2013-12-31      Pbo     706    706
-## 103 01-706-1049 2013-05-14 2013-05-14   Xan_Hi     706    706
-## 104 01-706-1384 2012-09-15 2012-09-15   Xan_Lo     706    706
-## 105 01-707-1037 2013-12-20 2013-12-20   Xan_Lo     707    707
-## 106 01-707-1206 2013-10-28 2013-10-28      Pbo     707    707
-## 107 01-708-1019 2013-12-20 2013-12-20   Xan_Lo     708    708
-## 108 01-708-1032 2013-02-09 2013-02-09   Xan_Lo     708    708
-## 109 01-708-1084 2013-05-09 2013-05-09   Xan_Lo     708    708
-## 110 01-708-1087 2012-10-22 2012-10-22      Pbo     708    708
-## 111 01-708-1158 2014-02-08 2014-02-08      Pbo     708    708
-## 112 01-708-1171 2012-12-06 2012-12-06      Pbo     708    708
-## 113 01-708-1178 2013-12-29 2013-12-29   Xan_Hi     708    708
-## 114 01-708-1213 2013-02-09 2013-02-09   Xan_Lo     708    708
-## 115 01-708-1216 2012-10-24 2012-10-24   Xan_Hi     708    708
-## 116 01-708-1236 2013-09-21 2013-09-21   Xan_Lo     708    708
-## 117 01-708-1253 2013-05-07 2013-05-07      Pbo     708    708
-## 118 01-708-1272 2013-02-06 2013-02-06   Xan_Lo     708    708
-## 119 01-708-1286 2013-09-10 2013-09-10      Pbo     708    708
-## 120 01-708-1296 2013-06-14 2013-06-14      Pbo     708    708
-## 121 01-708-1297 2013-01-25 2013-01-25   Xan_Lo     708    708
-## 122 01-708-1316 2013-08-23 2013-08-23      Pbo     708    708
-## 123 01-708-1336 2012-12-07 2012-12-07   Xan_Hi     708    708
-## 124 01-708-1342 2012-12-29 2012-12-29      Pbo     708    708
-## 125 01-708-1347 2013-04-20 2013-04-20   Xan_Hi     708    708
-## 126 01-708-1348 2013-08-05 2013-08-05   Xan_Lo     708    708
-## 127 01-708-1353 2013-07-04 2013-07-04   Xan_Lo     708    708
-## 128 01-708-1372 2013-04-12 2013-04-12   Xan_Lo     708    708
-## 129 01-708-1378 2013-09-03 2013-09-03      Pbo     708    708
-## 130 01-708-1406 2013-12-26 2013-12-26   Xan_Hi     708    708
-## 131 01-708-1428 2013-11-09 2013-11-09   Xan_Lo     708    708
-## 132 01-709-1001 2013-10-08 2013-10-08      Pbo     709    709
-## 133 01-709-1007 2012-07-31 2012-07-31   Xan_Lo     709    709
-## 134 01-709-1020 2012-12-01 2012-12-01   Xan_Lo     709    709
-## 135 01-709-1029 2012-12-25 2012-12-25   Xan_Hi     709    709
-## 136 01-709-1081 2014-01-18 2014-01-18   Xan_Lo     709    709
-## 137 01-709-1088 2014-04-12 2014-04-12      Pbo     709    709
-## 138 01-709-1099 2013-10-25 2013-10-25   Xan_Hi     709    709
-## 139 01-709-1102 2013-01-15 2013-01-15   Xan_Lo     709    709
-## 140 01-709-1168 2013-08-02 2013-08-02   Xan_Hi     709    709
-## 141 01-709-1217 2013-03-04 2013-03-04   Xan_Lo     709    709
-## 142 01-709-1238 2013-05-15 2013-05-15   Xan_Hi     709    709
-## 143 01-709-1259 2013-01-26 2013-01-26      Pbo     709    709
-## 144 01-709-1285 2013-03-24 2013-03-24   Xan_Lo     709    709
-## 145 01-709-1301 2013-07-19 2013-07-19      Pbo     709    709
-## 146 01-709-1306 2014-02-03 2014-02-03      Pbo     709    709
-## 147 01-709-1309 2013-06-19 2013-06-19   Xan_Hi     709    709
-## 148 01-709-1312 2014-04-20 2014-04-20      Pbo     709    709
-## 149 01-709-1326 2013-04-05 2013-04-05   Xan_Lo     709    709
-## 150 01-709-1329 2013-08-15 2013-08-15   Xan_Lo     709    709
-## 151 01-709-1339 2012-12-23 2012-12-23      Pbo     709    709
-## 152 01-709-1424 2013-03-03 2013-03-03   Xan_Lo     709    709
-## 153 01-710-1002 2014-01-14 2014-01-14   Xan_Lo     710    710
-## 154 01-710-1006 2013-02-10 2013-02-10   Xan_Hi     710    710
-## 155 01-710-1021 2013-09-27 2013-09-27   Xan_Hi     710    710
-## 156 01-710-1027 2014-02-28 2014-02-28      Pbo     710    710
-## 157 01-710-1045 2013-06-03 2013-06-03   Xan_Lo     710    710
-## 158 01-710-1053 2012-12-26 2012-12-26   Xan_Lo     710    710
-## 159 01-710-1060 2013-01-01 2013-01-01      Pbo     710    710
-## 160 01-710-1070 2012-09-08 2012-09-08   Xan_Hi     710    710
-## 161 01-710-1077 2013-11-17 2013-11-17      Pbo     710    710
-## 162 01-710-1078 2013-09-17 2013-09-17      Pbo     710    710
-## 163 01-710-1083 2013-07-22 2013-07-22      Pbo     710    710
-## 164 01-710-1137 2013-10-11 2013-10-11   Xan_Hi     710    710
-## 165 01-710-1142 2012-10-02 2012-10-02   Xan_Hi     710    710
-## 166 01-710-1154 2014-03-29 2014-03-29   Xan_Lo     710    710
-## 167 01-710-1166 2012-11-30 2012-11-30   Xan_Lo     710    710
-## 168 01-710-1183 2013-11-16 2013-11-16      Pbo     710    710
-## 169 01-710-1187 2012-11-10 2012-11-10   Xan_Hi     710    710
-## 170 01-710-1235 2012-09-26 2012-09-26   Xan_Lo     710    710
-## 171 01-710-1249 2013-12-28 2013-12-28   Xan_Hi     710    710
-## 172 01-710-1264 2013-06-13 2013-06-13      Pbo     710    710
-## 173 01-710-1270 2014-02-12 2014-02-12   Xan_Lo     710    710
-## 174 01-710-1271 2012-09-27 2012-09-27      Pbo     710    710
-## 175 01-710-1278 2012-12-24 2012-12-24   Xan_Hi     710    710
-## 176 01-710-1300 2012-12-15 2012-12-15   Xan_Lo     710    710
-## 177 01-710-1314 2013-04-24 2013-04-24      Pbo     710    710
-## 178 01-710-1315 2013-02-27 2013-02-27      Pbo     710    710
-## 179 01-710-1354 2012-11-11 2012-11-11   Xan_Hi     710    710
-## 180 01-710-1358 2012-09-17 2012-09-17   Xan_Lo     710    710
-## 181 01-710-1368 2013-10-23 2013-10-23      Pbo     710    710
-## 182 01-710-1385 2012-10-29 2012-10-29   Xan_Lo     710    710
-## 183 01-710-1408 2013-01-05 2013-01-05   Xan_Hi     710    710
-## 184 01-711-1012 2013-04-03 2013-04-03   Xan_Hi     711    711
-## 185 01-711-1036 2012-07-29 2012-07-29      Pbo     711    711
-## 186 01-711-1143 2013-04-03 2013-04-03   Xan_Lo     711    711
-## 187 01-711-1433 2013-01-27 2013-01-27   Xan_Lo     711    711
-## 188 01-713-1043 2013-09-15 2013-09-15   Xan_Lo     713    713
-## 189 01-713-1073 2014-03-30 2014-03-30   Xan_Lo     713    713
-## 190 01-713-1106 2012-10-31 2012-10-31   Xan_Hi     713    713
-## 191 01-713-1141 2013-05-31 2013-05-31   Xan_Hi     713    713
-## 192 01-713-1179 2013-08-09 2013-08-09      Pbo     713    713
-## 193 01-713-1209 2013-05-27 2013-05-27   Xan_Hi     713    713
-## 194 01-713-1256 2012-09-19 2012-09-19      Pbo     713    713
-## 195 01-713-1269 2014-01-27 2014-01-27      Pbo     713    713
-## 196 01-713-1448 2014-01-19 2014-01-19   Xan_Lo     713    713
-## 197 01-714-1035 2014-04-17 2014-04-17      Pbo     714    714
-## 198 01-714-1068 2013-08-08 2013-08-08   Xan_Lo     714    714
-## 199 01-714-1195 2013-04-26 2013-04-26   Xan_Lo     714    714
-## 200 01-714-1288 2013-12-04 2013-12-04   Xan_Hi     714    714
-## 201 01-714-1375 2013-02-26 2013-02-26      Pbo     714    714
-## 202 01-714-1425 2013-08-15 2013-08-15   Xan_Lo     714    714
-## 203 01-715-1085 2013-02-16 2013-02-16   Xan_Lo     715    715
-## 204 01-715-1107 2013-02-26 2013-02-26   Xan_Lo     715    715
-## 205 01-715-1155 2013-12-13 2013-12-13      Pbo     715    715
-## 206 01-715-1207 2012-11-18 2012-11-18      Pbo     715    715
-## 207 01-715-1319 2013-02-17 2013-02-17   Xan_Hi     715    715
-## 208 01-715-1321 2014-02-11 2014-02-11   Xan_Hi     715    715
-## 209 01-715-1397 2013-04-03 2013-04-03      Pbo     715    715
-## 210 01-715-1405 2013-07-06 2013-07-06   Xan_Lo     715    715
-## 211 01-716-1024 2012-07-09 2012-07-09      Pbo     716    716
-## 212 01-716-1026 2014-04-02 2014-04-02      Pbo     716    716
-## 213 01-716-1030 2013-12-28 2013-12-28   Xan_Lo     716    716
-## 214 01-716-1044 2013-04-27 2013-04-27      Pbo     716    716
-## 215 01-716-1063 2013-05-09 2013-05-09   Xan_Lo     716    716
-## 216 01-716-1071 2013-06-08 2013-06-08   Xan_Hi     716    716
-## 217 01-716-1094 2012-12-19 2012-12-19   Xan_Lo     716    716
-## 218 01-716-1103 2014-03-20 2014-03-20   Xan_Lo     716    716
-## 219 01-716-1108 2013-02-12 2013-02-12      Pbo     716    716
-## 220 01-716-1151 2013-02-01 2013-02-01   Xan_Lo     716    716
-## 221 01-716-1157 2013-10-02 2013-10-02   Xan_Lo     716    716
-## 222 01-716-1160 2013-04-05 2013-04-05      Pbo     716    716
-## 223 01-716-1167 2012-10-08 2012-10-08   Xan_Lo     716    716
-## 224 01-716-1177 2014-09-02 2014-09-02      Pbo     716    716
-## 225 01-716-1189 2012-10-09 2012-10-09   Xan_Hi     716    716
-## 226 01-716-1229 2013-02-20 2013-02-20   Xan_Hi     716    716
-## 227 01-716-1298 2013-04-08 2013-04-08   Xan_Lo     716    716
-## 228 01-716-1308 2013-08-28 2013-08-28      Pbo     716    716
-## 229 01-716-1311 2014-05-14 2014-05-14   Xan_Lo     716    716
-## 230 01-716-1364 2013-07-04 2013-07-04   Xan_Hi     716    716
-## 231 01-716-1373 2012-12-14 2012-12-14   Xan_Hi     716    716
-## 232 01-716-1418 2013-05-05 2013-05-05   Xan_Hi     716    716
-## 233 01-716-1441 2014-01-22 2014-01-22      Pbo     716    716
-## 234 01-716-1447 2013-12-16 2013-12-16   Xan_Hi     716    716
-## 235 01-717-1004 2014-01-14 2014-01-14   Xan_Lo     717    717
-## 236 01-717-1109 2014-01-27 2014-01-27   Xan_Hi     717    717
-## 237 01-717-1174 2013-01-22 2013-01-22   Xan_Hi     717    717
-## 238 01-717-1201 2013-12-19 2013-12-19      Pbo     717    717
-## 239 01-717-1344 2014-01-11 2014-01-11      Pbo     717    717
-## 240 01-717-1357 2013-05-01 2013-05-01   Xan_Hi     717    717
-## 241 01-717-1446 2013-09-01 2013-09-01   Xan_Lo     717    717
-## 242 01-718-1066 2013-07-07 2013-07-07   Xan_Lo     718    718
-## 243 01-718-1079 2012-09-19 2012-09-19   Xan_Lo     718    718
-## 244 01-718-1101 2013-02-17 2013-02-17   Xan_Hi     718    718
-## 245 01-718-1139 2013-05-19 2013-05-19      Pbo     718    718
-## 246 01-718-1150 2013-01-19 2013-01-19      Pbo     718    718
-## 247 01-718-1170 2013-09-16 2013-09-16   Xan_Lo     718    718
-## 248 01-718-1172 2013-09-21 2013-09-21      Pbo     718    718
-## 249 01-718-1250 2013-09-21 2013-09-21   Xan_Lo     718    718
-## 250 01-718-1254 2013-07-10 2013-07-10   Xan_Lo     718    718
-## 251 01-718-1328 2013-02-01 2013-02-01   Xan_Hi     718    718
-## 252 01-718-1355 2013-02-28 2013-02-28      Pbo     718    718
-## 253 01-718-1371 2013-04-26 2013-04-26   Xan_Hi     718    718
-## 254 01-718-1427 2012-12-17 2012-12-17   Xan_Hi     718    718
-##                   trt01p                  arm               trt01a trt01pn
-## 1                Placebo              Placebo              Placebo       0
-## 2                Placebo              Placebo              Placebo       0
-## 3   Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 4    Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 5   Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 6                Placebo              Placebo              Placebo       0
-## 7    Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 8    Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 9    Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 10               Placebo              Placebo              Placebo       0
-## 11               Placebo              Placebo              Placebo       0
-## 12  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 13  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 14  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 15               Placebo              Placebo              Placebo       0
-## 16  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 17  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 18   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 19   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 20               Placebo              Placebo              Placebo       0
-## 21   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 22               Placebo              Placebo              Placebo       0
-## 23  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 24  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 25  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 26   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 27  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 28   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 29   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 30   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 31               Placebo              Placebo              Placebo       0
-## 32  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 33               Placebo              Placebo              Placebo       0
-## 34  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 35               Placebo              Placebo              Placebo       0
-## 36               Placebo              Placebo              Placebo       0
-## 37               Placebo              Placebo              Placebo       0
-## 38   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 39               Placebo              Placebo              Placebo       0
-## 40   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 41  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 42   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 43               Placebo              Placebo              Placebo       0
-## 44  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 45   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 46               Placebo              Placebo              Placebo       0
-## 47               Placebo              Placebo              Placebo       0
-## 48   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 49               Placebo              Placebo              Placebo       0
-## 50   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 51   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 52               Placebo              Placebo              Placebo       0
-## 53  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 54   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 55  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 56               Placebo              Placebo              Placebo       0
-## 57  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 58   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 59  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 60  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 61  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 62   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 63               Placebo              Placebo              Placebo       0
-## 64  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 65   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 66  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 67  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 68  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 69   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 70   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 71               Placebo              Placebo              Placebo       0
-## 72   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 73               Placebo              Placebo              Placebo       0
-## 74   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 75               Placebo              Placebo              Placebo       0
-## 76  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 77               Placebo              Placebo              Placebo       0
-## 78  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 79   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 80   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 81  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 82               Placebo              Placebo              Placebo       0
-## 83               Placebo              Placebo              Placebo       0
-## 84               Placebo              Placebo              Placebo       0
-## 85               Placebo              Placebo              Placebo       0
-## 86               Placebo              Placebo              Placebo       0
-## 87   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 88               Placebo              Placebo              Placebo       0
-## 89               Placebo              Placebo              Placebo       0
-## 90   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 91  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 92  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 93               Placebo              Placebo              Placebo       0
-## 94   Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 95  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 96  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 97               Placebo              Placebo              Placebo       0
-## 98  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 99  Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 100  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 101  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 102              Placebo              Placebo              Placebo       0
-## 103 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 104  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 105  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 106              Placebo              Placebo              Placebo       0
-## 107  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 108  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 109  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 110              Placebo              Placebo              Placebo       0
-## 111              Placebo              Placebo              Placebo       0
-## 112              Placebo              Placebo              Placebo       0
-## 113 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 114 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 115 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 116 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 117              Placebo              Placebo              Placebo       0
-## 118  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 119              Placebo              Placebo              Placebo       0
-## 120              Placebo              Placebo              Placebo       0
-## 121  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 122              Placebo              Placebo              Placebo       0
-## 123 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 124              Placebo              Placebo              Placebo       0
-## 125 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 126  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 127  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 128 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 129              Placebo              Placebo              Placebo       0
-## 130 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 131  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 132              Placebo              Placebo              Placebo       0
-## 133  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 134  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 135 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 136  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 137              Placebo              Placebo              Placebo       0
-## 138 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 139  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 140 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 141  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 142 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 143              Placebo              Placebo              Placebo       0
-## 144  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 145              Placebo              Placebo              Placebo       0
-## 146              Placebo              Placebo              Placebo       0
-## 147 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 148              Placebo              Placebo              Placebo       0
-## 149  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 150 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 151              Placebo              Placebo              Placebo       0
-## 152 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 153  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 154 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 155 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 156              Placebo              Placebo              Placebo       0
-## 157  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 158  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 159              Placebo              Placebo              Placebo       0
-## 160 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 161              Placebo              Placebo              Placebo       0
-## 162              Placebo              Placebo              Placebo       0
-## 163              Placebo              Placebo              Placebo       0
-## 164 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 165 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 166  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 167  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 168              Placebo              Placebo              Placebo       0
-## 169 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 170  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 171 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 172              Placebo              Placebo              Placebo       0
-## 173  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 174              Placebo              Placebo              Placebo       0
-## 175 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 176  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 177              Placebo              Placebo              Placebo       0
-## 178              Placebo              Placebo              Placebo       0
-## 179 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 180  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 181              Placebo              Placebo              Placebo       0
-## 182  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 183 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 184 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 185              Placebo              Placebo              Placebo       0
-## 186  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 187 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 188  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 189  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 190 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 191 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 192              Placebo              Placebo              Placebo       0
-## 193 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 194              Placebo              Placebo              Placebo       0
-## 195              Placebo              Placebo              Placebo       0
-## 196  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 197              Placebo              Placebo              Placebo       0
-## 198  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 199  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 200 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 201              Placebo              Placebo              Placebo       0
-## 202 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 203  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 204  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 205              Placebo              Placebo              Placebo       0
-## 206              Placebo              Placebo              Placebo       0
-## 207 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 208 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 209              Placebo              Placebo              Placebo       0
-## 210  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 211              Placebo              Placebo              Placebo       0
-## 212              Placebo              Placebo              Placebo       0
-## 213 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 214              Placebo              Placebo              Placebo       0
-## 215  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 216 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 217  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 218  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 219              Placebo              Placebo              Placebo       0
-## 220  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 221  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 222              Placebo              Placebo              Placebo       0
-## 223  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 224              Placebo              Placebo              Placebo       0
-## 225 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 226 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 227  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 228              Placebo              Placebo              Placebo       0
-## 229  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 230 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 231 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 232 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 233              Placebo              Placebo              Placebo       0
-## 234 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 235  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 236 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 237 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 238              Placebo              Placebo              Placebo       0
-## 239              Placebo              Placebo              Placebo       0
-## 240 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 241  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 242  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 243  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 244 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 245              Placebo              Placebo              Placebo       0
-## 246              Placebo              Placebo              Placebo       0
-## 247  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 248              Placebo              Placebo              Placebo       0
-## 249  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 250  Xanomeline Low Dose  Xanomeline Low Dose  Xanomeline Low Dose      54
-## 251 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 252              Placebo              Placebo              Placebo       0
-## 253 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-## 254 Xanomeline High Dose Xanomeline High Dose Xanomeline High Dose      81
-##     ittfl agegr1 age agegr1n                             race racen    sex
-## 1       Y    &lt;65  63       1                            WHITE     1 Female
-## 2       Y    &lt;65  64       1                            WHITE     1   Male
-## 3       Y  65-80  71       2                            WHITE     1   Male
-## 4       Y  65-80  74       2                            WHITE     1   Male
-## 5       Y  65-80  77       2                            WHITE     1 Female
-## 6       Y    &gt;80  85       3                            WHITE     1 Female
-## 7       Y  65-80  68       2                            WHITE     1   Male
-## 8       Y    &gt;80  81       3                            WHITE     1 Female
-## 9       Y    &gt;80  84       3                            WHITE     1   Male
-## 10      Y    &lt;65  52       1                            WHITE     1   Male
-## 11      Y    &gt;80  84       3                            WHITE     1   Male
-## 12      Y    &gt;80  81       3                            WHITE     1 Female
-## 13      Y  65-80  75       2                            WHITE     1 Female
-## 14      Y    &lt;65  57       1                            WHITE     1   Male
-## 15      Y  65-80  79       2                            WHITE     1 Female
-## 16      Y    &lt;65  56       1                            WHITE     1   Male
-## 17      Y  65-80  79       2                            WHITE     1 Female
-## 18      Y  65-80  71       2                            WHITE     1   Male
-## 19      Y  65-80  80       2                            WHITE     1 Female
-## 20      Y    &gt;80  81       3        BLACK OR AFRICAN AMERICAN     2 Female
-## 21      Y  65-80  76       2                            WHITE     1 Female
-## 22      Y  65-80  69       2                            WHITE     1   Male
-## 23      Y    &lt;65  56       1                            WHITE     1   Male
-## 24      Y    &lt;65  61       1 AMERICAN INDIAN OR ALASKA NATIVE     6   Male
-## 25      Y    &lt;65  56       1                            WHITE     1 Female
-## 26      Y  65-80  67       2                            WHITE     1   Male
-## 27      Y    &lt;65  61       1                            WHITE     1   Male
-## 28      Y  65-80  68       2                            WHITE     1   Male
-## 29      Y  65-80  79       2                            WHITE     1   Male
-## 30      Y    &lt;65  51       1                            WHITE     1   Male
-## 31      Y    &lt;65  63       1                            WHITE     1 Female
-## 32      Y  65-80  67       2                            WHITE     1   Male
-## 33      Y    &gt;80  81       3        BLACK OR AFRICAN AMERICAN     2 Female
-## 34      Y  65-80  72       2                            WHITE     1 Female
-## 35      Y    &gt;80  87       3                            WHITE     1 Female
-## 36      Y  65-80  78       2                            WHITE     1   Male
-## 37      Y    &gt;80  85       3                            WHITE     1   Male
-## 38      Y    &gt;80  84       3                            WHITE     1 Female
-## 39      Y  65-80  70       2                            WHITE     1   Male
-## 40      Y    &lt;65  57       1        BLACK OR AFRICAN AMERICAN     2 Female
-## 41      Y    &lt;65  63       1                            WHITE     1   Male
-## 42      Y    &gt;80  84       3                            WHITE     1 Female
-## 43      Y    &lt;65  64       1                            WHITE     1   Male
-## 44      Y  65-80  69       2                            WHITE     1   Male
-## 45      Y  65-80  71       2                            WHITE     1   Male
-## 46      Y    &gt;80  81       3                            WHITE     1 Female
-## 47      Y    &gt;80  84       3                            WHITE     1 Female
-## 48      Y    &gt;80  81       3                            WHITE     1 Female
-## 49      Y  65-80  75       2                            WHITE     1   Male
-## 50      Y    &gt;80  84       3                            WHITE     1   Male
-## 51      Y  65-80  76       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 52      Y  65-80  72       2                            WHITE     1 Female
-## 53      Y  65-80  78       2                            WHITE     1 Female
-## 54      Y  65-80  72       2                            WHITE     1 Female
-## 55      Y    &gt;80  88       3                            WHITE     1 Female
-## 56      Y    &gt;80  81       3                            WHITE     1 Female
-## 57      Y  65-80  67       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 58      Y    &gt;80  81       3        BLACK OR AFRICAN AMERICAN     2 Female
-## 59      Y  65-80  67       2                            WHITE     1   Male
-## 60      Y  65-80  76       2                            WHITE     1 Female
-## 61      Y  65-80  76       2                            WHITE     1 Female
-## 62      Y    &gt;80  83       3                            WHITE     1   Male
-## 63      Y  65-80  80       2                            WHITE     1   Male
-## 64      Y  65-80  77       2                            WHITE     1   Male
-## 65      Y    &gt;80  81       3                            WHITE     1 Female
-## 66      Y  65-80  75       2                            WHITE     1   Male
-## 67      Y  65-80  80       2                            WHITE     1 Female
-## 68      Y  65-80  79       2                            WHITE     1   Male
-## 69      Y  65-80  77       2                            WHITE     1   Male
-## 70      Y  65-80  71       2                            WHITE     1 Female
-## 71      Y    &gt;80  84       3                            WHITE     1 Female
-## 72      Y  65-80  74       2                            WHITE     1 Female
-## 73      Y  65-80  67       2                            WHITE     1 Female
-## 74      Y    &gt;80  81       3                            WHITE     1 Female
-## 75      Y    &gt;80  87       3                            WHITE     1 Female
-## 76      Y    &gt;80  86       3                            WHITE     1   Male
-## 77      Y  65-80  71       2                            WHITE     1 Female
-## 78      Y    &gt;80  82       3                            WHITE     1   Male
-## 79      Y  65-80  68       2                            WHITE     1 Female
-## 80      Y    &gt;80  81       3                            WHITE     1   Male
-## 81      Y  65-80  80       2                            WHITE     1   Male
-## 82      Y  65-80  70       2                            WHITE     1   Male
-## 83      Y    &gt;80  81       3                            WHITE     1   Male
-## 84      Y  65-80  74       2                            WHITE     1   Male
-## 85      Y  65-80  75       2                            WHITE     1   Male
-## 86      Y  65-80  69       2                            WHITE     1 Female
-## 87      Y    &lt;65  56       1                            WHITE     1 Female
-## 88      Y  65-80  66       2                            WHITE     1 Female
-## 89      Y    &gt;80  84       3                            WHITE     1 Female
-## 90      Y    &gt;80  87       3                            WHITE     1   Male
-## 91      Y    &lt;65  56       1                            WHITE     1 Female
-## 92      Y  65-80  73       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 93      Y  65-80  70       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 94      Y    &lt;65  60       1        BLACK OR AFRICAN AMERICAN     2 Female
-## 95      Y  65-80  72       2                            WHITE     1   Male
-## 96      Y  65-80  74       2                            WHITE     1 Female
-## 97      Y    &gt;80  86       3                            WHITE     1 Female
-## 98      Y    &lt;65  63       1        BLACK OR AFRICAN AMERICAN     2 Female
-## 99      Y    &gt;80  82       3                            WHITE     1   Male
-## 100     Y    &gt;80  84       3                            WHITE     1 Female
-## 101     Y  65-80  68       2                            WHITE     1 Female
-## 102     Y    &lt;65  64       1        BLACK OR AFRICAN AMERICAN     2 Female
-## 103     Y    &lt;65  60       1                            WHITE     1 Female
-## 104     Y  65-80  74       2                            WHITE     1 Female
-## 105     Y  65-80  72       2                            WHITE     1 Female
-## 106     Y  65-80  65       2                            WHITE     1   Male
-## 107     Y  65-80  68       2                            WHITE     1   Male
-## 108     Y    &lt;65  62       1                            WHITE     1   Male
-## 109     Y  65-80  73       2                            WHITE     1 Female
-## 110     Y  65-80  74       2                            WHITE     1 Female
-## 111     Y    &gt;80  81       3                            WHITE     1 Female
-## 112     Y  65-80  77       2                            WHITE     1 Female
-## 113     Y  65-80  77       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 114     Y  65-80  76       2                            WHITE     1 Female
-## 115     Y  65-80  78       2                            WHITE     1   Male
-## 116     Y    &gt;80  86       3                            WHITE     1 Female
-## 117     Y    &lt;65  61       1                            WHITE     1   Male
-## 118     Y    &gt;80  82       3                            WHITE     1   Male
-## 119     Y  65-80  80       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 120     Y    &lt;65  57       1        BLACK OR AFRICAN AMERICAN     2   Male
-## 121     Y    &lt;65  61       1                            WHITE     1   Male
-## 122     Y  65-80  74       2                            WHITE     1 Female
-## 123     Y  65-80  73       2                            WHITE     1   Male
-## 124     Y    &lt;65  59       1                            WHITE     1 Female
-## 125     Y    &lt;65  61       1                            WHITE     1 Female
-## 126     Y  65-80  79       2                            WHITE     1 Female
-## 127     Y    &gt;80  87       3        BLACK OR AFRICAN AMERICAN     2 Female
-## 128     Y    &gt;80  84       3                            WHITE     1   Male
-## 129     Y  65-80  67       2        BLACK OR AFRICAN AMERICAN     2   Male
-## 130     Y  65-80  71       2                            WHITE     1 Female
-## 131     Y    &gt;80  84       3                            WHITE     1 Female
-## 132     Y  65-80  76       2                            WHITE     1 Female
-## 133     Y    &lt;65  54       1                            WHITE     1 Female
-## 134     Y  65-80  72       2                            WHITE     1 Female
-## 135     Y    &gt;80  82       3                            WHITE     1   Male
-## 136     Y    &gt;80  86       3                            WHITE     1 Female
-## 137     Y  65-80  69       2                            WHITE     1   Male
-## 138     Y  65-80  79       2                            WHITE     1 Female
-## 139     Y  65-80  71       2                            WHITE     1 Female
-## 140     Y  65-80  72       2                            WHITE     1 Female
-## 141     Y  65-80  77       2                            WHITE     1   Male
-## 142     Y  65-80  69       2                            WHITE     1   Male
-## 143     Y    &gt;80  82       3                            WHITE     1   Male
-## 144     Y    &gt;80  87       3                            WHITE     1   Male
-## 145     Y    &lt;65  62       1                            WHITE     1 Female
-## 146     Y    &lt;65  60       1                            WHITE     1 Female
-## 147     Y  65-80  65       2                            WHITE     1   Male
-## 148     Y  65-80  68       2                            WHITE     1 Female
-## 149     Y  65-80  75       2                            WHITE     1 Female
-## 150     Y  65-80  70       2                            WHITE     1   Male
-## 151     Y    &gt;80  81       3                            WHITE     1   Male
-## 152     Y  65-80  77       2                            WHITE     1   Male
-## 153     Y    &gt;80  88       3                            WHITE     1   Male
-## 154     Y  65-80  77       2                            WHITE     1   Male
-## 155     Y  65-80  79       2        BLACK OR AFRICAN AMERICAN     2   Male
-## 156     Y    &gt;80  83       3                            WHITE     1   Male
-## 157     Y    &gt;80  83       3                            WHITE     1 Female
-## 158     Y    &gt;80  84       3                            WHITE     1 Female
-## 159     Y    &gt;80  82       3                            WHITE     1   Male
-## 160     Y    &gt;80  85       3                            WHITE     1 Female
-## 161     Y  65-80  76       2                            WHITE     1 Female
-## 162     Y    &gt;80  81       3                            WHITE     1 Female
-## 163     Y    &gt;80  89       3                            WHITE     1 Female
-## 164     Y  65-80  79       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 165     Y  65-80  76       2                            WHITE     1 Female
-## 166     Y    &gt;80  84       3                            WHITE     1   Male
-## 167     Y    &gt;80  81       3                            WHITE     1 Female
-## 168     Y  65-80  80       2                            WHITE     1 Female
-## 169     Y  65-80  78       2                            WHITE     1 Female
-## 170     Y    &lt;65  56       1                            WHITE     1 Female
-## 171     Y  65-80  79       2                            WHITE     1   Male
-## 172     Y  65-80  78       2                            WHITE     1   Male
-## 173     Y    &gt;80  83       3                            WHITE     1 Female
-## 174     Y    &gt;80  86       3                            WHITE     1 Female
-## 175     Y    &gt;80  81       3                            WHITE     1   Male
-## 176     Y  65-80  78       2                            WHITE     1 Female
-## 177     Y  65-80  78       2                            WHITE     1 Female
-## 178     Y    &gt;80  83       3                            WHITE     1 Female
-## 179     Y  65-80  73       2                            WHITE     1   Male
-## 180     Y    &gt;80  82       3                            WHITE     1   Male
-## 181     Y    &gt;80  88       3                            WHITE     1 Female
-## 182     Y  65-80  77       2                            WHITE     1   Male
-## 183     Y  65-80  80       2                            WHITE     1   Male
-## 184     Y  65-80  67       2                            WHITE     1 Female
-## 185     Y  65-80  70       2        BLACK OR AFRICAN AMERICAN     2   Male
-## 186     Y  65-80  76       2                            WHITE     1 Female
-## 187     Y    &gt;80  84       3                            WHITE     1 Female
-## 188     Y  65-80  78       2                            WHITE     1 Female
-## 189     Y  65-80  74       2        BLACK OR AFRICAN AMERICAN     2 Female
-## 190     Y  65-80  74       2                            WHITE     1   Male
-## 191     Y  65-80  79       2                            WHITE     1   Male
-## 192     Y    &lt;65  64       1                            WHITE     1 Female
-## 193     Y  65-80  77       2                            WHITE     1 Female
-## 194     Y  65-80  71       2                            WHITE     1   Male
-## 195     Y  65-80  73       2                            WHITE     1   Male
-## 196     Y  65-80  71       2                            WHITE     1 Female
-## 197     Y    &gt;80  88       3                            WHITE     1 Female
-## 198     Y  65-80  79       2                            WHITE     1 Female
-## 199     Y  65-80  75       2                            WHITE     1   Male
-## 200     Y  65-80  77       2        BLACK OR AFRICAN AMERICAN     2   Male
-## 201     Y  65-80  78       2                            WHITE     1 Female
-## 202     Y    &gt;80  81       3                            WHITE     1   Male
-## 203     Y  65-80  77       2                            WHITE     1 Female
-## 204     Y  65-80  65       2                            WHITE     1   Male
-## 205     Y    &lt;65  59       1                            WHITE     1 Female
-## 206     Y  65-80  78       2                            WHITE     1 Female
-## 207     Y  65-80  65       2                            WHITE     1   Male
-## 208     Y  65-80  75       2                            WHITE     1 Female
-## 209     Y  65-80  76       2                            WHITE     1 Female
-## 210     Y  65-80  69       2                            WHITE     1   Male
-## 211     Y    &gt;80  87       3                            WHITE     1 Female
-## 212     Y  65-80  73       2                            WHITE     1 Female
-## 213     Y    &gt;80  83       3                            WHITE     1 Female
-## 214     Y  65-80  74       2                            WHITE     1   Male
-## 215     Y  65-80  80       2                            WHITE     1   Male
-## 216     Y  65-80  78       2                            WHITE     1 Female
-## 217     Y    &gt;80  82       3                            WHITE     1   Male
-## 218     Y  65-80  79       2                            WHITE     1   Male
-## 219     Y    &gt;80  86       3                            WHITE     1 Female
-## 220     Y    &gt;80  83       3                            WHITE     1 Female
-## 221     Y    &gt;80  85       3                            WHITE     1   Male
-## 222     Y    &gt;80  83       3                            WHITE     1 Female
-## 223     Y  65-80  68       2                            WHITE     1   Male
-## 224     Y  65-80  72       2                            WHITE     1   Male
-## 225     Y    &gt;80  81       3                            WHITE     1   Male
-## 226     Y  65-80  73       2                            WHITE     1 Female
-## 227     Y  65-80  76       2                            WHITE     1 Female
-## 228     Y  65-80  76       2                            WHITE     1 Female
-## 229     Y  65-80  78       2                            WHITE     1   Male
-## 230     Y    &gt;80  84       3                            WHITE     1 Female
-## 231     Y  65-80  74       2                            WHITE     1   Male
-## 232     Y  65-80  80       2                            WHITE     1 Female
-## 233     Y    &gt;80  85       3                            WHITE     1   Male
-## 234     Y  65-80  72       2                            WHITE     1 Female
-## 235     Y  65-80  80       2                            WHITE     1 Female
-## 236     Y    &gt;80  84       3                            WHITE     1   Male
-## 237     Y  65-80  73       2                            WHITE     1   Male
-## 238     Y    &gt;80  85       3                            WHITE     1 Female
-## 239     Y    &lt;65  64       1                            WHITE     1 Female
-## 240     Y  65-80  77       2                            WHITE     1   Male
-## 241     Y  65-80  75       2                            WHITE     1 Female
-## 242     Y  65-80  79       2                            WHITE     1 Female
-## 243     Y  65-80  67       2                            WHITE     1 Female
-## 244     Y    &gt;80  82       3        BLACK OR AFRICAN AMERICAN     2   Male
-## 245     Y  65-80  77       2                            WHITE     1   Male
-## 246     Y  65-80  73       2                            WHITE     1 Female
-## 247     Y  65-80  80       2                            WHITE     1 Female
-## 248     Y  65-80  74       2                            WHITE     1   Male
-## 249     Y    &gt;80  82       3                            WHITE     1 Female
-## 250     Y  65-80  78       2                            WHITE     1   Male
-## 251     Y    &gt;80  86       3                            WHITE     1   Male
-## 252     Y  65-80  79       2                            WHITE     1   Male
-## 253     Y  65-80  69       2                            WHITE     1 Female
-## 254     Y  65-80  74       2        BLACK OR AFRICAN AMERICAN     2 Female
-##                     ethnic    rfstdtc    rfendtc dthfl
-## 1       HISPANIC OR LATINO 2014-01-02 2014-07-02      
-## 2       HISPANIC OR LATINO 2012-08-05 2012-09-02      
-## 3   NOT HISPANIC OR LATINO 2013-07-19 2014-01-14      
-## 4   NOT HISPANIC OR LATINO 2014-03-18 2014-04-14      
-## 5   NOT HISPANIC OR LATINO 2014-07-01 2014-12-30      
-## 6   NOT HISPANIC OR LATINO 2013-02-12 2013-03-29      
-## 7   NOT HISPANIC OR LATINO 2014-01-01 2014-07-09      
-## 8   NOT HISPANIC OR LATINO 2012-09-07 2012-09-17      
-## 9   NOT HISPANIC OR LATINO 2012-11-30 2013-01-23      
-## 10  NOT HISPANIC OR LATINO 2014-03-12 2014-09-09      
-## 11  NOT HISPANIC OR LATINO 2014-02-15 2014-08-16      
-## 12  NOT HISPANIC OR LATINO 2012-10-28 2013-04-29      
-## 13  NOT HISPANIC OR LATINO 2013-05-20 2013-06-30      
-## 14  NOT HISPANIC OR LATINO 2013-08-23 2014-02-20      
-## 15  NOT HISPANIC OR LATINO 2013-09-23 2014-04-01      
-## 16  NOT HISPANIC OR LATINO 2013-02-12 2013-03-23      
-## 17  NOT HISPANIC OR LATINO 2013-12-05 2013-12-12      
-## 18  NOT HISPANIC OR LATINO 2013-02-15 2013-03-25      
-## 19  NOT HISPANIC OR LATINO 2012-07-22 2013-01-20      
-## 20  NOT HISPANIC OR LATINO 2013-02-02 2013-08-03      
-## 21  NOT HISPANIC OR LATINO 2012-11-15 2013-01-14     Y
-## 22  NOT HISPANIC OR LATINO 2013-03-30 2013-09-22      
-## 23      HISPANIC OR LATINO 2014-01-11 2014-07-11      
-## 24  NOT HISPANIC OR LATINO 2014-02-07 2014-06-14      
-## 25      HISPANIC OR LATINO 2014-01-25 2014-07-26      
-## 26  NOT HISPANIC OR LATINO 2013-03-24 2013-06-14      
-## 27  NOT HISPANIC OR LATINO 2013-08-29 2013-11-05      
-## 28  NOT HISPANIC OR LATINO 2014-05-22 2014-11-20      
-## 29  NOT HISPANIC OR LATINO 2012-10-02 2013-04-02      
-## 30  NOT HISPANIC OR LATINO 2013-01-05 2013-02-07      
-## 31  NOT HISPANIC OR LATINO 2013-10-08 2014-03-18      
-## 32  NOT HISPANIC OR LATINO 2013-07-31 2013-08-14      
-## 33  NOT HISPANIC OR LATINO 2013-05-30 2013-11-27      
-## 34  NOT HISPANIC OR LATINO 2013-02-04 2013-08-06      
-## 35  NOT HISPANIC OR LATINO 2014-03-12 2014-03-25      
-## 36  NOT HISPANIC OR LATINO 2012-10-28 2013-04-28      
-## 37  NOT HISPANIC OR LATINO 2013-09-23 2014-03-24      
-## 38  NOT HISPANIC OR LATINO 2013-03-19 2013-04-30      
-## 39  NOT HISPANIC OR LATINO 2013-08-08 2014-02-05      
-## 40  NOT HISPANIC OR LATINO 2013-10-26 2014-04-26      
-## 41      HISPANIC OR LATINO 2013-01-05 2013-02-13      
-## 42  NOT HISPANIC OR LATINO 2013-07-26 2013-11-17      
-## 43  NOT HISPANIC OR LATINO 2013-03-02 2013-08-31      
-## 44  NOT HISPANIC OR LATINO 2013-10-25 2013-12-24      
-## 45  NOT HISPANIC OR LATINO 2012-09-02 2012-12-24      
-## 46  NOT HISPANIC OR LATINO 2013-01-25 2013-03-29      
-## 47  NOT HISPANIC OR LATINO 2013-03-13 2013-09-14      
-## 48  NOT HISPANIC OR LATINO 2013-02-20 2013-06-13      
-## 49  NOT HISPANIC OR LATINO 2013-12-20 2013-12-31      
-## 50  NOT HISPANIC OR LATINO 2013-10-17 2013-12-12      
-## 51  NOT HISPANIC OR LATINO 2013-06-16 2013-07-22      
-## 52  NOT HISPANIC OR LATINO 2013-03-16 2013-09-06      
-## 53  NOT HISPANIC OR LATINO 2012-07-20 2013-01-21      
-## 54  NOT HISPANIC OR LATINO 2013-05-13 2013-06-22      
-## 55  NOT HISPANIC OR LATINO 2013-11-21 2014-05-19      
-## 56  NOT HISPANIC OR LATINO 2012-09-12 2013-03-13      
-## 57  NOT HISPANIC OR LATINO 2014-03-17 2014-05-24      
-## 58  NOT HISPANIC OR LATINO 2013-09-22 2014-03-21      
-## 59  NOT HISPANIC OR LATINO 2012-12-12 2012-12-19      
-## 60  NOT HISPANIC OR LATINO 2014-03-12 2014-09-11      
-## 61  NOT HISPANIC OR LATINO 2013-01-13 2013-02-25      
-## 62  NOT HISPANIC OR LATINO 2013-08-27 2013-10-02      
-## 63  NOT HISPANIC OR LATINO 2014-02-21 2014-07-09      
-## 64  NOT HISPANIC OR LATINO 2013-10-06 2013-11-24      
-## 65  NOT HISPANIC OR LATINO 2013-09-27 2013-11-29      
-## 66  NOT HISPANIC OR LATINO 2013-10-24 2013-12-24      
-## 67  NOT HISPANIC OR LATINO 2014-01-22 2014-03-31      
-## 68  NOT HISPANIC OR LATINO 2013-03-15 2013-06-20      
-## 69  NOT HISPANIC OR LATINO 2013-01-23 2013-07-08      
-## 70  NOT HISPANIC OR LATINO 2013-12-02 2014-02-03      
-## 71  NOT HISPANIC OR LATINO 2013-10-02 2014-03-31      
-## 72  NOT HISPANIC OR LATINO 2013-10-31 2014-05-16      
-## 73  NOT HISPANIC OR LATINO 2012-09-19 2013-04-04      
-## 74  NOT HISPANIC OR LATINO 2012-11-19 2013-05-27      
-## 75  NOT HISPANIC OR LATINO 2013-03-21 2013-07-14      
-## 76  NOT HISPANIC OR LATINO 2013-08-25 2013-10-31      
-## 77  NOT HISPANIC OR LATINO 2012-08-30 2013-01-18      
-## 78  NOT HISPANIC OR LATINO 2013-10-13 2013-12-06      
-## 79  NOT HISPANIC OR LATINO 2013-07-08 2013-08-08      
-## 80  NOT HISPANIC OR LATINO 2014-04-23 2014-08-06      
-## 81  NOT HISPANIC OR LATINO 2013-12-09 2014-02-16      
-## 82  NOT HISPANIC OR LATINO 2013-10-12 2014-04-18      
-## 83  NOT HISPANIC OR LATINO 2012-12-07 2013-06-19      
-## 84  NOT HISPANIC OR LATINO 2012-11-17 2013-01-12      
-## 85  NOT HISPANIC OR LATINO 2014-05-11 2014-11-01     Y
-## 86  NOT HISPANIC OR LATINO 2013-07-05 2013-07-12      
-## 87      HISPANIC OR LATINO 2013-11-27 2014-05-11      
-## 88  NOT HISPANIC OR LATINO 2013-08-05 2013-12-05      
-## 89  NOT HISPANIC OR LATINO 2014-01-08 2014-02-07      
-## 90  NOT HISPANIC OR LATINO 2013-09-16 2013-09-29      
-## 91  NOT HISPANIC OR LATINO 2014-01-17 2014-07-25      
-## 92  NOT HISPANIC OR LATINO 2013-11-28 2014-03-17      
-## 93  NOT HISPANIC OR LATINO 2012-12-26 2013-06-24      
-## 94  NOT HISPANIC OR LATINO 2013-10-14 2014-05-14      
-## 95  NOT HISPANIC OR LATINO 2013-12-16 2014-06-02      
-## 96  NOT HISPANIC OR LATINO 2013-11-02 2014-01-23      
-## 97      HISPANIC OR LATINO 2013-03-10 2013-09-08      
-## 98  NOT HISPANIC OR LATINO 2014-01-04 2014-03-07      
-## 99  NOT HISPANIC OR LATINO 2013-05-13 2013-05-13      
-## 100 NOT HISPANIC OR LATINO 2012-09-07 2013-02-20      
-## 101     HISPANIC OR LATINO 2013-06-23 2013-12-19      
-## 102 NOT HISPANIC OR LATINO 2013-12-31 2014-07-29      
-## 103 NOT HISPANIC OR LATINO 2013-05-14 2013-06-25      
-## 104 NOT HISPANIC OR LATINO 2012-09-15 2012-09-29      
-## 105 NOT HISPANIC OR LATINO 2013-12-20 2014-01-08      
-## 106 NOT HISPANIC OR LATINO 2013-10-28 2014-04-27      
-## 107 NOT HISPANIC OR LATINO 2013-12-20 2014-01-23      
-## 108 NOT HISPANIC OR LATINO 2013-02-09 2013-03-09      
-## 109 NOT HISPANIC OR LATINO 2013-05-09 2013-11-11      
-## 110 NOT HISPANIC OR LATINO 2012-10-22 2013-04-28      
-## 111 NOT HISPANIC OR LATINO 2014-02-08 2014-03-22      
-## 112 NOT HISPANIC OR LATINO 2012-12-06 2013-06-04      
-## 113 NOT HISPANIC OR LATINO 2013-12-29 2014-04-06      
-## 114 NOT HISPANIC OR LATINO 2013-02-09 2013-02-26      
-## 115 NOT HISPANIC OR LATINO 2012-10-24 2012-12-06      
-## 116 NOT HISPANIC OR LATINO 2013-09-21 2013-09-26      
-## 117 NOT HISPANIC OR LATINO 2013-05-07 2013-11-05      
-## 118 NOT HISPANIC OR LATINO 2013-02-06 2013-04-04      
-## 119 NOT HISPANIC OR LATINO 2013-09-10 2014-03-08      
-## 120 NOT HISPANIC OR LATINO 2013-06-14 2013-12-12      
-## 121 NOT HISPANIC OR LATINO 2013-01-25 2013-05-08      
-## 122 NOT HISPANIC OR LATINO 2013-08-23 2014-03-01      
-## 123 NOT HISPANIC OR LATINO 2012-12-07 2013-06-05      
-## 124 NOT HISPANIC OR LATINO 2012-12-29 2013-06-28      
-## 125 NOT HISPANIC OR LATINO 2013-04-20 2013-06-18      
-## 126 NOT HISPANIC OR LATINO 2013-08-05 2014-02-13      
-## 127 NOT HISPANIC OR LATINO 2013-07-04 2013-09-10      
-## 128 NOT HISPANIC OR LATINO 2013-04-12 2013-05-10      
-## 129 NOT HISPANIC OR LATINO 2013-09-03 2014-01-28      
-## 130 NOT HISPANIC OR LATINO 2013-12-26 2014-07-02      
-## 131 NOT HISPANIC OR LATINO 2013-11-09 2014-01-31      
-## 132 NOT HISPANIC OR LATINO 2013-10-08 2014-04-08      
-## 133 NOT HISPANIC OR LATINO 2012-07-31 2012-09-01      
-## 134 NOT HISPANIC OR LATINO 2012-12-01 2013-06-01      
-## 135 NOT HISPANIC OR LATINO 2012-12-25 2013-06-26      
-## 136 NOT HISPANIC OR LATINO 2014-01-18 2014-05-10      
-## 137 NOT HISPANIC OR LATINO 2014-04-12 2014-10-09      
-## 138 NOT HISPANIC OR LATINO 2013-10-25 2014-04-25      
-## 139 NOT HISPANIC OR LATINO 2013-01-15 2013-03-31      
-## 140 NOT HISPANIC OR LATINO 2013-08-02 2013-09-27      
-## 141 NOT HISPANIC OR LATINO 2013-03-04 2013-06-25      
-## 142 NOT HISPANIC OR LATINO 2013-05-15 2013-08-07      
-## 143 NOT HISPANIC OR LATINO 2013-01-26 2013-06-13      
-## 144 NOT HISPANIC OR LATINO 2013-03-24 2013-05-31      
-## 145 NOT HISPANIC OR LATINO 2013-07-19 2014-01-17      
-## 146 NOT HISPANIC OR LATINO 2014-02-03 2014-06-25      
-## 147 NOT HISPANIC OR LATINO 2013-06-19 2013-12-19      
-## 148 NOT HISPANIC OR LATINO 2014-04-20 2014-10-19      
-## 149 NOT HISPANIC OR LATINO 2013-04-05 2013-10-02      
-## 150 NOT HISPANIC OR LATINO 2013-08-15 2013-08-29      
-## 151 NOT HISPANIC OR LATINO 2012-12-23 2013-06-24      
-## 152 NOT HISPANIC OR LATINO 2013-03-03 2013-03-08      
-## 153 NOT HISPANIC OR LATINO 2014-01-14 2014-01-18      
-## 154 NOT HISPANIC OR LATINO 2013-02-10 2013-08-10      
-## 155 NOT HISPANIC OR LATINO 2013-09-27 2013-11-12      
-## 156 NOT HISPANIC OR LATINO 2014-02-28 2014-08-29      
-## 157 NOT HISPANIC OR LATINO 2013-06-03 2013-08-17      
-## 158 NOT HISPANIC OR LATINO 2012-12-26 2013-02-15      
-## 159 NOT HISPANIC OR LATINO 2013-01-01 2013-07-05      
-## 160 NOT HISPANIC OR LATINO 2012-09-08 2013-02-23      
-## 161 NOT HISPANIC OR LATINO 2013-11-17 2014-05-18      
-## 162 NOT HISPANIC OR LATINO 2013-09-17 2014-03-23      
-## 163 NOT HISPANIC OR LATINO 2013-07-22 2013-08-03     Y
-## 164 NOT HISPANIC OR LATINO 2013-10-11 2013-11-13      
-## 165 NOT HISPANIC OR LATINO 2012-10-02 2012-10-23      
-## 166     HISPANIC OR LATINO 2014-03-29 2014-05-09      
-## 167 NOT HISPANIC OR LATINO 2012-11-30 2013-03-30      
-## 168 NOT HISPANIC OR LATINO 2013-11-16 2014-05-17      
-## 169 NOT HISPANIC OR LATINO 2012-11-10 2013-05-12      
-## 170     HISPANIC OR LATINO 2012-09-26 2013-03-27      
-## 171 NOT HISPANIC OR LATINO 2013-12-28 2014-06-28      
-## 172 NOT HISPANIC OR LATINO 2013-06-13 2013-10-12      
-## 173 NOT HISPANIC OR LATINO 2014-02-12 2014-03-01      
-## 174 NOT HISPANIC OR LATINO 2012-09-27 2012-12-02      
-## 175 NOT HISPANIC OR LATINO 2012-12-24 2013-03-03      
-## 176 NOT HISPANIC OR LATINO 2012-12-15 2013-02-19      
-## 177 NOT HISPANIC OR LATINO 2013-04-24 2013-05-25      
-## 178 NOT HISPANIC OR LATINO 2013-02-27 2013-07-16      
-## 179 NOT HISPANIC OR LATINO 2012-11-11 2013-05-01      
-## 180 NOT HISPANIC OR LATINO 2012-09-17 2013-03-12      
-## 181 NOT HISPANIC OR LATINO 2013-10-23 2014-04-24      
-## 182 NOT HISPANIC OR LATINO 2012-10-29 2013-02-18      
-## 183 NOT HISPANIC OR LATINO 2013-01-05 2013-07-12      
-## 184 NOT HISPANIC OR LATINO 2013-04-03 2013-05-02      
-## 185 NOT HISPANIC OR LATINO 2012-07-29 2013-02-10      
-## 186 NOT HISPANIC OR LATINO 2013-04-03 2013-06-01      
-## 187 NOT HISPANIC OR LATINO 2013-01-27 2013-02-06      
-## 188 NOT HISPANIC OR LATINO 2013-09-15 2014-03-24      
-## 189 NOT HISPANIC OR LATINO 2014-03-30 2014-10-05      
-## 190 NOT HISPANIC OR LATINO 2012-10-31 2013-05-06      
-## 191 NOT HISPANIC OR LATINO 2013-05-31 2013-08-06      
-## 192 NOT HISPANIC OR LATINO 2013-08-09 2014-02-05      
-## 193 NOT HISPANIC OR LATINO 2013-05-27 2013-11-22      
-## 194 NOT HISPANIC OR LATINO 2012-09-19 2013-03-25      
-## 195 NOT HISPANIC OR LATINO 2014-01-27 2014-07-28      
-## 196 NOT HISPANIC OR LATINO 2014-01-19 2014-05-17      
-## 197 NOT HISPANIC OR LATINO 2014-04-17 2014-10-16      
-## 198 NOT HISPANIC OR LATINO 2013-08-08 2013-10-16      
-## 199 NOT HISPANIC OR LATINO 2013-04-26 2013-10-23      
-## 200 NOT HISPANIC OR LATINO 2013-12-04 2014-06-17      
-## 201 NOT HISPANIC OR LATINO 2013-02-26 2013-09-07      
-## 202 NOT HISPANIC OR LATINO 2013-08-15 2013-08-22      
-## 203 NOT HISPANIC OR LATINO 2013-02-16 2013-08-18      
-## 204 NOT HISPANIC OR LATINO 2013-02-26 2013-05-13      
-## 205 NOT HISPANIC OR LATINO 2013-12-13 2014-04-26      
-## 206 NOT HISPANIC OR LATINO 2012-11-18 2013-06-01      
-## 207 NOT HISPANIC OR LATINO 2013-02-17 2013-03-18      
-## 208 NOT HISPANIC OR LATINO 2014-02-11 2014-04-22      
-## 209 NOT HISPANIC OR LATINO 2013-04-03 2013-10-03      
-## 210 NOT HISPANIC OR LATINO 2013-07-06 2013-07-13      
-## 211 NOT HISPANIC OR LATINO 2012-07-09 2013-01-20      
-## 212 NOT HISPANIC OR LATINO 2014-04-02 2014-10-16      
-## 213 NOT HISPANIC OR LATINO 2013-12-28 2014-01-10      
-## 214 NOT HISPANIC OR LATINO 2013-04-27 2013-11-03      
-## 215 NOT HISPANIC OR LATINO 2013-05-09 2013-08-28      
-## 216 NOT HISPANIC OR LATINO 2013-06-08 2013-08-01      
-## 217 NOT HISPANIC OR LATINO 2012-12-19 2013-01-26      
-## 218 NOT HISPANIC OR LATINO 2014-03-20 2014-09-20      
-## 219 NOT HISPANIC OR LATINO 2013-02-12 2013-08-10      
-## 220 NOT HISPANIC OR LATINO 2013-02-01 2013-06-07      
-## 221 NOT HISPANIC OR LATINO 2013-10-02 2014-04-05      
-## 222 NOT HISPANIC OR LATINO 2013-04-05 2013-10-11      
-## 223 NOT HISPANIC OR LATINO 2012-10-08 2013-04-13      
-## 224 NOT HISPANIC OR LATINO 2014-09-02 2015-03-05      
-## 225 NOT HISPANIC OR LATINO 2012-10-09 2013-03-03      
-## 226 NOT HISPANIC OR LATINO 2013-02-20 2013-04-02      
-## 227 NOT HISPANIC OR LATINO 2013-04-08 2013-07-06      
-## 228 NOT HISPANIC OR LATINO 2013-08-28 2013-10-07      
-## 229 NOT HISPANIC OR LATINO 2014-05-14 2014-09-30      
-## 230 NOT HISPANIC OR LATINO 2013-07-04 2014-01-09      
-## 231 NOT HISPANIC OR LATINO 2012-12-14 2013-02-28      
-## 232 NOT HISPANIC OR LATINO 2013-05-05 2013-11-20      
-## 233 NOT HISPANIC OR LATINO 2014-01-22 2014-07-22      
-## 234 NOT HISPANIC OR LATINO 2013-12-16 2014-06-17      
-## 235 NOT HISPANIC OR LATINO 2014-01-14 2014-07-16      
-## 236 NOT HISPANIC OR LATINO 2014-01-27 2014-07-28      
-## 237 NOT HISPANIC OR LATINO 2013-01-22 2013-07-24      
-## 238 NOT HISPANIC OR LATINO 2013-12-19 2014-02-21      
-## 239 NOT HISPANIC OR LATINO 2014-01-11 2014-03-14      
-## 240 NOT HISPANIC OR LATINO 2013-05-01 2013-10-20      
-## 241 NOT HISPANIC OR LATINO 2013-09-01 2014-03-04      
-## 242 NOT HISPANIC OR LATINO 2013-07-07 2013-07-30      
-## 243 NOT HISPANIC OR LATINO 2012-09-19 2012-11-06      
-## 244 NOT HISPANIC OR LATINO 2013-02-17 2013-08-02      
-## 245 NOT HISPANIC OR LATINO 2013-05-19 2013-11-17      
-## 246 NOT HISPANIC OR LATINO 2013-01-19 2013-07-31      
-## 247 NOT HISPANIC OR LATINO 2013-09-16 2013-11-03      
-## 248 NOT HISPANIC OR LATINO 2013-09-21 2013-11-29      
-## 249     HISPANIC OR LATINO 2013-09-21 2014-02-08      
-## 250     HISPANIC OR LATINO 2013-07-10 2014-01-09      
-## 251 NOT HISPANIC OR LATINO 2013-02-01 2013-05-01      
-## 252 NOT HISPANIC OR LATINO 2013-02-28 2013-08-29      
-## 253 NOT HISPANIC OR LATINO 2013-04-26 2013-08-08      
-## 254 NOT HISPANIC OR LATINO 2012-12-17 2013-02-18</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="Variable.html#cb16-1" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>sv   </span>
+<span id="cb16-2"><a href="Variable.html#cb16-2" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> sv_visit3 <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="Variable.html#cb16-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(visitnum <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="Variable.html#cb16-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
+<span id="cb16-5"><a href="Variable.html#cb16-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">trtsdt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(svstdtc))  </span>
+<span id="cb16-6"><a href="Variable.html#cb16-6" aria-hidden="true" tabindex="-1"></a>                   ) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-7"><a href="Variable.html#cb16-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> (usubjid , svstdtc , trtsdt )</span>
+<span id="cb16-8"><a href="Variable.html#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="Variable.html#cb16-9" aria-hidden="true" tabindex="-1"></a>sv_visit3</span></code></pre></div>
+<pre><code>##         usubjid    svstdtc     trtsdt
+## 1   01-701-1015 2014-01-02 2014-01-02
+## 2   01-701-1023 2012-08-05 2012-08-05
+## 3   01-701-1028 2013-07-19 2013-07-19
+## 4   01-701-1033 2014-03-18 2014-03-18
+## 5   01-701-1034 2014-07-01 2014-07-01
+## 6   01-701-1047 2013-02-12 2013-02-12
+## 7   01-701-1097 2014-01-01 2014-01-01
+## 8   01-701-1111 2012-09-07 2012-09-07
+## 9   01-701-1115 2012-11-30 2012-11-30
+## 10  01-701-1118 2014-03-12 2014-03-12
+## 11  01-701-1130 2014-02-15 2014-02-15
+## 12  01-701-1133 2012-10-28 2012-10-28
+## 13  01-701-1146 2013-05-20 2013-05-20
+## 14  01-701-1148 2013-08-23 2013-08-23
+## 15  01-701-1153 2013-09-23 2013-09-23
+## 16  01-701-1180 2013-02-12 2013-02-12
+## 17  01-701-1181 2013-12-05 2013-12-05
+## 18  01-701-1188 2013-02-15 2013-02-15
+## 19  01-701-1192 2012-07-22 2012-07-22
+## 20  01-701-1203 2013-02-02 2013-02-02
+## 21  01-701-1211 2012-11-15 2012-11-15
+## 22  01-701-1234 2013-03-30 2013-03-30
+## 23  01-701-1239 2014-01-11 2014-01-11
+## 24  01-701-1275 2014-02-07 2014-02-07
+## 25  01-701-1287 2014-01-25 2014-01-25
+## 26  01-701-1294 2013-03-24 2013-03-24
+## 27  01-701-1302 2013-08-29 2013-08-29
+## 28  01-701-1317 2014-05-22 2014-05-22
+## 29  01-701-1324 2012-10-02 2012-10-02
+## 30  01-701-1341 2013-01-05 2013-01-05
+## 31  01-701-1345 2013-10-08 2013-10-08
+## 32  01-701-1360 2013-07-31 2013-07-31
+## 33  01-701-1363 2013-05-30 2013-05-30
+## 34  01-701-1383 2013-02-04 2013-02-04
+## 35  01-701-1387 2014-03-12 2014-03-12
+## 36  01-701-1392 2012-10-28 2012-10-28
+## 37  01-701-1415 2013-09-23 2013-09-23
+## 38  01-701-1429 2013-03-19 2013-03-19
+## 39  01-701-1440 2013-08-08 2013-08-08
+## 40  01-701-1442 2013-10-26 2013-10-26
+## 41  01-701-1444 2013-01-05 2013-01-05
+## 42  01-702-1082 2013-07-26 2013-07-26
+## 43  01-703-1042 2013-03-02 2013-03-02
+## 44  01-703-1076 2013-10-25 2013-10-25
+## 45  01-703-1086 2012-09-02 2012-09-02
+## 46  01-703-1096 2013-01-25 2013-01-25
+## 47  01-703-1100 2013-03-13 2013-03-13
+## 48  01-703-1119 2013-02-20 2013-02-20
+## 49  01-703-1175 2013-12-20 2013-12-20
+## 50  01-703-1182 2013-10-17 2013-10-17
+## 51  01-703-1197 2013-06-16 2013-06-16
+## 52  01-703-1210 2013-03-16 2013-03-16
+## 53  01-703-1258 2012-07-20 2012-07-20
+## 54  01-703-1279 2013-05-13 2013-05-13
+## 55  01-703-1295 2013-11-21 2013-11-21
+## 56  01-703-1299 2012-09-12 2012-09-12
+## 57  01-703-1335 2014-03-17 2014-03-17
+## 58  01-703-1379 2013-09-22 2013-09-22
+## 59  01-703-1403 2012-12-12 2012-12-12
+## 60  01-703-1439 2014-03-12 2014-03-12
+## 61  01-704-1008 2013-01-13 2013-01-13
+## 62  01-704-1009 2013-08-27 2013-08-27
+## 63  01-704-1010 2014-02-21 2014-02-21
+## 64  01-704-1017 2013-10-06 2013-10-06
+## 65  01-704-1025 2013-09-27 2013-09-27
+## 66  01-704-1065 2013-10-24 2013-10-24
+## 67  01-704-1074 2014-01-22 2014-01-22
+## 68  01-704-1093 2013-03-15 2013-03-15
+## 69  01-704-1114 2013-01-23 2013-01-23
+## 70  01-704-1120 2013-12-02 2013-12-02
+## 71  01-704-1127 2013-10-02 2013-10-02
+## 72  01-704-1135 2013-10-31 2013-10-31
+## 73  01-704-1164 2012-09-19 2012-09-19
+## 74  01-704-1218 2012-11-19 2012-11-19
+## 75  01-704-1233 2013-03-21 2013-03-21
+## 76  01-704-1241 2013-08-25 2013-08-25
+## 77  01-704-1260 2012-08-30 2012-08-30
+## 78  01-704-1266 2013-10-13 2013-10-13
+## 79  01-704-1323 2013-07-08 2013-07-08
+## 80  01-704-1325 2014-04-23 2014-04-23
+## 81  01-704-1332 2013-12-09 2013-12-09
+## 82  01-704-1351 2013-10-12 2013-10-12
+## 83  01-704-1388 2012-12-07 2012-12-07
+## 84  01-704-1435 2012-11-17 2012-11-17
+## 85  01-704-1445 2014-05-11 2014-05-11
+## 86  01-705-1018 2013-07-05 2013-07-05
+## 87  01-705-1031 2013-11-27 2013-11-27
+## 88  01-705-1059 2013-08-05 2013-08-05
+## 89  01-705-1186 2014-01-08 2014-01-08
+## 90  01-705-1199 2013-09-16 2013-09-16
+## 91  01-705-1280 2014-01-17 2014-01-17
+## 92  01-705-1281 2013-11-28 2013-11-28
+## 93  01-705-1282 2012-12-26 2012-12-26
+## 94  01-705-1292 2013-10-14 2013-10-14
+## 95  01-705-1303 2013-12-16 2013-12-16
+## 96  01-705-1310 2013-11-02 2013-11-02
+## 97  01-705-1349 2013-03-10 2013-03-10
+## 98  01-705-1377 2014-01-04 2014-01-04
+## 99  01-705-1382 2013-05-13 2013-05-13
+## 100 01-705-1393 2012-09-07 2012-09-07
+## 101 01-705-1431 2013-06-23 2013-06-23
+## 102 01-706-1041 2013-12-31 2013-12-31
+## 103 01-706-1049 2013-05-14 2013-05-14
+## 104 01-706-1384 2012-09-15 2012-09-15
+## 105 01-707-1037 2013-12-20 2013-12-20
+## 106 01-707-1206 2013-10-28 2013-10-28
+## 107 01-708-1019 2013-12-20 2013-12-20
+## 108 01-708-1032 2013-02-09 2013-02-09
+## 109 01-708-1084 2013-05-09 2013-05-09
+## 110 01-708-1087 2012-10-22 2012-10-22
+## 111 01-708-1158 2014-02-08 2014-02-08
+## 112 01-708-1171 2012-12-06 2012-12-06
+## 113 01-708-1178 2013-12-29 2013-12-29
+## 114 01-708-1213 2013-02-09 2013-02-09
+## 115 01-708-1216 2012-10-24 2012-10-24
+## 116 01-708-1236 2013-09-21 2013-09-21
+## 117 01-708-1253 2013-05-07 2013-05-07
+## 118 01-708-1272 2013-02-06 2013-02-06
+## 119 01-708-1286 2013-09-10 2013-09-10
+## 120 01-708-1296 2013-06-14 2013-06-14
+## 121 01-708-1297 2013-01-25 2013-01-25
+## 122 01-708-1316 2013-08-23 2013-08-23
+## 123 01-708-1336 2012-12-07 2012-12-07
+## 124 01-708-1342 2012-12-29 2012-12-29
+## 125 01-708-1347 2013-04-20 2013-04-20
+## 126 01-708-1348 2013-08-05 2013-08-05
+## 127 01-708-1353 2013-07-04 2013-07-04
+## 128 01-708-1372 2013-04-12 2013-04-12
+## 129 01-708-1378 2013-09-03 2013-09-03
+## 130 01-708-1406 2013-12-26 2013-12-26
+## 131 01-708-1428 2013-11-09 2013-11-09
+## 132 01-709-1001 2013-10-08 2013-10-08
+## 133 01-709-1007 2012-07-31 2012-07-31
+## 134 01-709-1020 2012-12-01 2012-12-01
+## 135 01-709-1029 2012-12-25 2012-12-25
+## 136 01-709-1081 2014-01-18 2014-01-18
+## 137 01-709-1088 2014-04-12 2014-04-12
+## 138 01-709-1099 2013-10-25 2013-10-25
+## 139 01-709-1102 2013-01-15 2013-01-15
+## 140 01-709-1168 2013-08-02 2013-08-02
+## 141 01-709-1217 2013-03-04 2013-03-04
+## 142 01-709-1238 2013-05-15 2013-05-15
+## 143 01-709-1259 2013-01-26 2013-01-26
+## 144 01-709-1285 2013-03-24 2013-03-24
+## 145 01-709-1301 2013-07-19 2013-07-19
+## 146 01-709-1306 2014-02-03 2014-02-03
+## 147 01-709-1309 2013-06-19 2013-06-19
+## 148 01-709-1312 2014-04-20 2014-04-20
+## 149 01-709-1326 2013-04-05 2013-04-05
+## 150 01-709-1329 2013-08-15 2013-08-15
+## 151 01-709-1339 2012-12-23 2012-12-23
+## 152 01-709-1424 2013-03-03 2013-03-03
+## 153 01-710-1002 2014-01-14 2014-01-14
+## 154 01-710-1006 2013-02-10 2013-02-10
+## 155 01-710-1021 2013-09-27 2013-09-27
+## 156 01-710-1027 2014-02-28 2014-02-28
+## 157 01-710-1045 2013-06-03 2013-06-03
+## 158 01-710-1053 2012-12-26 2012-12-26
+## 159 01-710-1060 2013-01-01 2013-01-01
+## 160 01-710-1070 2012-09-08 2012-09-08
+## 161 01-710-1077 2013-11-17 2013-11-17
+## 162 01-710-1078 2013-09-17 2013-09-17
+## 163 01-710-1083 2013-07-22 2013-07-22
+## 164 01-710-1137 2013-10-11 2013-10-11
+## 165 01-710-1142 2012-10-02 2012-10-02
+## 166 01-710-1154 2014-03-29 2014-03-29
+## 167 01-710-1166 2012-11-30 2012-11-30
+## 168 01-710-1183 2013-11-16 2013-11-16
+## 169 01-710-1187 2012-11-10 2012-11-10
+## 170 01-710-1235 2012-09-26 2012-09-26
+## 171 01-710-1249 2013-12-28 2013-12-28
+## 172 01-710-1264 2013-06-13 2013-06-13
+## 173 01-710-1270 2014-02-12 2014-02-12
+## 174 01-710-1271 2012-09-27 2012-09-27
+## 175 01-710-1278 2012-12-24 2012-12-24
+## 176 01-710-1300 2012-12-15 2012-12-15
+## 177 01-710-1314 2013-04-24 2013-04-24
+## 178 01-710-1315 2013-02-27 2013-02-27
+## 179 01-710-1354 2012-11-11 2012-11-11
+## 180 01-710-1358 2012-09-17 2012-09-17
+## 181 01-710-1368 2013-10-23 2013-10-23
+## 182 01-710-1385 2012-10-29 2012-10-29
+## 183 01-710-1408 2013-01-05 2013-01-05
+## 184 01-711-1012 2013-04-03 2013-04-03
+## 185 01-711-1036 2012-07-29 2012-07-29
+## 186 01-711-1143 2013-04-03 2013-04-03
+## 187 01-711-1433 2013-01-27 2013-01-27
+## 188 01-713-1043 2013-09-15 2013-09-15
+## 189 01-713-1073 2014-03-30 2014-03-30
+## 190 01-713-1106 2012-10-31 2012-10-31
+## 191 01-713-1141 2013-05-31 2013-05-31
+## 192 01-713-1179 2013-08-09 2013-08-09
+## 193 01-713-1209 2013-05-27 2013-05-27
+## 194 01-713-1256 2012-09-19 2012-09-19
+## 195 01-713-1269 2014-01-27 2014-01-27
+## 196 01-713-1448 2014-01-19 2014-01-19
+## 197 01-714-1035 2014-04-17 2014-04-17
+## 198 01-714-1068 2013-08-08 2013-08-08
+## 199 01-714-1195 2013-04-26 2013-04-26
+## 200 01-714-1288 2013-12-04 2013-12-04
+## 201 01-714-1375 2013-02-26 2013-02-26
+## 202 01-714-1425 2013-08-15 2013-08-15
+## 203 01-715-1085 2013-02-16 2013-02-16
+## 204 01-715-1107 2013-02-26 2013-02-26
+## 205 01-715-1155 2013-12-13 2013-12-13
+## 206 01-715-1207 2012-11-18 2012-11-18
+## 207 01-715-1319 2013-02-17 2013-02-17
+## 208 01-715-1321 2014-02-11 2014-02-11
+## 209 01-715-1397 2013-04-03 2013-04-03
+## 210 01-715-1405 2013-07-06 2013-07-06
+## 211 01-716-1024 2012-07-09 2012-07-09
+## 212 01-716-1026 2014-04-02 2014-04-02
+## 213 01-716-1030 2013-12-28 2013-12-28
+## 214 01-716-1044 2013-04-27 2013-04-27
+## 215 01-716-1063 2013-05-09 2013-05-09
+## 216 01-716-1071 2013-06-08 2013-06-08
+## 217 01-716-1094 2012-12-19 2012-12-19
+## 218 01-716-1103 2014-03-20 2014-03-20
+## 219 01-716-1108 2013-02-12 2013-02-12
+## 220 01-716-1151 2013-02-01 2013-02-01
+## 221 01-716-1157 2013-10-02 2013-10-02
+## 222 01-716-1160 2013-04-05 2013-04-05
+## 223 01-716-1167 2012-10-08 2012-10-08
+## 224 01-716-1177 2014-09-02 2014-09-02
+## 225 01-716-1189 2012-10-09 2012-10-09
+## 226 01-716-1229 2013-02-20 2013-02-20
+## 227 01-716-1298 2013-04-08 2013-04-08
+## 228 01-716-1308 2013-08-28 2013-08-28
+## 229 01-716-1311 2014-05-14 2014-05-14
+## 230 01-716-1364 2013-07-04 2013-07-04
+## 231 01-716-1373 2012-12-14 2012-12-14
+## 232 01-716-1418 2013-05-05 2013-05-05
+## 233 01-716-1441 2014-01-22 2014-01-22
+## 234 01-716-1447 2013-12-16 2013-12-16
+## 235 01-717-1004 2014-01-14 2014-01-14
+## 236 01-717-1109 2014-01-27 2014-01-27
+## 237 01-717-1174 2013-01-22 2013-01-22
+## 238 01-717-1201 2013-12-19 2013-12-19
+## 239 01-717-1344 2014-01-11 2014-01-11
+## 240 01-717-1357 2013-05-01 2013-05-01
+## 241 01-717-1446 2013-09-01 2013-09-01
+## 242 01-718-1066 2013-07-07 2013-07-07
+## 243 01-718-1079 2012-09-19 2012-09-19
+## 244 01-718-1101 2013-02-17 2013-02-17
+## 245 01-718-1139 2013-05-19 2013-05-19
+## 246 01-718-1150 2013-01-19 2013-01-19
+## 247 01-718-1170 2013-09-16 2013-09-16
+## 248 01-718-1172 2013-09-21 2013-09-21
+## 249 01-718-1250 2013-09-21 2013-09-21
+## 250 01-718-1254 2013-07-10 2013-07-10
+## 251 01-718-1328 2013-02-01 2013-02-01
+## 252 01-718-1355 2013-02-28 2013-02-28
+## 253 01-718-1371 2013-04-26 2013-04-26
+## 254 01-718-1427 2012-12-17 2012-12-17</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="Variable.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nature of usubjid is character and svstdtc is &lt;s3.labelled&gt; </span></span>
+<span id="cb18-2"><a href="Variable.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="Variable.html#cb18-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
+<span id="cb18-4"><a href="Variable.html#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="Variable.html#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="Variable.html#cb18-6" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> adsl_deri01 <span class="sc">%&gt;%</span>  </span>
+<span id="cb18-7"><a href="Variable.html#cb18-7" aria-hidden="true" tabindex="-1"></a>               </span>
+<span id="cb18-8"><a href="Variable.html#cb18-8" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span> (usubjid , trtsdt, svstdtc , actarmcd , sitegr1, siteid , trt01p, arm , trt01a , trt01pn ,trt01pn,ittfl,agegr1,age,agegr1n,race               ,racen,sex,ethnic , rfstdtc ,</span>
+<span id="cb18-9"><a href="Variable.html#cb18-9" aria-hidden="true" tabindex="-1"></a>               rfendtc , sex , ethnic , dthfl )</span>
+<span id="cb18-10"><a href="Variable.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#adsl_deri02</span></span></code></pre></div>
 </div>
 <div id="date-of-last-exposure-to-treatment-trtedt" class="section level3" number="7.3.2">
 <h3><span class="header-section-number">7.3.2</span> Date of Last Exposure to Treatment (TRTEDT)</h3>
@@ -1756,611 +734,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Steps to arrive at logic</p>
 <ol style="list-style-type: decimal">
 <li>Check for the subjects whose final dose date is missing</li>
-<li>Check if these subjects discontinued after visit 3</li>
+<li><code>Check if these subjects discontinued after visit 3 (Check  if they have any records after the Visit 3 , this needs checked )</code></li>
 <li>If they have not discontinued then use the SV date as date of last dose</li>
-<li>To find last.date use slice_tail , slice_max within by group , compare it origonal dataset</li>
+<li>To find last.date use <strong>slice_tail , slice_max within by group</strong> or use <strong>Dplyr::first or last functions</strong> , compare it original dataset</li>
 </ol>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="Variable.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates chek </span></span>
-<span id="cb22-2"><a href="Variable.html#cb22-2" aria-hidden="true" tabindex="-1"></a>trtedt_chk<span class="ot">&lt;-</span> <span class="fu">select</span>(adsl,usubjid , trtedt )</span>
-<span id="cb22-3"><a href="Variable.html#cb22-3" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb22-4"><a href="Variable.html#cb22-4" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
-<span id="cb22-5"><a href="Variable.html#cb22-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-6"><a href="Variable.html#cb22-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid , exendtc)</span>
-<span id="cb22-7"><a href="Variable.html#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="Variable.html#cb22-8" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
-<span id="cb22-9"><a href="Variable.html#cb22-9" aria-hidden="true" tabindex="-1"></a>exendtc</span></code></pre></div>
-<pre><code>##         usubjid    exendtc    svstdtc
-## 1   01-701-1015 2014-01-16 2014-01-02
-## 2   01-701-1015 2014-06-18 2014-01-02
-## 3   01-701-1015 2014-07-02 2014-01-02
-## 4   01-701-1023 2012-08-27 2012-08-05
-## 5   01-701-1023 2012-09-01 2012-08-05
-## 6   01-701-1028 2013-08-01 2013-07-19
-## 7   01-701-1028 2014-01-06 2013-07-19
-## 8   01-701-1028 2014-01-14 2013-07-19
-## 9   01-701-1033 2014-03-31 2014-03-18
-## 10  01-701-1034 2014-07-15 2014-07-01
-## 11  01-701-1034 2014-12-17 2014-07-01
-## 12  01-701-1034 2014-12-30 2014-07-01
-## 13  01-701-1047 2013-02-25 2013-02-12
-## 14  01-701-1047 2013-03-09 2013-02-12
-## 15  01-701-1097 2014-01-15 2014-01-01
-## 16  01-701-1097 2014-06-18 2014-01-01
-## 17  01-701-1097 2014-07-09 2014-01-01
-## 18  01-701-1111 2012-09-16 2012-09-07
-## 19  01-701-1115 2012-12-13 2012-11-30
-## 20  01-701-1115 2013-01-23 2012-11-30
-## 21  01-701-1118 2014-03-26 2014-03-12
-## 22  01-701-1118 2014-08-27 2014-03-12
-## 23  01-701-1118 2014-09-09 2014-03-12
-## 24  01-701-1130 2014-03-01 2014-02-15
-## 25  01-701-1130 2014-08-02 2014-02-15
-## 26  01-701-1130 2014-08-16 2014-02-15
-## 27  01-701-1133 2012-11-12 2012-10-28
-## 28  01-701-1133 2013-04-18 2012-10-28
-## 29  01-701-1133 2013-04-28 2012-10-28
-## 30  01-701-1146 2013-06-03 2013-05-20
-## 31  01-701-1146 2013-06-26 2013-05-20
-## 32  01-701-1148 2013-09-05 2013-08-23
-## 33  01-701-1148 2014-02-08 2013-08-23
-## 34  01-701-1148 2014-02-20 2013-08-23
-## 35  01-701-1153 2013-10-08 2013-09-23
-## 36  01-701-1153 2014-03-11 2013-09-23
-## 37  01-701-1153 2014-03-16 2013-09-23
-## 38  01-701-1180 2013-02-25 2013-02-12
-## 39  01-701-1180 2013-03-18 2013-02-12
-## 40  01-701-1181 2013-12-09 2013-12-05
-## 41  01-701-1188 2013-03-02 2013-02-15
-## 42  01-701-1188 2013-03-24 2013-02-15
-## 43  01-701-1192 2012-08-07 2012-07-22
-## 44  01-701-1192 2013-01-11 2012-07-22
-## 45  01-701-1192 2013-01-20 2012-07-22
-## 46  01-701-1203 2013-02-23 2013-02-02
-## 47  01-701-1203 2013-07-22 2013-02-02
-## 48  01-701-1203 2013-08-03 2013-02-02
-## 49  01-701-1211 2012-11-28 2012-11-15
-## 50  01-701-1211 2013-01-12 2012-11-15
-## 51  01-701-1234 2013-04-21 2013-03-30
-## 52  01-701-1234 2013-09-10 2013-03-30
-## 53  01-701-1234 2013-09-22 2013-03-30
-## 54  01-701-1239 2014-01-25 2014-01-11
-## 55  01-701-1239 2014-06-27 2014-01-11
-## 56  01-701-1239 2014-07-10 2014-01-11
-## 57  01-701-1275 2014-02-22 2014-02-07
-## 58  01-701-1275 2014-05-31 2014-02-07
-## 59  01-701-1287 2014-02-11 2014-01-25
-## 60  01-701-1287 2014-07-12 2014-01-25
-## 61  01-701-1287 2014-07-26 2014-01-25
-## 62  01-701-1294 2013-04-10 2013-03-24
-## 63  01-701-1294 2013-06-14 2013-03-24
-## 64  01-701-1302 2013-09-15 2013-08-29
-## 65  01-701-1302 2013-11-05 2013-08-29
-## 66  01-701-1317 2014-06-05 2014-05-22
-## 67  01-701-1317 2014-11-06 2014-05-22
-## 68  01-701-1317 2014-11-20 2014-05-22
-## 69  01-701-1324 2012-10-16 2012-10-02
-## 70  01-701-1324 2013-03-19 2012-10-02
-## 71  01-701-1324 2013-04-02 2012-10-02
-## 72  01-701-1341 2013-01-18 2013-01-05
-## 73  01-701-1341 2013-01-26 2013-01-05
-## 74  01-701-1345 2013-10-24 2013-10-08
-## 75  01-701-1345 2014-03-18 2013-10-08
-## 76  01-701-1360 2013-08-05 2013-07-31
-## 77  01-701-1363 2013-06-12 2013-05-30
-## 78  01-701-1363 2013-11-13 2013-05-30
-## 79  01-701-1363 2013-11-27 2013-05-30
-## 80  01-701-1383 2013-02-19 2013-02-04
-## 81  01-701-1383 2013-07-30 2013-02-04
-## 82  01-701-1383 2013-08-06 2013-02-04
-## 83  01-701-1387 2014-03-25 2014-03-12
-## 84  01-701-1392 2012-11-11 2012-10-28
-## 85  01-701-1392 2013-04-15 2012-10-28
-## 86  01-701-1392 2013-04-28 2012-10-28
-## 87  01-701-1415 2013-10-07 2013-09-23
-## 88  01-701-1415 2014-03-10 2013-09-23
-## 89  01-701-1415 2014-03-24 2013-09-23
-## 90  01-701-1429 2013-04-02 2013-03-19
-## 91  01-701-1429 2013-04-30 2013-03-19
-## 92  01-701-1440 2013-08-23 2013-08-08
-## 93  01-701-1440 2014-01-22 2013-08-08
-## 94  01-701-1440 2014-02-05 2013-08-08
-## 95  01-701-1442 2013-11-09 2013-10-26
-## 96  01-701-1442 2014-04-17 2013-10-26
-## 97  01-701-1442 2014-04-26 2013-10-26
-## 98  01-701-1444 2013-01-18 2013-01-05
-## 99  01-701-1444 2013-02-12 2013-01-05
-## 100 01-702-1082 2013-08-08 2013-07-26
-## 101 01-702-1082 2013-10-13 2013-07-26
-## 102 01-703-1042 2013-03-14 2013-03-02
-## 103 01-703-1042 2013-08-09 2013-03-02
-## 104 01-703-1042 2013-08-31 2013-03-02
-## 105 01-703-1076 2013-11-06 2013-10-25
-## 106 01-703-1076 2013-12-24 2013-10-25
-## 107 01-703-1086 2012-09-16 2012-09-02
-## 108 01-703-1086 2012-12-04 2012-09-02
-## 109 01-703-1096 2013-02-09 2013-01-25
-## 110 01-703-1096 2013-03-16 2013-01-25
-## 111 01-703-1100 2013-03-29 2013-03-13
-## 112 01-703-1100 2013-08-28 2013-03-13
-## 113 01-703-1100 2013-09-14 2013-03-13
-## 114 01-703-1119 2013-03-10 2013-02-20
-## 115 01-703-1119 2013-06-13 2013-02-20
-## 116 01-703-1175 2013-12-26 2013-12-20
-## 117 01-703-1182 2013-10-31 2013-10-17
-## 118 01-703-1182 2013-12-11 2013-10-17
-## 119 01-703-1197 2013-06-29 2013-06-16
-## 120 01-703-1210 2013-03-30 2013-03-16
-## 121 01-703-1210 2013-08-24 2013-03-16
-## 122 01-703-1210 2013-09-06 2013-03-16
-## 123 01-703-1258 2012-08-01 2012-07-20
-## 124 01-703-1258 2012-12-31 2012-07-20
-## 125 01-703-1258 2013-01-11 2012-07-20
-## 126 01-703-1279 2013-06-03 2013-05-13
-## 127 01-703-1295 2013-12-05 2013-11-21
-## 128 01-703-1295 2014-04-19 2013-11-21
-## 129 01-703-1299 2012-09-28 2012-09-12
-## 130 01-703-1299 2013-03-01 2012-09-12
-## 131 01-703-1299 2013-03-13 2012-09-12
-## 132 01-703-1335 2014-03-31 2014-03-17
-## 133 01-703-1335 2014-05-07 2014-03-17
-## 134 01-703-1379 2013-10-07 2013-09-22
-## 135 01-703-1379 2014-03-08 2013-09-22
-## 136 01-703-1379 2014-03-21 2013-09-22
-## 137 01-703-1403 2012-12-13 2012-12-12
-## 138 01-703-1439 2014-03-26 2014-03-12
-## 139 01-703-1439 2014-08-28 2014-03-12
-## 140 01-703-1439 2014-09-11 2014-03-12
-## 141 01-704-1008 2013-01-28 2013-01-13
-## 142 01-704-1008 2013-02-21 2013-01-13
-## 143 01-704-1009 2013-09-14 2013-08-27
-## 144 01-704-1009 2013-09-25 2013-08-27
-## 145 01-704-1010 2014-03-08 2014-02-21
-## 146 01-704-1010 2014-07-08 2014-02-21
-## 147 01-704-1017 2013-10-19 2013-10-06
-## 148 01-704-1017 2013-11-18 2013-10-06
-## 149 01-704-1025 2013-10-11 2013-09-27
-## 150 01-704-1025 2013-10-24 2013-09-27
-## 151 01-704-1065 2013-11-07 2013-10-24
-## 152 01-704-1065 2013-12-22 2013-10-24
-## 153 01-704-1074 2014-02-09 2014-01-22
-## 154 01-704-1074 2014-03-20 2014-01-22
-## 155 01-704-1093 2013-03-30 2013-03-15
-## 156 01-704-1093 2013-06-17 2013-03-15
-## 157 01-704-1114 2013-02-03 2013-01-23
-## 158 01-704-1114 2013-07-07 2013-01-23
-## 159 01-704-1120 2013-12-15 2013-12-02
-## 160 01-704-1120 2014-02-01 2013-12-02
-## 161 01-704-1127 2013-10-16 2013-10-02
-## 162 01-704-1127 2014-03-17 2013-10-02
-## 163 01-704-1127 2014-03-31 2013-10-02
-## 164 01-704-1135 2013-11-14 2013-10-31
-## 165 01-704-1135 2014-05-01 2013-10-31
-## 166 01-704-1135 2014-05-16 2013-10-31
-## 167 01-704-1164 2012-10-04 2012-09-19
-## 168 01-704-1164 2013-03-17 2012-09-19
-## 169 01-704-1164 2013-04-04 2012-09-19
-## 170 01-704-1218 2012-12-03 2012-11-19
-## 171 01-704-1218 2013-05-13 2012-11-19
-## 172 01-704-1218 2013-05-27 2012-11-19
-## 173 01-704-1233 2013-04-04 2013-03-21
-## 174 01-704-1233            2013-03-21
-## 175 01-704-1241 2013-09-05 2013-08-25
-## 176 01-704-1241 2013-10-09 2013-08-25
-## 177 01-704-1260 2012-09-13 2012-08-30
-## 178 01-704-1260 2012-11-04 2012-08-30
-## 179 01-704-1266 2013-10-27 2013-10-13
-## 180 01-704-1266 2013-12-06 2013-10-13
-## 181 01-704-1323 2013-07-23 2013-07-08
-## 182 01-704-1323 2013-08-05 2013-07-08
-## 183 01-704-1325 2014-05-07 2014-04-23
-## 184 01-704-1325 2014-07-04 2014-04-23
-## 185 01-704-1332 2013-12-23 2013-12-09
-## 186 01-704-1332 2014-02-14 2013-12-09
-## 187 01-704-1351 2013-10-26 2013-10-12
-## 188 01-704-1351 2014-04-04 2013-10-12
-## 189 01-704-1351 2014-04-18 2013-10-12
-## 190 01-704-1388 2012-12-21 2012-12-07
-## 191 01-704-1388 2013-05-23 2012-12-07
-## 192 01-704-1388 2013-06-11 2012-12-07
-## 193 01-704-1435 2012-12-01 2012-11-17
-## 194 01-704-1435 2013-01-09 2012-11-17
-## 195 01-704-1445 2014-05-25 2014-05-11
-## 196 01-704-1445 2014-11-01 2014-05-11
-## 197 01-705-1018            2013-07-05
-## 198 01-705-1031 2013-12-18 2013-11-27
-## 199 01-705-1031            2013-11-27
-## 200 01-705-1059 2013-08-19 2013-08-05
-## 201 01-705-1059 2013-12-05 2013-08-05
-## 202 01-705-1186 2014-01-23 2014-01-08
-## 203 01-705-1186 2014-01-26 2014-01-08
-## 204 01-705-1199 2013-09-28 2013-09-16
-## 205 01-705-1280 2014-01-31 2014-01-17
-## 206 01-705-1280 2014-07-11 2014-01-17
-## 207 01-705-1280 2014-07-25 2014-01-17
-## 208 01-705-1281 2013-12-15 2013-11-28
-## 209 01-705-1281 2014-02-27 2013-11-28
-## 210 01-705-1282 2013-01-09 2012-12-26
-## 211 01-705-1282 2013-06-11 2012-12-26
-## 212 01-705-1282 2013-06-24 2012-12-26
-## 213 01-705-1292 2013-10-29 2013-10-14
-## 214 01-705-1292 2014-04-28 2013-10-14
-## 215 01-705-1292 2014-05-13 2013-10-14
-## 216 01-705-1303 2013-12-30 2013-12-16
-## 217 01-705-1303            2013-12-16
-## 218 01-705-1310 2013-11-22 2013-11-02
-## 219 01-705-1310 2014-01-23 2013-11-02
-## 220 01-705-1349 2013-03-24 2013-03-10
-## 221 01-705-1349 2013-08-25 2013-03-10
-## 222 01-705-1349 2013-09-08 2013-03-10
-## 223 01-705-1377 2014-01-25 2014-01-04
-## 224 01-705-1377            2014-01-04
-## 225 01-705-1382            2013-05-13
-## 226 01-705-1393 2012-09-27 2012-09-07
-## 227 01-705-1393 2013-02-01 2012-09-07
-## 228 01-705-1431 2013-07-07 2013-06-23
-## 229 01-705-1431 2013-12-05 2013-06-23
-## 230 01-705-1431 2013-12-19 2013-06-23
-## 231 01-706-1041 2014-01-14 2013-12-31
-## 232 01-706-1041 2014-07-15 2013-12-31
-## 233 01-706-1041 2014-07-28 2013-12-31
-## 234 01-706-1049 2013-05-28 2013-05-14
-## 235 01-706-1049 2013-06-18 2013-05-14
-## 236 01-706-1384 2012-09-24 2012-09-15
-## 237 01-707-1037 2013-12-24 2013-12-20
-## 238 01-707-1206 2013-11-12 2013-10-28
-## 239 01-707-1206 2014-04-13 2013-10-28
-## 240 01-707-1206 2014-04-26 2013-10-28
-## 241 01-708-1019 2014-01-01 2013-12-20
-## 242 01-708-1032 2013-02-23 2013-02-09
-## 243 01-708-1032 2013-03-01 2013-02-09
-## 244 01-708-1084 2013-05-23 2013-05-09
-## 245 01-708-1084 2013-10-28 2013-05-09
-## 246 01-708-1084 2013-11-11 2013-05-09
-## 247 01-708-1087 2012-11-05 2012-10-22
-## 248 01-708-1087 2013-04-10 2012-10-22
-## 249 01-708-1087 2013-04-28 2012-10-22
-## 250 01-708-1158 2014-02-26 2014-02-08
-## 251 01-708-1158 2014-03-21 2014-02-08
-## 252 01-708-1171 2012-12-18 2012-12-06
-## 253 01-708-1171 2013-05-20 2012-12-06
-## 254 01-708-1171 2013-06-04 2012-12-06
-## 255 01-708-1178 2014-01-18 2013-12-29
-## 256 01-708-1178 2014-04-06 2013-12-29
-## 257 01-708-1213 2013-02-22 2013-02-09
-## 258 01-708-1216 2012-11-08 2012-10-24
-## 259 01-708-1216 2012-11-29 2012-10-24
-## 260 01-708-1236 2013-09-21 2013-09-21
-## 261 01-708-1253 2013-05-21 2013-05-07
-## 262 01-708-1253 2013-10-27 2013-05-07
-## 263 01-708-1253 2013-11-05 2013-05-07
-## 264 01-708-1272 2013-02-21 2013-02-06
-## 265 01-708-1272 2013-03-22 2013-02-06
-## 266 01-708-1286 2013-09-23 2013-09-10
-## 267 01-708-1286 2014-02-23 2013-09-10
-## 268 01-708-1286 2014-03-08 2013-09-10
-## 269 01-708-1296 2013-06-27 2013-06-14
-## 270 01-708-1296 2013-11-27 2013-06-14
-## 271 01-708-1296 2013-12-12 2013-06-14
-## 272 01-708-1297 2013-02-08 2013-01-25
-## 273 01-708-1297 2013-05-03 2013-01-25
-## 274 01-708-1316 2013-09-05 2013-08-23
-## 275 01-708-1316 2014-02-15 2013-08-23
-## 276 01-708-1316 2014-03-01 2013-08-23
-## 277 01-708-1336 2012-12-21 2012-12-07
-## 278 01-708-1336 2013-05-22 2012-12-07
-## 279 01-708-1336 2013-06-05 2012-12-07
-## 280 01-708-1342 2013-01-12 2012-12-29
-## 281 01-708-1342 2013-06-15 2012-12-29
-## 282 01-708-1342 2013-06-28 2012-12-29
-## 283 01-708-1347 2013-05-04 2013-04-20
-## 284 01-708-1347 2013-06-18 2013-04-20
-## 285 01-708-1348 2013-08-19 2013-08-05
-## 286 01-708-1348 2014-02-03 2013-08-05
-## 287 01-708-1348 2014-02-13 2013-08-05
-## 288 01-708-1353 2013-07-18 2013-07-04
-## 289 01-708-1353 2013-08-28 2013-07-04
-## 290 01-708-1372 2013-04-19 2013-04-12
-## 291 01-708-1378 2013-09-21 2013-09-03
-## 292 01-708-1378 2014-01-28 2013-09-03
-## 293 01-708-1406 2014-01-09 2013-12-26
-## 294 01-708-1406 2014-06-16 2013-12-26
-## 295 01-708-1406 2014-07-02 2013-12-26
-## 296 01-708-1428 2013-11-23 2013-11-09
-## 297 01-708-1428 2013-12-14 2013-11-09
-## 298 01-709-1001 2013-10-22 2013-10-08
-## 299 01-709-1001 2014-03-17 2013-10-08
-## 300 01-709-1001 2014-04-08 2013-10-08
-## 301 01-709-1007 2012-08-18 2012-07-31
-## 302 01-709-1007 2012-08-28 2012-07-31
-## 303 01-709-1020 2012-12-15 2012-12-01
-## 304 01-709-1020 2013-05-18 2012-12-01
-## 305 01-709-1020 2013-06-01 2012-12-01
-## 306 01-709-1029 2013-01-09 2012-12-25
-## 307 01-709-1029 2013-06-12 2012-12-25
-## 308 01-709-1029 2013-06-26 2012-12-25
-## 309 01-709-1081 2014-02-01 2014-01-18
-## 310 01-709-1081 2014-04-27 2014-01-18
-## 311 01-709-1088 2014-04-26 2014-04-12
-## 312 01-709-1088 2014-09-27 2014-04-12
-## 313 01-709-1088 2014-10-09 2014-04-12
-## 314 01-709-1099 2013-11-12 2013-10-25
-## 315 01-709-1099 2014-04-11 2013-10-25
-## 316 01-709-1099 2014-04-25 2013-10-25
-## 317 01-709-1102 2013-01-31 2013-01-15
-## 318 01-709-1102 2013-03-27 2013-01-15
-## 319 01-709-1168 2013-08-17 2013-08-02
-## 320 01-709-1168 2013-09-26 2013-08-02
-## 321 01-709-1217 2013-03-19 2013-03-04
-## 322 01-709-1217 2013-06-11 2013-03-04
-## 323 01-709-1238 2013-05-29 2013-05-15
-## 324 01-709-1238 2013-08-06 2013-05-15
-## 325 01-709-1259 2013-02-10 2013-01-26
-## 326 01-709-1259 2013-06-13 2013-01-26
-## 327 01-709-1285 2013-04-08 2013-03-24
-## 328 01-709-1285 2013-05-23 2013-03-24
-## 329 01-709-1301 2013-08-02 2013-07-19
-## 330 01-709-1301 2014-01-04 2013-07-19
-## 331 01-709-1301 2014-01-17 2013-07-19
-## 332 01-709-1306 2014-02-19 2014-02-03
-## 333 01-709-1306 2014-06-16 2014-02-03
-## 334 01-709-1309 2013-07-01 2013-06-19
-## 335 01-709-1309 2013-12-05 2013-06-19
-## 336 01-709-1309 2013-12-19 2013-06-19
-## 337 01-709-1312 2014-05-10 2014-04-20
-## 338 01-709-1312 2014-10-05 2014-04-20
-## 339 01-709-1312 2014-10-19 2014-04-20
-## 340 01-709-1326 2013-04-18 2013-04-05
-## 341 01-709-1326 2013-09-20 2013-04-05
-## 342 01-709-1326 2013-10-02 2013-04-05
-## 343 01-709-1329 2013-08-25 2013-08-15
-## 344 01-709-1339 2013-01-05 2012-12-23
-## 345 01-709-1339 2013-06-08 2012-12-23
-## 346 01-709-1339 2013-06-24 2012-12-23
-## 347 01-709-1424 2013-03-07 2013-03-03
-## 348 01-710-1002 2014-01-18 2014-01-14
-## 349 01-710-1006 2013-02-22 2013-02-10
-## 350 01-710-1006 2013-07-27 2013-02-10
-## 351 01-710-1006 2013-08-09 2013-02-10
-## 352 01-710-1021 2013-10-11 2013-09-27
-## 353 01-710-1021 2013-10-29 2013-09-27
-## 354 01-710-1027 2014-03-14 2014-02-28
-## 355 01-710-1027 2014-08-19 2014-02-28
-## 356 01-710-1027 2014-08-29 2014-02-28
-## 357 01-710-1045 2013-06-17 2013-06-03
-## 358 01-710-1045 2013-08-13 2013-06-03
-## 359 01-710-1053 2013-01-09 2012-12-26
-## 360 01-710-1053 2013-02-10 2012-12-26
-## 361 01-710-1060 2013-01-15 2013-01-01
-## 362 01-710-1060 2013-06-21 2013-01-01
-## 363 01-710-1060 2013-07-05 2013-01-01
-## 364 01-710-1070 2012-09-22 2012-09-08
-## 365 01-710-1070 2013-01-22 2012-09-08
-## 366 01-710-1077 2013-12-01 2013-11-17
-## 367 01-710-1077 2014-05-03 2013-11-17
-## 368 01-710-1077 2014-05-18 2013-11-17
-## 369 01-710-1078 2013-10-06 2013-09-17
-## 370 01-710-1078 2014-03-08 2013-09-17
-## 371 01-710-1078 2014-03-23 2013-09-17
-## 372 01-710-1083 2013-08-01 2013-07-22
-## 373 01-710-1137 2013-10-25 2013-10-11
-## 374 01-710-1137 2013-11-13 2013-10-11
-## 375 01-710-1142 2012-10-16 2012-10-02
-## 376 01-710-1142 2012-10-20 2012-10-02
-## 377 01-710-1154 2014-04-12 2014-03-29
-## 378 01-710-1154 2014-04-27 2014-03-29
-## 379 01-710-1166 2012-12-14 2012-11-30
-## 380 01-710-1166 2013-03-19 2012-11-30
-## 381 01-710-1183 2013-11-30 2013-11-16
-## 382 01-710-1183 2014-05-03 2013-11-16
-## 383 01-710-1183 2014-05-17 2013-11-16
-## 384 01-710-1187 2012-11-24 2012-11-10
-## 385 01-710-1187 2013-04-28 2012-11-10
-## 386 01-710-1187 2013-05-12 2012-11-10
-## 387 01-710-1235 2012-10-10 2012-09-26
-## 388 01-710-1235 2013-03-13 2012-09-26
-## 389 01-710-1235 2013-03-27 2012-09-26
-## 390 01-710-1249 2014-01-11 2013-12-28
-## 391 01-710-1249 2014-06-14 2013-12-28
-## 392 01-710-1249 2014-06-28 2013-12-28
-## 393 01-710-1264 2013-06-27 2013-06-13
-## 394 01-710-1264 2013-10-11 2013-06-13
-## 395 01-710-1270 2014-03-01 2014-02-12
-## 396 01-710-1271 2012-10-12 2012-09-27
-## 397 01-710-1271 2012-11-21 2012-09-27
-## 398 01-710-1278 2013-01-07 2012-12-24
-## 399 01-710-1278 2013-02-26 2012-12-24
-## 400 01-710-1300 2012-12-30 2012-12-15
-## 401 01-710-1300 2013-02-15 2012-12-15
-## 402 01-710-1314 2013-05-09 2013-04-24
-## 403 01-710-1314 2013-05-23 2013-04-24
-## 404 01-710-1315 2013-03-13 2013-02-27
-## 405 01-710-1315 2013-07-06 2013-02-27
-## 406 01-710-1354 2012-11-25 2012-11-11
-## 407 01-710-1354 2013-04-21 2012-11-11
-## 408 01-710-1354 2013-05-01 2012-11-11
-## 409 01-710-1358 2012-10-01 2012-09-17
-## 410 01-710-1358 2013-02-09 2012-09-17
-## 411 01-710-1368 2013-11-06 2013-10-23
-## 412 01-710-1368 2014-04-09 2013-10-23
-## 413 01-710-1368 2014-04-24 2013-10-23
-## 414 01-710-1385 2012-11-12 2012-10-29
-## 415 01-710-1385 2013-02-18 2012-10-29
-## 416 01-710-1408 2013-01-24 2013-01-05
-## 417 01-710-1408 2013-06-28 2013-01-05
-## 418 01-710-1408 2013-07-12 2013-01-05
-## 419 01-711-1012 2013-04-17 2013-04-03
-## 420 01-711-1012 2013-04-29 2013-04-03
-## 421 01-711-1036 2012-08-12 2012-07-29
-## 422 01-711-1036 2013-01-13 2012-07-29
-## 423 01-711-1036 2013-02-10 2012-07-29
-## 424 01-711-1143 2013-04-17 2013-04-03
-## 425 01-711-1143 2013-05-30 2013-04-03
-## 426 01-711-1433 2013-02-05 2013-01-27
-## 427 01-713-1043 2013-09-30 2013-09-15
-## 428 01-713-1043 2014-02-28 2013-09-15
-## 429 01-713-1043 2014-03-24 2013-09-15
-## 430 01-713-1073 2014-04-14 2014-03-30
-## 431 01-713-1073 2014-09-21 2014-03-30
-## 432 01-713-1073 2014-10-05 2014-03-30
-## 433 01-713-1106 2012-11-15 2012-10-31
-## 434 01-713-1106 2013-04-22 2012-10-31
-## 435 01-713-1106 2013-05-06 2012-10-31
-## 436 01-713-1141 2013-06-14 2013-05-31
-## 437 01-713-1141 2013-07-01 2013-05-31
-## 438 01-713-1179 2013-08-24 2013-08-09
-## 439 01-713-1179 2014-01-24 2013-08-09
-## 440 01-713-1179 2014-02-05 2013-08-09
-## 441 01-713-1209 2013-06-14 2013-05-27
-## 442 01-713-1209 2013-11-14 2013-05-27
-## 443 01-713-1209 2013-11-22 2013-05-27
-## 444 01-713-1256 2012-10-03 2012-09-19
-## 445 01-713-1256 2013-03-09 2012-09-19
-## 446 01-713-1256 2013-03-25 2012-09-19
-## 447 01-713-1269 2014-02-10 2014-01-27
-## 448 01-713-1269 2014-07-13 2014-01-27
-## 449 01-713-1269 2014-07-28 2014-01-27
-## 450 01-713-1448 2014-02-01 2014-01-19
-## 451 01-713-1448 2014-05-16 2014-01-19
-## 452 01-714-1035 2014-05-01 2014-04-17
-## 453 01-714-1035 2014-10-02 2014-04-17
-## 454 01-714-1035 2014-10-16 2014-04-17
-## 455 01-714-1068 2013-08-22 2013-08-08
-## 456 01-714-1068 2013-10-08 2013-08-08
-## 457 01-714-1195 2013-05-09 2013-04-26
-## 458 01-714-1195 2013-10-10 2013-04-26
-## 459 01-714-1195 2013-10-23 2013-04-26
-## 460 01-714-1288 2013-12-17 2013-12-04
-## 461 01-714-1288 2014-05-27 2013-12-04
-## 462 01-714-1288 2014-06-17 2013-12-04
-## 463 01-714-1375 2013-03-19 2013-02-26
-## 464 01-714-1375 2013-08-23 2013-02-26
-## 465 01-714-1375 2013-09-07 2013-02-26
-## 466 01-714-1425 2013-08-19 2013-08-15
-## 467 01-715-1085 2013-03-04 2013-02-16
-## 468 01-715-1085 2013-08-04 2013-02-16
-## 469 01-715-1085 2013-08-18 2013-02-16
-## 470 01-715-1107 2013-03-12 2013-02-26
-## 471 01-715-1107 2013-05-07 2013-02-26
-## 472 01-715-1155 2013-12-27 2013-12-13
-## 473 01-715-1155 2014-01-25 2013-12-13
-## 474 01-715-1207 2012-12-02 2012-11-18
-## 475 01-715-1207 2013-05-05 2012-11-18
-## 476 01-715-1207 2013-05-27 2012-11-18
-## 477 01-715-1319 2013-03-03 2013-02-17
-## 478 01-715-1319 2013-03-05 2013-02-17
-## 479 01-715-1321 2014-02-26 2014-02-11
-## 480 01-715-1321 2014-04-21 2014-02-11
-## 481 01-715-1397 2013-04-18 2013-04-03
-## 482 01-715-1397 2013-09-18 2013-04-03
-## 483 01-715-1397 2013-10-02 2013-04-03
-## 484 01-715-1405 2013-07-07 2013-07-06
-## 485 01-716-1024 2012-07-23 2012-07-09
-## 486 01-716-1024 2012-12-30 2012-07-09
-## 487 01-716-1024 2013-01-20 2012-07-09
-## 488 01-716-1026 2014-04-18 2014-04-02
-## 489 01-716-1026 2014-09-27 2014-04-02
-## 490 01-716-1026 2014-10-16 2014-04-02
-## 491 01-716-1030 2014-01-02 2013-12-28
-## 492 01-716-1044 2013-05-10 2013-04-27
-## 493 01-716-1044 2013-10-16 2013-04-27
-## 494 01-716-1044 2013-11-03 2013-04-27
-## 495 01-716-1063 2013-05-23 2013-05-09
-## 496 01-716-1063 2013-08-25 2013-05-09
-## 497 01-716-1071 2013-06-22 2013-06-08
-## 498 01-716-1071 2013-08-01 2013-06-08
-## 499 01-716-1094 2013-01-06 2012-12-19
-## 500 01-716-1094 2013-01-24 2012-12-19
-## 501 01-716-1103 2014-04-05 2014-03-20
-## 502 01-716-1103 2014-08-30 2014-03-20
-## 503 01-716-1103 2014-09-20 2014-03-20
-## 504 01-716-1108 2013-02-26 2013-02-12
-## 505 01-716-1108 2013-08-02 2013-02-12
-## 506 01-716-1108 2013-08-10 2013-02-12
-## 507 01-716-1151 2013-02-15 2013-02-01
-## 508 01-716-1151 2013-05-11 2013-02-01
-## 509 01-716-1157 2013-10-16 2013-10-02
-## 510 01-716-1157 2014-03-26 2013-10-02
-## 511 01-716-1157 2014-04-04 2013-10-02
-## 512 01-716-1160 2013-04-19 2013-04-05
-## 513 01-716-1160 2013-09-27 2013-04-05
-## 514 01-716-1160 2013-10-11 2013-04-05
-## 515 01-716-1167 2012-10-29 2012-10-08
-## 516 01-716-1167 2013-03-24 2012-10-08
-## 517 01-716-1167 2013-04-12 2012-10-08
-## 518 01-716-1177 2014-09-16 2014-09-02
-## 519 01-716-1177 2015-02-17 2014-09-02
-## 520 01-716-1177 2015-03-05 2014-09-02
-## 521 01-716-1189 2012-10-24 2012-10-09
-## 522 01-716-1189 2013-02-27 2012-10-09
-## 523 01-716-1229 2013-03-06 2013-02-20
-## 524 01-716-1229 2013-03-31 2013-02-20
-## 525 01-716-1298 2013-04-22 2013-04-08
-## 526 01-716-1298 2013-06-28 2013-04-08
-## 527 01-716-1308 2013-09-12 2013-08-28
-## 528 01-716-1308 2013-10-07 2013-08-28
-## 529 01-716-1311 2014-05-28 2014-05-14
-## 530 01-716-1311 2014-09-21 2014-05-14
-## 531 01-716-1364 2013-07-17 2013-07-04
-## 532 01-716-1364 2013-12-23 2013-07-04
-## 533 01-716-1364 2014-01-09 2013-07-04
-## 534 01-716-1373 2012-12-30 2012-12-14
-## 535 01-716-1373 2013-02-27 2012-12-14
-## 536 01-716-1418 2013-05-19 2013-05-05
-## 537 01-716-1418 2013-11-06 2013-05-05
-## 538 01-716-1418 2013-11-20 2013-05-05
-## 539 01-716-1441 2014-02-06 2014-01-22
-## 540 01-716-1441 2014-07-08 2014-01-22
-## 541 01-716-1441 2014-07-22 2014-01-22
-## 542 01-716-1447 2013-12-31 2013-12-16
-## 543 01-716-1447 2014-06-07 2013-12-16
-## 544 01-716-1447 2014-06-17 2013-12-16
-## 545 01-717-1004 2014-01-28 2014-01-14
-## 546 01-717-1004 2014-07-01 2014-01-14
-## 547 01-717-1004 2014-07-16 2014-01-14
-## 548 01-717-1109 2014-02-10 2014-01-27
-## 549 01-717-1109 2014-07-18 2014-01-27
-## 550 01-717-1109 2014-07-28 2014-01-27
-## 551 01-717-1174 2013-02-04 2013-01-22
-## 552 01-717-1174 2013-07-07 2013-01-22
-## 553 01-717-1174 2013-07-24 2013-01-22
-## 554 01-717-1201 2014-01-03 2013-12-19
-## 555 01-717-1201 2014-02-21 2013-12-19
-## 556 01-717-1344 2014-01-24 2014-01-11
-## 557 01-717-1344 2014-03-14 2014-01-11
-## 558 01-717-1357 2013-05-15 2013-05-01
-## 559 01-717-1357 2013-10-14 2013-05-01
-## 560 01-717-1446 2013-09-16 2013-09-01
-## 561 01-717-1446 2014-02-16 2013-09-01
-## 562 01-717-1446 2014-03-03 2013-09-01
-## 563 01-718-1066 2013-07-16 2013-07-07
-## 564 01-718-1079 2012-10-03 2012-09-19
-## 565 01-718-1079 2012-10-31 2012-09-19
-## 566 01-718-1101 2013-03-03 2013-02-17
-## 567 01-718-1101 2013-07-31 2013-02-17
-## 568 01-718-1139 2013-06-02 2013-05-19
-## 569 01-718-1139 2013-11-03 2013-05-19
-## 570 01-718-1139 2013-11-17 2013-05-19
-## 571 01-718-1150 2013-02-02 2013-01-19
-## 572 01-718-1150 2013-07-07 2013-01-19
-## 573 01-718-1150 2013-07-29 2013-01-19
-## 574 01-718-1170 2013-09-29 2013-09-16
-## 575 01-718-1170 2013-10-12 2013-09-16
-## 576 01-718-1172 2013-10-05 2013-09-21
-## 577 01-718-1172 2013-11-29 2013-09-21
-## 578 01-718-1250 2013-10-03 2013-09-21
-## 579 01-718-1250 2014-01-31 2013-09-21
-## 580 01-718-1254 2013-07-25 2013-07-10
-## 581 01-718-1254 2013-12-26 2013-07-10
-## 582 01-718-1254 2014-01-09 2013-07-10
-## 583 01-718-1328 2013-02-14 2013-02-01
-## 584 01-718-1328 2013-04-18 2013-02-01
-## 585 01-718-1355 2013-03-16 2013-02-28
-## 586 01-718-1355 2013-08-15 2013-02-28
-## 587 01-718-1355 2013-08-29 2013-02-28
-## 588 01-718-1371 2013-05-08 2013-04-26
-## 589 01-718-1371 2013-08-01 2013-04-26
-## 590 01-718-1427 2012-12-31 2012-12-17
-## 591 01-718-1427 2013-02-11 2012-12-17</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Variable.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
+<span id="cb19-2"><a href="Variable.html#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="Variable.html#cb19-3" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
+<span id="cb19-4"><a href="Variable.html#cb19-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ,  </span>
+<span id="cb19-5"><a href="Variable.html#cb19-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc_orig =</span> exendtc, </span>
+<span id="cb19-6"><a href="Variable.html#cb19-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(exendtc)) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-7"><a href="Variable.html#cb19-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid ,visit , visitnum,  exendtc , exendtc_orig )</span>
+<span id="cb19-8"><a href="Variable.html#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="Variable.html#cb19-9" aria-hidden="true" tabindex="-1"></a>ds_disp <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
+<span id="cb19-10"><a href="Variable.html#cb19-10" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span> (   dscat <span class="sc">==</span> <span class="st">&quot;DISPOSITION EVENT&quot;</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb19-11"><a href="Variable.html#cb19-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid))   <span class="sc">%&gt;%</span> </span>
+<span id="cb19-12"><a href="Variable.html#cb19-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span> ( usubjid , dsstdtc)</span>
+<span id="cb19-13"><a href="Variable.html#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="Variable.html#cb19-14" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , ds_disp  , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
+<span id="cb19-15"><a href="Variable.html#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="Variable.html#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="Variable.html#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="Variable.html#cb19-18" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb19-19"><a href="Variable.html#cb19-19" aria-hidden="true" tabindex="-1"></a>adsl_chk <span class="ot">&lt;-</span> <span class="fu">select</span> (adsl , usubjid , trtedt )</span></code></pre></div>
+<p></p>
+<p>using the as.Date( as.character () ) is creating numerical dates and date formats are not</p>
+<p>Below Logic is how you conditionally create a new column trtedt based DSSTDTC and exendtc_orig</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Variable.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects whose does dates are missing </span></span>
+<span id="cb20-2"><a href="Variable.html#cb20-2" aria-hidden="true" tabindex="-1"></a>exendtc_1 <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="Variable.html#cb20-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span> ( <span class="at">flag =</span> <span class="fu">ifelse</span> (exendtc   <span class="sc">%in%</span> <span class="cn">NA</span>  ,  <span class="st">&quot;N&quot;</span> ,<span class="st">&quot;Y&quot;</span>   ) ,</span>
+<span id="cb20-4"><a href="Variable.html#cb20-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt =</span>   <span class="fu">ifelse</span>(flag <span class="sc">==</span> <span class="st">&quot;N&quot;</span>, <span class="fu">as.character</span>(dsstdtc), </span>
+<span id="cb20-5"><a href="Variable.html#cb20-5" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">ifelse</span> (flag <span class="sc">==</span><span class="st">&quot;Y&quot;</span> ,<span class="fu">as.character</span>(exendtc_orig)  , <span class="cn">NA</span>  ))  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="Variable.html#cb20-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span> (visitnum <span class="sc">&gt;=</span> <span class="dv">3</span> )</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Variable.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
+<span id="cb21-2"><a href="Variable.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="Variable.html#cb21-3" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a href="Variable.html#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ,  </span>
+<span id="cb21-5"><a href="Variable.html#cb21-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc_orig =</span> exendtc, </span>
+<span id="cb21-6"><a href="Variable.html#cb21-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(exendtc)) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-7"><a href="Variable.html#cb21-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid ,visit , visitnum,  exendtc , exendtc_orig )</span>
+<span id="cb21-8"><a href="Variable.html#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="Variable.html#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="Variable.html#cb21-10" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
+<span id="cb21-11"><a href="Variable.html#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="Variable.html#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects whose does dates are missing </span></span>
+<span id="cb21-13"><a href="Variable.html#cb21-13" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
+<span id="cb21-14"><a href="Variable.html#cb21-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-15"><a href="Variable.html#cb21-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span> ( <span class="at">flag =</span> <span class="fu">ifelse</span> (exendtc   <span class="sc">%in%</span> <span class="cn">NA</span>  ,  <span class="st">&quot;N&quot;</span> ,<span class="st">&quot;Y&quot;</span>   ), </span>
+<span id="cb21-16"><a href="Variable.html#cb21-16" aria-hidden="true" tabindex="-1"></a>                    </span>
+<span id="cb21-17"><a href="Variable.html#cb21-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt_c  =</span> <span class="fu">ifelse</span>(exendtc   <span class="sc">%in%</span>  <span class="cn">NA</span>  , svstdtc , exendtc_orig ) , </span>
+<span id="cb21-18"><a href="Variable.html#cb21-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt   =</span>  <span class="fu">as.Date</span>(<span class="fu">as.character</span>(trtedt_c))   ,</span>
+<span id="cb21-19"><a href="Variable.html#cb21-19" aria-hidden="true" tabindex="-1"></a>           </span>
+<span id="cb21-20"><a href="Variable.html#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="at">trtedt_n     =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(exendtc   <span class="sc">%in%</span>  <span class="cn">NA</span>  ,trtsdt , exendtc ) ) </span>
+<span id="cb21-21"><a href="Variable.html#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">#, trtedt_ndt   =  as.Date.numeric (trtedt_n)   </span></span>
+<span id="cb21-22"><a href="Variable.html#cb21-22" aria-hidden="true" tabindex="-1"></a>           </span>
+<span id="cb21-23"><a href="Variable.html#cb21-23" aria-hidden="true" tabindex="-1"></a>           )   <span class="sc">%&gt;%</span> </span>
+<span id="cb21-24"><a href="Variable.html#cb21-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span> (visitnum <span class="sc">&gt;=</span> <span class="dv">3</span> )</span>
+<span id="cb21-25"><a href="Variable.html#cb21-25" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb21-26"><a href="Variable.html#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co"># One of the ways to get the First and Last group by values </span></span>
+<span id="cb21-27"><a href="Variable.html#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure you use the right variables used group_by </span></span>
+<span id="cb21-28"><a href="Variable.html#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="Variable.html#cb21-29" aria-hidden="true" tabindex="-1"></a>exend <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
+<span id="cb21-30"><a href="Variable.html#cb21-30" aria-hidden="true" tabindex="-1"></a>         <span class="fu">group_by</span> (usubjid) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-31"><a href="Variable.html#cb21-31" aria-hidden="true" tabindex="-1"></a>         dplyr<span class="sc">::</span> <span class="fu">mutate</span>(</span>
+<span id="cb21-32"><a href="Variable.html#cb21-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">first =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(exendtc) , </span>
+<span id="cb21-33"><a href="Variable.html#cb21-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">last  =</span> dplyr<span class="sc">::</span><span class="fu">last</span> (exendtc)</span>
+<span id="cb21-34"><a href="Variable.html#cb21-34" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-35"><a href="Variable.html#cb21-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarise</span>(<span class="at">trtedt =</span> <span class="fu">last</span>(exendtc))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Variable.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exendtc &lt;- select(exendtc,usubjid ,visitnum , trtedt, trtedt_c  )</span></span></code></pre></div>
 
 </div>
 </div>
