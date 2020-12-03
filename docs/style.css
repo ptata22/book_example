@@ -53,15 +53,16 @@ pre code {
 
 /* "#7B321C" dark red */
 /* "#FFACAC" light red */
-/*
-.blank{
+/**/
+
+.notechk {
   padding-left: 2em;
   border: 1px solid;
-  border-color: #ffffff;
-  color: #696969;
-  background-color: #;
+  border-color: #FFACAC ;
+  color: #7B321C;
+ 
 }
-*/
+
 .exercise a {
   color: #ffffff;
   font-weight: bold;

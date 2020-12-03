@@ -24,7 +24,7 @@
 <meta name="author" content="Yihui Xie" />
 
 
-<meta name="date" content="2020-11-24" />
+<meta name="date" content="2020-12-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -152,11 +152,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="7.1" data-path="Variable.html"><a href="Variable.html#overview"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
 <li class="chapter" data-level="7.2" data-path="Variable.html"><a href="Variable.html#your-turn"><i class="fa fa-check"></i><b>7.2</b> Your Turn</a></li>
-<li class="chapter" data-level="7.3" data-path="Variable.html"><a href="Variable.html#adsl-derivation-code-part-1"><i class="fa fa-check"></i><b>7.3</b> Adsl Derivation Code part-1</a>
-<ul>
-<li class="chapter" data-level="7.3.1" data-path="Variable.html"><a href="Variable.html#date-of-first-exposure-to-treatment-trtsdt"><i class="fa fa-check"></i><b>7.3.1</b> <strong>Date of First Exposure to Treatment (TRTSDT)</strong></a></li>
-<li class="chapter" data-level="7.3.2" data-path="Variable.html"><a href="Variable.html#date-of-last-exposure-to-treatment-trtedt"><i class="fa fa-check"></i><b>7.3.2</b> Date of Last Exposure to Treatment (TRTEDT)</a></li>
-</ul></li>
+<li class="chapter" data-level="7.3" data-path="Variable.html"><a href="Variable.html#adsl-derivation-code-part-1"><i class="fa fa-check"></i><b>7.3</b> Adsl Derivation Code part-1</a></li>
+<li class="chapter" data-level="7.4" data-path="Variable.html"><a href="Variable.html#date-of-first-exposure-to-treatment"><i class="fa fa-check"></i><b>7.4</b> <strong>Date of First Exposure to Treatment</strong></a></li>
+<li class="chapter" data-level="7.5" data-path="Variable.html"><a href="Variable.html#date-of-last-exposure-to-treatment-trtedt"><i class="fa fa-check"></i><b>7.5</b> Date of Last Exposure to Treatment (TRTEDT)</a></li>
+<li class="chapter" data-level="7.6" data-path="Variable.html"><a href="Variable.html#getting-the-first-and-last-observations"><i class="fa fa-check"></i><b>7.6</b> <strong>Getting the First and Last observations</strong></a></li>
+<li class="chapter" data-level="7.7" data-path="Variable.html"><a href="Variable.html#baseline-variables"><i class="fa fa-check"></i><b>7.7</b> Baseline Variables</a></li>
+<li class="chapter" data-level="7.8" data-path="Variable.html"><a href="Variable.html#comparing-the-values-generated-against-the-production-data-set"><i class="fa fa-check"></i><b>7.8</b> Comparing the values generated against the production data set</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>8</b> Methods</a></li>
 <li class="chapter" data-level="9" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>9</b> Applications</a>
@@ -191,10 +192,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>List of Variables Derived = 1</p>
 <table>
 <colgroup>
-<col width="3%" />
+<col width="4%" />
 <col width="10%" />
 <col width="25%" />
-<col width="60%" />
+<col width="59%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -388,423 +389,357 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="Variable.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#intilizing the Dplyr library</span></span>
 <span id="cb9-2"><a href="Variable.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## -- Attaching packages ------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## -- Attaching packages --------------- tidyverse 1.3.0 --</code></pre>
 <pre><code>## v ggplot2 3.3.2     v purrr   0.3.4
 ## v tibble  3.0.3     v dplyr   1.0.2
 ## v tidyr   1.1.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>## -- Conflicts ---------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts ------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Variable.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clinicalfd)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Variable.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="Variable.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clinicalfd)  <span class="co"># To read in fake clinical data</span></span>
+<span id="cb16-2"><a href="Variable.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arsenal)     <span class="co"># for comparing datasets</span></span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;arsenal&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lubridate&#39;:
+## 
+##     is.Date</code></pre>
+<p><u><em>Remove all the objects in the Global Environment ( Kind of clearing SAS work directory ) , This is kind of needed as you might get an Error saying the variable not found .</em></u></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Variable.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">remove</span> ( <span class="at">list =</span> <span class="fu">ls</span>())</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Bring in the datasets needed</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="Variable.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dm &lt;- clinicalfd::dm </span></span>
-<span id="cb14-2"><a href="Variable.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># names(clinicalfd::dm )</span></span>
-<span id="cb14-3"><a href="Variable.html#cb14-3" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>dm</span>
-<span id="cb14-4"><a href="Variable.html#cb14-4" aria-hidden="true" tabindex="-1"></a>dm  <span class="ot">&lt;-</span> dplyr <span class="sc">::</span> <span class="fu">filter</span>(dm ,arm <span class="sc">!=</span><span class="st">&quot;Screen Failure&quot;</span> )</span>
-<span id="cb14-5"><a href="Variable.html#cb14-5" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> ( dm , usubjid , siteid,arm) <span class="co"># Select </span></span>
-<span id="cb14-6"><a href="Variable.html#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="Variable.html#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#dm_01 &lt;- mutate (dm_01 , usubjid = as.character(usubjid) )</span></span>
-<span id="cb14-8"><a href="Variable.html#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="Variable.html#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="Variable.html#cb14-10" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>( adsl_deri01 , <span class="at">TRT01P =</span> arm) </span>
-<span id="cb14-11"><a href="Variable.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Use of Mutate function to create new variable#</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Variable.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dm &lt;- clinicalfd::dm </span></span>
+<span id="cb20-2"><a href="Variable.html#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># names(clinicalfd::dm )</span></span>
+<span id="cb20-3"><a href="Variable.html#cb20-3" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>dm</span>
+<span id="cb20-4"><a href="Variable.html#cb20-4" aria-hidden="true" tabindex="-1"></a>dm  <span class="ot">&lt;-</span> dplyr <span class="sc">::</span> <span class="fu">filter</span>(dm ,arm <span class="sc">!=</span><span class="st">&quot;Screen Failure&quot;</span> )</span>
+<span id="cb20-5"><a href="Variable.html#cb20-5" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> ( dm , usubjid , siteid,arm) <span class="co"># Select </span></span>
+<span id="cb20-6"><a href="Variable.html#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="Variable.html#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#dm_01 &lt;- mutate (dm_01 , usubjid = as.character(usubjid) )</span></span>
+<span id="cb20-8"><a href="Variable.html#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="Variable.html#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="Variable.html#cb20-10" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>( adsl_deri01 , <span class="at">TRT01P =</span> arm) </span>
+<span id="cb20-11"><a href="Variable.html#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Use of Mutate function to create new variable#</span></span></code></pre></div>
 </div>
 <div id="adsl-derivation-code-part-1" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> Adsl Derivation Code part-1</h2>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="Variable.html#cb15-1" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dm  <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="Variable.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (actarmcd <span class="sc">!=</span><span class="st">&quot;Scrnfail&quot;</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb15-3"><a href="Variable.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitegr1 =</span> siteid , <span class="at">trt01p =</span> arm , <span class="at">trt01a =</span> arm , </span>
-<span id="cb15-4"><a href="Variable.html#cb15-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid),</span>
-<span id="cb15-5"><a href="Variable.html#cb15-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">trt01pn  =</span> <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Placebo&quot;</span> ) , <span class="dv">0</span> ,</span>
-<span id="cb15-6"><a href="Variable.html#cb15-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline Low Dose&quot;</span> ) , <span class="dv">54</span>,</span>
-<span id="cb15-7"><a href="Variable.html#cb15-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline High Dose&quot;</span> ) , <span class="dv">81</span> , <span class="cn">NA</span>))) ,</span>
-<span id="cb15-8"><a href="Variable.html#cb15-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">trt01an =</span> trt01pn ,</span>
-<span id="cb15-9"><a href="Variable.html#cb15-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ittfl   =</span> <span class="fu">ifelse</span> (trt01pn <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">54</span>,<span class="dv">81</span>) , <span class="st">&quot;Y&quot;</span> , <span class="st">&quot;N&quot;</span> ),</span>
-<span id="cb15-10"><a href="Variable.html#cb15-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">agegr1  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="st">&quot;&lt;65&quot;</span> , </span>
-<span id="cb15-11"><a href="Variable.html#cb15-11" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;65-80&quot;</span>  , </span>
-<span id="cb15-12"><a href="Variable.html#cb15-12" aria-hidden="true" tabindex="-1"></a>                               (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;&gt;80&quot;</span>  ),</span>
-<span id="cb15-13"><a href="Variable.html#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="Variable.html#cb15-14" aria-hidden="true" tabindex="-1"></a>           </span>
-<span id="cb15-15"><a href="Variable.html#cb15-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">agegr1n  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="dv">1</span>  , </span>
-<span id="cb15-16"><a href="Variable.html#cb15-16" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">2</span>  , </span>
-<span id="cb15-17"><a href="Variable.html#cb15-17" aria-hidden="true" tabindex="-1"></a>                                (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">3</span>  ),</span>
-<span id="cb15-18"><a href="Variable.html#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-19"><a href="Variable.html#cb15-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">race  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="st">&quot;WHITE&quot;</span> , </span>
-<span id="cb15-20"><a href="Variable.html#cb15-20" aria-hidden="true" tabindex="-1"></a>                              race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span>                                <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> ,</span>
-<span id="cb15-21"><a href="Variable.html#cb15-21" aria-hidden="true" tabindex="-1"></a>                              </span>
-<span id="cb15-22"><a href="Variable.html#cb15-22" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> ,</span>
-<span id="cb15-23"><a href="Variable.html#cb15-23" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="st">&quot;ASIAN&quot;</span> ) , </span>
-<span id="cb15-24"><a href="Variable.html#cb15-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">racen  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="dv">1</span> , </span>
-<span id="cb15-25"><a href="Variable.html#cb15-25" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span> <span class="dv">2</span> ,</span>
-<span id="cb15-26"><a href="Variable.html#cb15-26" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="dv">6</span> ,</span>
-<span id="cb15-27"><a href="Variable.html#cb15-27" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="dv">7</span> ),</span>
-<span id="cb15-28"><a href="Variable.html#cb15-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">sex  =</span>  <span class="fu">case_when</span>(sex <span class="sc">%in%</span> <span class="st">&quot;F&quot;</span> <span class="sc">~</span> <span class="st">&quot;Female&quot;</span>  , </span>
-<span id="cb15-29"><a href="Variable.html#cb15-29" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;M&quot;</span> <span class="sc">~</span> <span class="st">&quot;Male&quot;</span>    , </span>
-<span id="cb15-30"><a href="Variable.html#cb15-30" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> ) , </span>
-<span id="cb15-31"><a href="Variable.html#cb15-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">ethnic  =</span>  <span class="fu">case_when</span>(ethnic <span class="sc">%in%</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span>  , </span>
-<span id="cb15-32"><a href="Variable.html#cb15-32" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span>  , </span>
-<span id="cb15-33"><a href="Variable.html#cb15-33" aria-hidden="true" tabindex="-1"></a>           ethnic <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> )</span>
-<span id="cb15-34"><a href="Variable.html#cb15-34" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<div>
-<p><strong>Date of First Exposure to Treatment</strong> <code>SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date</code></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Variable.html#cb21-1" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> dm  <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="Variable.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (actarmcd <span class="sc">!=</span><span class="st">&quot;Scrnfail&quot;</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="Variable.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sitegr1 =</span> siteid , <span class="at">trt01p =</span> arm , <span class="at">trt01a =</span> arm , </span>
+<span id="cb21-4"><a href="Variable.html#cb21-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid),</span>
+<span id="cb21-5"><a href="Variable.html#cb21-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">trt01pn  =</span> <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Placebo&quot;</span> ) , <span class="dv">0</span> ,</span>
+<span id="cb21-6"><a href="Variable.html#cb21-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline Low Dose&quot;</span> ) , <span class="dv">54</span>,</span>
+<span id="cb21-7"><a href="Variable.html#cb21-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>( (arm <span class="sc">%in%</span> <span class="st">&quot;Xanomeline High Dose&quot;</span> ) , <span class="dv">81</span> , <span class="cn">NA</span>))) ,</span>
+<span id="cb21-8"><a href="Variable.html#cb21-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">trt01an =</span> trt01pn ,</span>
+<span id="cb21-9"><a href="Variable.html#cb21-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ittfl   =</span> <span class="fu">ifelse</span> (trt01pn <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">54</span>,<span class="dv">81</span>) , <span class="st">&quot;Y&quot;</span> , <span class="st">&quot;N&quot;</span> ),</span>
+<span id="cb21-10"><a href="Variable.html#cb21-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">agegr1  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="st">&quot;&lt;65&quot;</span> , </span>
+<span id="cb21-11"><a href="Variable.html#cb21-11" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;65-80&quot;</span>  , </span>
+<span id="cb21-12"><a href="Variable.html#cb21-12" aria-hidden="true" tabindex="-1"></a>                               (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="st">&quot;&gt;80&quot;</span>  ),</span>
+<span id="cb21-13"><a href="Variable.html#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="Variable.html#cb21-14" aria-hidden="true" tabindex="-1"></a>           </span>
+<span id="cb21-15"><a href="Variable.html#cb21-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">agegr1n  =</span> <span class="fu">case_when</span>( age <span class="sc">&lt;</span> <span class="dv">65</span>  <span class="sc">~</span> <span class="dv">1</span>  , </span>
+<span id="cb21-16"><a href="Variable.html#cb21-16" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">65</span> <span class="sc">&lt;=</span> age <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">2</span>  , </span>
+<span id="cb21-17"><a href="Variable.html#cb21-17" aria-hidden="true" tabindex="-1"></a>                                (age <span class="sc">&gt;</span> <span class="dv">80</span> ) <span class="sc">~</span> <span class="dv">3</span>  ),</span>
+<span id="cb21-18"><a href="Variable.html#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="Variable.html#cb21-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">race  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="st">&quot;WHITE&quot;</span> , </span>
+<span id="cb21-20"><a href="Variable.html#cb21-20" aria-hidden="true" tabindex="-1"></a>                              race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span>                                <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> ,</span>
+<span id="cb21-21"><a href="Variable.html#cb21-21" aria-hidden="true" tabindex="-1"></a>                              </span>
+<span id="cb21-22"><a href="Variable.html#cb21-22" aria-hidden="true" tabindex="-1"></a>race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> ,</span>
+<span id="cb21-23"><a href="Variable.html#cb21-23" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="st">&quot;ASIAN&quot;</span> ) , </span>
+<span id="cb21-24"><a href="Variable.html#cb21-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">racen  =</span> <span class="fu">case_when</span>( race <span class="sc">%in%</span> <span class="st">&quot;WHITE&quot;</span> <span class="sc">~</span> <span class="dv">1</span> , </span>
+<span id="cb21-25"><a href="Variable.html#cb21-25" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;BLACK OR AFRICAN AMERICAN&quot;</span> <span class="sc">~</span> <span class="dv">2</span> ,</span>
+<span id="cb21-26"><a href="Variable.html#cb21-26" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;AMERICAN INDIAN OR ALASKA NATIVE&quot;</span> <span class="sc">~</span> <span class="dv">6</span> ,</span>
+<span id="cb21-27"><a href="Variable.html#cb21-27" aria-hidden="true" tabindex="-1"></a>            race <span class="sc">%in%</span> <span class="st">&quot;ASIAN&quot;</span> <span class="sc">~</span> <span class="dv">7</span> ),</span>
+<span id="cb21-28"><a href="Variable.html#cb21-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">sex  =</span>  <span class="fu">case_when</span>(sex <span class="sc">%in%</span> <span class="st">&quot;F&quot;</span> <span class="sc">~</span> <span class="st">&quot;Female&quot;</span>  , </span>
+<span id="cb21-29"><a href="Variable.html#cb21-29" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;M&quot;</span> <span class="sc">~</span> <span class="st">&quot;Male&quot;</span>    , </span>
+<span id="cb21-30"><a href="Variable.html#cb21-30" aria-hidden="true" tabindex="-1"></a>                             sex <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> ) , </span>
+<span id="cb21-31"><a href="Variable.html#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="at">ethnic=</span><span class="fu">case_when</span>(ethnic <span class="sc">%in%</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;NOT HISPANIC OR LATINO&quot;</span>, </span>
+<span id="cb21-32"><a href="Variable.html#cb21-32" aria-hidden="true" tabindex="-1"></a>                ethnic <span class="sc">%in%</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span> <span class="sc">~</span> <span class="st">&quot;HISPANIC OR LATINO&quot;</span>    , </span>
+<span id="cb21-33"><a href="Variable.html#cb21-33" aria-hidden="true" tabindex="-1"></a>                ethnic <span class="sc">%in%</span> <span class="st">&quot;U&quot;</span> <span class="sc">~</span>  <span class="st">&quot;Unknown&quot;</span> )  </span>
+<span id="cb21-34"><a href="Variable.html#cb21-34" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 </div>
-<div id="date-of-first-exposure-to-treatment-trtsdt" class="section level3" number="7.3.1">
-<h3><span class="header-section-number">7.3.1</span> <strong>Date of First Exposure to Treatment (TRTSDT)</strong></h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="Variable.html#cb16-1" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>sv   </span>
-<span id="cb16-2"><a href="Variable.html#cb16-2" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> sv_visit3 <span class="sc">%&gt;%</span> </span>
-<span id="cb16-3"><a href="Variable.html#cb16-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(visitnum <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-4"><a href="Variable.html#cb16-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
-<span id="cb16-5"><a href="Variable.html#cb16-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">trtsdt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(svstdtc))  </span>
-<span id="cb16-6"><a href="Variable.html#cb16-6" aria-hidden="true" tabindex="-1"></a>                   ) <span class="sc">%&gt;%</span> </span>
-<span id="cb16-7"><a href="Variable.html#cb16-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> (usubjid , svstdtc , trtsdt )</span>
-<span id="cb16-8"><a href="Variable.html#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="Variable.html#cb16-9" aria-hidden="true" tabindex="-1"></a>sv_visit3</span></code></pre></div>
-<pre><code>##         usubjid    svstdtc     trtsdt
-## 1   01-701-1015 2014-01-02 2014-01-02
-## 2   01-701-1023 2012-08-05 2012-08-05
-## 3   01-701-1028 2013-07-19 2013-07-19
-## 4   01-701-1033 2014-03-18 2014-03-18
-## 5   01-701-1034 2014-07-01 2014-07-01
-## 6   01-701-1047 2013-02-12 2013-02-12
-## 7   01-701-1097 2014-01-01 2014-01-01
-## 8   01-701-1111 2012-09-07 2012-09-07
-## 9   01-701-1115 2012-11-30 2012-11-30
-## 10  01-701-1118 2014-03-12 2014-03-12
-## 11  01-701-1130 2014-02-15 2014-02-15
-## 12  01-701-1133 2012-10-28 2012-10-28
-## 13  01-701-1146 2013-05-20 2013-05-20
-## 14  01-701-1148 2013-08-23 2013-08-23
-## 15  01-701-1153 2013-09-23 2013-09-23
-## 16  01-701-1180 2013-02-12 2013-02-12
-## 17  01-701-1181 2013-12-05 2013-12-05
-## 18  01-701-1188 2013-02-15 2013-02-15
-## 19  01-701-1192 2012-07-22 2012-07-22
-## 20  01-701-1203 2013-02-02 2013-02-02
-## 21  01-701-1211 2012-11-15 2012-11-15
-## 22  01-701-1234 2013-03-30 2013-03-30
-## 23  01-701-1239 2014-01-11 2014-01-11
-## 24  01-701-1275 2014-02-07 2014-02-07
-## 25  01-701-1287 2014-01-25 2014-01-25
-## 26  01-701-1294 2013-03-24 2013-03-24
-## 27  01-701-1302 2013-08-29 2013-08-29
-## 28  01-701-1317 2014-05-22 2014-05-22
-## 29  01-701-1324 2012-10-02 2012-10-02
-## 30  01-701-1341 2013-01-05 2013-01-05
-## 31  01-701-1345 2013-10-08 2013-10-08
-## 32  01-701-1360 2013-07-31 2013-07-31
-## 33  01-701-1363 2013-05-30 2013-05-30
-## 34  01-701-1383 2013-02-04 2013-02-04
-## 35  01-701-1387 2014-03-12 2014-03-12
-## 36  01-701-1392 2012-10-28 2012-10-28
-## 37  01-701-1415 2013-09-23 2013-09-23
-## 38  01-701-1429 2013-03-19 2013-03-19
-## 39  01-701-1440 2013-08-08 2013-08-08
-## 40  01-701-1442 2013-10-26 2013-10-26
-## 41  01-701-1444 2013-01-05 2013-01-05
-## 42  01-702-1082 2013-07-26 2013-07-26
-## 43  01-703-1042 2013-03-02 2013-03-02
-## 44  01-703-1076 2013-10-25 2013-10-25
-## 45  01-703-1086 2012-09-02 2012-09-02
-## 46  01-703-1096 2013-01-25 2013-01-25
-## 47  01-703-1100 2013-03-13 2013-03-13
-## 48  01-703-1119 2013-02-20 2013-02-20
-## 49  01-703-1175 2013-12-20 2013-12-20
-## 50  01-703-1182 2013-10-17 2013-10-17
-## 51  01-703-1197 2013-06-16 2013-06-16
-## 52  01-703-1210 2013-03-16 2013-03-16
-## 53  01-703-1258 2012-07-20 2012-07-20
-## 54  01-703-1279 2013-05-13 2013-05-13
-## 55  01-703-1295 2013-11-21 2013-11-21
-## 56  01-703-1299 2012-09-12 2012-09-12
-## 57  01-703-1335 2014-03-17 2014-03-17
-## 58  01-703-1379 2013-09-22 2013-09-22
-## 59  01-703-1403 2012-12-12 2012-12-12
-## 60  01-703-1439 2014-03-12 2014-03-12
-## 61  01-704-1008 2013-01-13 2013-01-13
-## 62  01-704-1009 2013-08-27 2013-08-27
-## 63  01-704-1010 2014-02-21 2014-02-21
-## 64  01-704-1017 2013-10-06 2013-10-06
-## 65  01-704-1025 2013-09-27 2013-09-27
-## 66  01-704-1065 2013-10-24 2013-10-24
-## 67  01-704-1074 2014-01-22 2014-01-22
-## 68  01-704-1093 2013-03-15 2013-03-15
-## 69  01-704-1114 2013-01-23 2013-01-23
-## 70  01-704-1120 2013-12-02 2013-12-02
-## 71  01-704-1127 2013-10-02 2013-10-02
-## 72  01-704-1135 2013-10-31 2013-10-31
-## 73  01-704-1164 2012-09-19 2012-09-19
-## 74  01-704-1218 2012-11-19 2012-11-19
-## 75  01-704-1233 2013-03-21 2013-03-21
-## 76  01-704-1241 2013-08-25 2013-08-25
-## 77  01-704-1260 2012-08-30 2012-08-30
-## 78  01-704-1266 2013-10-13 2013-10-13
-## 79  01-704-1323 2013-07-08 2013-07-08
-## 80  01-704-1325 2014-04-23 2014-04-23
-## 81  01-704-1332 2013-12-09 2013-12-09
-## 82  01-704-1351 2013-10-12 2013-10-12
-## 83  01-704-1388 2012-12-07 2012-12-07
-## 84  01-704-1435 2012-11-17 2012-11-17
-## 85  01-704-1445 2014-05-11 2014-05-11
-## 86  01-705-1018 2013-07-05 2013-07-05
-## 87  01-705-1031 2013-11-27 2013-11-27
-## 88  01-705-1059 2013-08-05 2013-08-05
-## 89  01-705-1186 2014-01-08 2014-01-08
-## 90  01-705-1199 2013-09-16 2013-09-16
-## 91  01-705-1280 2014-01-17 2014-01-17
-## 92  01-705-1281 2013-11-28 2013-11-28
-## 93  01-705-1282 2012-12-26 2012-12-26
-## 94  01-705-1292 2013-10-14 2013-10-14
-## 95  01-705-1303 2013-12-16 2013-12-16
-## 96  01-705-1310 2013-11-02 2013-11-02
-## 97  01-705-1349 2013-03-10 2013-03-10
-## 98  01-705-1377 2014-01-04 2014-01-04
-## 99  01-705-1382 2013-05-13 2013-05-13
-## 100 01-705-1393 2012-09-07 2012-09-07
-## 101 01-705-1431 2013-06-23 2013-06-23
-## 102 01-706-1041 2013-12-31 2013-12-31
-## 103 01-706-1049 2013-05-14 2013-05-14
-## 104 01-706-1384 2012-09-15 2012-09-15
-## 105 01-707-1037 2013-12-20 2013-12-20
-## 106 01-707-1206 2013-10-28 2013-10-28
-## 107 01-708-1019 2013-12-20 2013-12-20
-## 108 01-708-1032 2013-02-09 2013-02-09
-## 109 01-708-1084 2013-05-09 2013-05-09
-## 110 01-708-1087 2012-10-22 2012-10-22
-## 111 01-708-1158 2014-02-08 2014-02-08
-## 112 01-708-1171 2012-12-06 2012-12-06
-## 113 01-708-1178 2013-12-29 2013-12-29
-## 114 01-708-1213 2013-02-09 2013-02-09
-## 115 01-708-1216 2012-10-24 2012-10-24
-## 116 01-708-1236 2013-09-21 2013-09-21
-## 117 01-708-1253 2013-05-07 2013-05-07
-## 118 01-708-1272 2013-02-06 2013-02-06
-## 119 01-708-1286 2013-09-10 2013-09-10
-## 120 01-708-1296 2013-06-14 2013-06-14
-## 121 01-708-1297 2013-01-25 2013-01-25
-## 122 01-708-1316 2013-08-23 2013-08-23
-## 123 01-708-1336 2012-12-07 2012-12-07
-## 124 01-708-1342 2012-12-29 2012-12-29
-## 125 01-708-1347 2013-04-20 2013-04-20
-## 126 01-708-1348 2013-08-05 2013-08-05
-## 127 01-708-1353 2013-07-04 2013-07-04
-## 128 01-708-1372 2013-04-12 2013-04-12
-## 129 01-708-1378 2013-09-03 2013-09-03
-## 130 01-708-1406 2013-12-26 2013-12-26
-## 131 01-708-1428 2013-11-09 2013-11-09
-## 132 01-709-1001 2013-10-08 2013-10-08
-## 133 01-709-1007 2012-07-31 2012-07-31
-## 134 01-709-1020 2012-12-01 2012-12-01
-## 135 01-709-1029 2012-12-25 2012-12-25
-## 136 01-709-1081 2014-01-18 2014-01-18
-## 137 01-709-1088 2014-04-12 2014-04-12
-## 138 01-709-1099 2013-10-25 2013-10-25
-## 139 01-709-1102 2013-01-15 2013-01-15
-## 140 01-709-1168 2013-08-02 2013-08-02
-## 141 01-709-1217 2013-03-04 2013-03-04
-## 142 01-709-1238 2013-05-15 2013-05-15
-## 143 01-709-1259 2013-01-26 2013-01-26
-## 144 01-709-1285 2013-03-24 2013-03-24
-## 145 01-709-1301 2013-07-19 2013-07-19
-## 146 01-709-1306 2014-02-03 2014-02-03
-## 147 01-709-1309 2013-06-19 2013-06-19
-## 148 01-709-1312 2014-04-20 2014-04-20
-## 149 01-709-1326 2013-04-05 2013-04-05
-## 150 01-709-1329 2013-08-15 2013-08-15
-## 151 01-709-1339 2012-12-23 2012-12-23
-## 152 01-709-1424 2013-03-03 2013-03-03
-## 153 01-710-1002 2014-01-14 2014-01-14
-## 154 01-710-1006 2013-02-10 2013-02-10
-## 155 01-710-1021 2013-09-27 2013-09-27
-## 156 01-710-1027 2014-02-28 2014-02-28
-## 157 01-710-1045 2013-06-03 2013-06-03
-## 158 01-710-1053 2012-12-26 2012-12-26
-## 159 01-710-1060 2013-01-01 2013-01-01
-## 160 01-710-1070 2012-09-08 2012-09-08
-## 161 01-710-1077 2013-11-17 2013-11-17
-## 162 01-710-1078 2013-09-17 2013-09-17
-## 163 01-710-1083 2013-07-22 2013-07-22
-## 164 01-710-1137 2013-10-11 2013-10-11
-## 165 01-710-1142 2012-10-02 2012-10-02
-## 166 01-710-1154 2014-03-29 2014-03-29
-## 167 01-710-1166 2012-11-30 2012-11-30
-## 168 01-710-1183 2013-11-16 2013-11-16
-## 169 01-710-1187 2012-11-10 2012-11-10
-## 170 01-710-1235 2012-09-26 2012-09-26
-## 171 01-710-1249 2013-12-28 2013-12-28
-## 172 01-710-1264 2013-06-13 2013-06-13
-## 173 01-710-1270 2014-02-12 2014-02-12
-## 174 01-710-1271 2012-09-27 2012-09-27
-## 175 01-710-1278 2012-12-24 2012-12-24
-## 176 01-710-1300 2012-12-15 2012-12-15
-## 177 01-710-1314 2013-04-24 2013-04-24
-## 178 01-710-1315 2013-02-27 2013-02-27
-## 179 01-710-1354 2012-11-11 2012-11-11
-## 180 01-710-1358 2012-09-17 2012-09-17
-## 181 01-710-1368 2013-10-23 2013-10-23
-## 182 01-710-1385 2012-10-29 2012-10-29
-## 183 01-710-1408 2013-01-05 2013-01-05
-## 184 01-711-1012 2013-04-03 2013-04-03
-## 185 01-711-1036 2012-07-29 2012-07-29
-## 186 01-711-1143 2013-04-03 2013-04-03
-## 187 01-711-1433 2013-01-27 2013-01-27
-## 188 01-713-1043 2013-09-15 2013-09-15
-## 189 01-713-1073 2014-03-30 2014-03-30
-## 190 01-713-1106 2012-10-31 2012-10-31
-## 191 01-713-1141 2013-05-31 2013-05-31
-## 192 01-713-1179 2013-08-09 2013-08-09
-## 193 01-713-1209 2013-05-27 2013-05-27
-## 194 01-713-1256 2012-09-19 2012-09-19
-## 195 01-713-1269 2014-01-27 2014-01-27
-## 196 01-713-1448 2014-01-19 2014-01-19
-## 197 01-714-1035 2014-04-17 2014-04-17
-## 198 01-714-1068 2013-08-08 2013-08-08
-## 199 01-714-1195 2013-04-26 2013-04-26
-## 200 01-714-1288 2013-12-04 2013-12-04
-## 201 01-714-1375 2013-02-26 2013-02-26
-## 202 01-714-1425 2013-08-15 2013-08-15
-## 203 01-715-1085 2013-02-16 2013-02-16
-## 204 01-715-1107 2013-02-26 2013-02-26
-## 205 01-715-1155 2013-12-13 2013-12-13
-## 206 01-715-1207 2012-11-18 2012-11-18
-## 207 01-715-1319 2013-02-17 2013-02-17
-## 208 01-715-1321 2014-02-11 2014-02-11
-## 209 01-715-1397 2013-04-03 2013-04-03
-## 210 01-715-1405 2013-07-06 2013-07-06
-## 211 01-716-1024 2012-07-09 2012-07-09
-## 212 01-716-1026 2014-04-02 2014-04-02
-## 213 01-716-1030 2013-12-28 2013-12-28
-## 214 01-716-1044 2013-04-27 2013-04-27
-## 215 01-716-1063 2013-05-09 2013-05-09
-## 216 01-716-1071 2013-06-08 2013-06-08
-## 217 01-716-1094 2012-12-19 2012-12-19
-## 218 01-716-1103 2014-03-20 2014-03-20
-## 219 01-716-1108 2013-02-12 2013-02-12
-## 220 01-716-1151 2013-02-01 2013-02-01
-## 221 01-716-1157 2013-10-02 2013-10-02
-## 222 01-716-1160 2013-04-05 2013-04-05
-## 223 01-716-1167 2012-10-08 2012-10-08
-## 224 01-716-1177 2014-09-02 2014-09-02
-## 225 01-716-1189 2012-10-09 2012-10-09
-## 226 01-716-1229 2013-02-20 2013-02-20
-## 227 01-716-1298 2013-04-08 2013-04-08
-## 228 01-716-1308 2013-08-28 2013-08-28
-## 229 01-716-1311 2014-05-14 2014-05-14
-## 230 01-716-1364 2013-07-04 2013-07-04
-## 231 01-716-1373 2012-12-14 2012-12-14
-## 232 01-716-1418 2013-05-05 2013-05-05
-## 233 01-716-1441 2014-01-22 2014-01-22
-## 234 01-716-1447 2013-12-16 2013-12-16
-## 235 01-717-1004 2014-01-14 2014-01-14
-## 236 01-717-1109 2014-01-27 2014-01-27
-## 237 01-717-1174 2013-01-22 2013-01-22
-## 238 01-717-1201 2013-12-19 2013-12-19
-## 239 01-717-1344 2014-01-11 2014-01-11
-## 240 01-717-1357 2013-05-01 2013-05-01
-## 241 01-717-1446 2013-09-01 2013-09-01
-## 242 01-718-1066 2013-07-07 2013-07-07
-## 243 01-718-1079 2012-09-19 2012-09-19
-## 244 01-718-1101 2013-02-17 2013-02-17
-## 245 01-718-1139 2013-05-19 2013-05-19
-## 246 01-718-1150 2013-01-19 2013-01-19
-## 247 01-718-1170 2013-09-16 2013-09-16
-## 248 01-718-1172 2013-09-21 2013-09-21
-## 249 01-718-1250 2013-09-21 2013-09-21
-## 250 01-718-1254 2013-07-10 2013-07-10
-## 251 01-718-1328 2013-02-01 2013-02-01
-## 252 01-718-1355 2013-02-28 2013-02-28
-## 253 01-718-1371 2013-04-26 2013-04-26
-## 254 01-718-1427 2012-12-17 2012-12-17</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="Variable.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nature of usubjid is character and svstdtc is &lt;s3.labelled&gt; </span></span>
-<span id="cb18-2"><a href="Variable.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="Variable.html#cb18-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
-<span id="cb18-4"><a href="Variable.html#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="Variable.html#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="Variable.html#cb18-6" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> adsl_deri01 <span class="sc">%&gt;%</span>  </span>
-<span id="cb18-7"><a href="Variable.html#cb18-7" aria-hidden="true" tabindex="-1"></a>               </span>
-<span id="cb18-8"><a href="Variable.html#cb18-8" aria-hidden="true" tabindex="-1"></a>               <span class="fu">select</span> (usubjid , trtsdt, svstdtc , actarmcd , sitegr1, siteid , trt01p, arm , trt01a , trt01pn ,trt01pn,ittfl,agegr1,age,agegr1n,race               ,racen,sex,ethnic , rfstdtc ,</span>
-<span id="cb18-9"><a href="Variable.html#cb18-9" aria-hidden="true" tabindex="-1"></a>               rfendtc , sex , ethnic , dthfl )</span>
-<span id="cb18-10"><a href="Variable.html#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#adsl_deri02</span></span></code></pre></div>
+<div id="date-of-first-exposure-to-treatment" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> <strong>Date of First Exposure to Treatment</strong></h2>
 </div>
-<div id="date-of-last-exposure-to-treatment-trtedt" class="section level3" number="7.3.2">
-<h3><span class="header-section-number">7.3.2</span> Date of Last Exposure to Treatment (TRTEDT)</h3>
+<p><strong>Date of First Exposure to Treatment (TRTSDT) derivation</strong></p>
+<p><strong>SV.SVSTDTC when SV.VISITNUM=3, converted to SAS date</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="Variable.html#cb22-1" aria-hidden="true" tabindex="-1"></a>sv_visit <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>sv   </span>
+<span id="cb22-2"><a href="Variable.html#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="Variable.html#cb22-3" aria-hidden="true" tabindex="-1"></a>sv_visit3 <span class="ot">&lt;-</span> sv_visit <span class="sc">%&gt;%</span> </span>
+<span id="cb22-4"><a href="Variable.html#cb22-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(visitnum <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-5"><a href="Variable.html#cb22-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
+<span id="cb22-6"><a href="Variable.html#cb22-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">trtsdt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(svstdtc))  </span>
+<span id="cb22-7"><a href="Variable.html#cb22-7" aria-hidden="true" tabindex="-1"></a>                   ) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="Variable.html#cb22-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> (usubjid , svstdtc , trtsdt )</span>
+<span id="cb22-9"><a href="Variable.html#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="Variable.html#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># For derive DURDIS (duration of Disease (months))</span></span>
+<span id="cb22-11"><a href="Variable.html#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="Variable.html#cb22-12" aria-hidden="true" tabindex="-1"></a>sv_visit1 <span class="ot">&lt;-</span> sv_visit <span class="sc">%&gt;%</span> </span>
+<span id="cb22-13"><a href="Variable.html#cb22-13" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span>(visitnum <span class="sc">==</span> <span class="dv">1</span> ) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-14"><a href="Variable.html#cb22-14" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
+<span id="cb22-15"><a href="Variable.html#cb22-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">visit1dt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(svstdtc))  </span>
+<span id="cb22-16"><a href="Variable.html#cb22-16" aria-hidden="true" tabindex="-1"></a>                   ) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-17"><a href="Variable.html#cb22-17" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> (usubjid ,  visit1dt )</span>
+<span id="cb22-18"><a href="Variable.html#cb22-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-19"><a href="Variable.html#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="Variable.html#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co"># nature of usubjid is character and svstdtc is &lt;s3.labelled&gt; </span></span>
+<span id="cb22-21"><a href="Variable.html#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="Variable.html#cb22-22" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
+<span id="cb22-23"><a href="Variable.html#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="Variable.html#cb22-24" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, sv_visit1 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span></code></pre></div>
+<div id="date-of-last-exposure-to-treatment-trtedt" class="section level2" number="7.5">
+<h2><span class="header-section-number">7.5</span> Date of Last Exposure to Treatment (TRTEDT)</h2>
 <p>The date of final dose (from the CRF) is EX.EXENDTC on the subject’s last EX record. If the date of final dose is missing for the subject and the subject discontinued after visit 3, use the date of discontinuation as the date of last dose.</p>
 <p>Steps to arrive at logic</p>
 <ol style="list-style-type: decimal">
 <li>Check for the subjects whose final dose date is missing</li>
-<li><code>Check if these subjects discontinued after visit 3 (Check  if they have any records after the Visit 3 , this needs checked )</code></li>
+<li><strong><code>Check if these subjects discontinued after visit 3 (Check  if they have any records after the Visit 3 , this needs checked )</code></strong></li>
 <li>If they have not discontinued then use the SV date as date of last dose</li>
 <li>To find last.date use <strong>slice_tail , slice_max within by group</strong> or use <strong>Dplyr::first or last functions</strong> , compare it original dataset</li>
 </ol>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Variable.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
-<span id="cb19-2"><a href="Variable.html#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="Variable.html#cb19-3" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
-<span id="cb19-4"><a href="Variable.html#cb19-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ,  </span>
-<span id="cb19-5"><a href="Variable.html#cb19-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc_orig =</span> exendtc, </span>
-<span id="cb19-6"><a href="Variable.html#cb19-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(exendtc)) ) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-7"><a href="Variable.html#cb19-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid ,visit , visitnum,  exendtc , exendtc_orig )</span>
-<span id="cb19-8"><a href="Variable.html#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="Variable.html#cb19-9" aria-hidden="true" tabindex="-1"></a>ds_disp <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
-<span id="cb19-10"><a href="Variable.html#cb19-10" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span> (   dscat <span class="sc">==</span> <span class="st">&quot;DISPOSITION EVENT&quot;</span> ) <span class="sc">%&gt;%</span></span>
-<span id="cb19-11"><a href="Variable.html#cb19-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid))   <span class="sc">%&gt;%</span> </span>
-<span id="cb19-12"><a href="Variable.html#cb19-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span> ( usubjid , dsstdtc)</span>
-<span id="cb19-13"><a href="Variable.html#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-14"><a href="Variable.html#cb19-14" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , ds_disp  , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
-<span id="cb19-15"><a href="Variable.html#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-16"><a href="Variable.html#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-17"><a href="Variable.html#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-18"><a href="Variable.html#cb19-18" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb19-19"><a href="Variable.html#cb19-19" aria-hidden="true" tabindex="-1"></a>adsl_chk <span class="ot">&lt;-</span> <span class="fu">select</span> (adsl , usubjid , trtedt )</span></code></pre></div>
-<p></p>
-<p>using the as.Date( as.character () ) is creating numerical dates and date formats are not</p>
-<p>Below Logic is how you conditionally create a new column trtedt based DSSTDTC and exendtc_orig</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Variable.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects whose does dates are missing </span></span>
-<span id="cb20-2"><a href="Variable.html#cb20-2" aria-hidden="true" tabindex="-1"></a>exendtc_1 <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
-<span id="cb20-3"><a href="Variable.html#cb20-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span> ( <span class="at">flag =</span> <span class="fu">ifelse</span> (exendtc   <span class="sc">%in%</span> <span class="cn">NA</span>  ,  <span class="st">&quot;N&quot;</span> ,<span class="st">&quot;Y&quot;</span>   ) ,</span>
-<span id="cb20-4"><a href="Variable.html#cb20-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt =</span>   <span class="fu">ifelse</span>(flag <span class="sc">==</span> <span class="st">&quot;N&quot;</span>, <span class="fu">as.character</span>(dsstdtc), </span>
-<span id="cb20-5"><a href="Variable.html#cb20-5" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">ifelse</span> (flag <span class="sc">==</span><span class="st">&quot;Y&quot;</span> ,<span class="fu">as.character</span>(exendtc_orig)  , <span class="cn">NA</span>  ))  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-6"><a href="Variable.html#cb20-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span> (visitnum <span class="sc">&gt;=</span> <span class="dv">3</span> )</span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Variable.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
-<span id="cb21-2"><a href="Variable.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="Variable.html#cb21-3" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
-<span id="cb21-4"><a href="Variable.html#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ,  </span>
-<span id="cb21-5"><a href="Variable.html#cb21-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc_orig =</span> exendtc, </span>
-<span id="cb21-6"><a href="Variable.html#cb21-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(exendtc)) ) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-7"><a href="Variable.html#cb21-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid ,visit , visitnum,  exendtc , exendtc_orig )</span>
-<span id="cb21-8"><a href="Variable.html#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="Variable.html#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="Variable.html#cb21-10" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , sv_visit3 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
-<span id="cb21-11"><a href="Variable.html#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="Variable.html#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects whose does dates are missing </span></span>
-<span id="cb21-13"><a href="Variable.html#cb21-13" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
-<span id="cb21-14"><a href="Variable.html#cb21-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-15"><a href="Variable.html#cb21-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span> ( <span class="at">flag =</span> <span class="fu">ifelse</span> (exendtc   <span class="sc">%in%</span> <span class="cn">NA</span>  ,  <span class="st">&quot;N&quot;</span> ,<span class="st">&quot;Y&quot;</span>   ), </span>
-<span id="cb21-16"><a href="Variable.html#cb21-16" aria-hidden="true" tabindex="-1"></a>                    </span>
-<span id="cb21-17"><a href="Variable.html#cb21-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt_c  =</span> <span class="fu">ifelse</span>(exendtc   <span class="sc">%in%</span>  <span class="cn">NA</span>  , svstdtc , exendtc_orig ) , </span>
-<span id="cb21-18"><a href="Variable.html#cb21-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt   =</span>  <span class="fu">as.Date</span>(<span class="fu">as.character</span>(trtedt_c))   ,</span>
-<span id="cb21-19"><a href="Variable.html#cb21-19" aria-hidden="true" tabindex="-1"></a>           </span>
-<span id="cb21-20"><a href="Variable.html#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="at">trtedt_n     =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(exendtc   <span class="sc">%in%</span>  <span class="cn">NA</span>  ,trtsdt , exendtc ) ) </span>
-<span id="cb21-21"><a href="Variable.html#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">#, trtedt_ndt   =  as.Date.numeric (trtedt_n)   </span></span>
-<span id="cb21-22"><a href="Variable.html#cb21-22" aria-hidden="true" tabindex="-1"></a>           </span>
-<span id="cb21-23"><a href="Variable.html#cb21-23" aria-hidden="true" tabindex="-1"></a>           )   <span class="sc">%&gt;%</span> </span>
-<span id="cb21-24"><a href="Variable.html#cb21-24" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span> (visitnum <span class="sc">&gt;=</span> <span class="dv">3</span> )</span>
-<span id="cb21-25"><a href="Variable.html#cb21-25" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb21-26"><a href="Variable.html#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co"># One of the ways to get the First and Last group by values </span></span>
-<span id="cb21-27"><a href="Variable.html#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure you use the right variables used group_by </span></span>
-<span id="cb21-28"><a href="Variable.html#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-29"><a href="Variable.html#cb21-29" aria-hidden="true" tabindex="-1"></a>exend <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
-<span id="cb21-30"><a href="Variable.html#cb21-30" aria-hidden="true" tabindex="-1"></a>         <span class="fu">group_by</span> (usubjid) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-31"><a href="Variable.html#cb21-31" aria-hidden="true" tabindex="-1"></a>         dplyr<span class="sc">::</span> <span class="fu">mutate</span>(</span>
-<span id="cb21-32"><a href="Variable.html#cb21-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">first =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(exendtc) , </span>
-<span id="cb21-33"><a href="Variable.html#cb21-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">last  =</span> dplyr<span class="sc">::</span><span class="fu">last</span> (exendtc)</span>
-<span id="cb21-34"><a href="Variable.html#cb21-34" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span> </span>
-<span id="cb21-35"><a href="Variable.html#cb21-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarise</span>(<span class="at">trtedt =</span> <span class="fu">last</span>(exendtc))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Variable.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exendtc &lt;- select(exendtc,usubjid ,visitnum , trtedt, trtedt_c  )</span></span></code></pre></div>
-
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Variable.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
+<span id="cb23-2"><a href="Variable.html#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="Variable.html#cb23-3" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> ex <span class="sc">%&gt;%</span> </span>
+<span id="cb23-4"><a href="Variable.html#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ,  </span>
+<span id="cb23-5"><a href="Variable.html#cb23-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc_orig =</span> exendtc, </span>
+<span id="cb23-6"><a href="Variable.html#cb23-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">exendtc =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(exendtc)) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-7"><a href="Variable.html#cb23-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span>( usubjid ,visit , visitnum,  exendtc , exendtc_orig )</span>
+<span id="cb23-8"><a href="Variable.html#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="Variable.html#cb23-9" aria-hidden="true" tabindex="-1"></a>ds_disp <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
+<span id="cb23-10"><a href="Variable.html#cb23-10" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span> (   dscat <span class="sc">==</span> <span class="st">&quot;DISPOSITION EVENT&quot;</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-11"><a href="Variable.html#cb23-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid))   <span class="sc">%&gt;%</span> </span>
+<span id="cb23-12"><a href="Variable.html#cb23-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">select</span> ( usubjid , dsstdtc)</span>
+<span id="cb23-13"><a href="Variable.html#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="Variable.html#cb23-14" aria-hidden="true" tabindex="-1"></a>exendtc <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(exendtc , ds_disp  , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span></code></pre></div>
+<p>NOTE : Handling the Missing is different from SAS approach “disconfl_com ==”NA" won’t work and = would give an error too "</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="Variable.html#cb24-1" aria-hidden="true" tabindex="-1"></a>ds_orig  <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="Variable.html#cb24-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid )) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="Variable.html#cb24-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span> (  usubjid , dsdecod )</span>
+<span id="cb24-4"><a href="Variable.html#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="Variable.html#cb24-5" aria-hidden="true" tabindex="-1"></a>ds_con01 <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a href="Variable.html#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span> (dsdecod <span class="sc">==</span> <span class="st">&quot;COMPLETED&quot;</span> <span class="sc">&amp;</span> dsdecod <span class="sc">!=</span> <span class="st">&quot;SCREEN FAILURE&quot;</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb24-7"><a href="Variable.html#cb24-7" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
+<span id="cb24-8"><a href="Variable.html#cb24-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">disconfl_com =</span> <span class="st">&quot;Y&quot;</span>)   <span class="sc">%&gt;%</span> </span>
+<span id="cb24-9"><a href="Variable.html#cb24-9" aria-hidden="true" tabindex="-1"></a>             <span class="fu">distinct</span> (usubjid, disconfl_com  ) </span>
+<span id="cb24-10"><a href="Variable.html#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="Variable.html#cb24-11" aria-hidden="true" tabindex="-1"></a>ds_con02 <span class="ot">&lt;-</span> ds <span class="sc">%&gt;%</span> </span>
+<span id="cb24-12"><a href="Variable.html#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span> (dsdecod <span class="sc">!=</span> <span class="st">&quot;COMPLETED&quot;</span> <span class="sc">&amp;</span> dsdecod <span class="sc">!=</span> <span class="st">&quot;SCREEN FAILURE&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-13"><a href="Variable.html#cb24-13" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) , </span>
+<span id="cb24-14"><a href="Variable.html#cb24-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">disconfl_not_com =</span> <span class="st">&quot;Y&quot;</span> , </span>
+<span id="cb24-15"><a href="Variable.html#cb24-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">dsdecod_02 =</span> dsdecod )   <span class="sc">%&gt;%</span> </span>
+<span id="cb24-16"><a href="Variable.html#cb24-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">distinct</span> (usubjid , <span class="at">.keep_all  =</span> <span class="cn">TRUE</span>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb24-17"><a href="Variable.html#cb24-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span> (usubjid, disconfl_not_com , dsdecod_02 )</span>
+<span id="cb24-18"><a href="Variable.html#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="Variable.html#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="Variable.html#cb24-20" aria-hidden="true" tabindex="-1"></a>ds_con03   <span class="ot">&lt;-</span> <span class="fu">right_join</span> ( ds_con01 , ds_con02  , <span class="st">&quot;usubjid&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-21"><a href="Variable.html#cb24-21" aria-hidden="true" tabindex="-1"></a>              <span class="fu">arrange</span>(usubjid)</span>
+<span id="cb24-22"><a href="Variable.html#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="Variable.html#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="Variable.html#cb24-24" aria-hidden="true" tabindex="-1"></a>ds_con04   <span class="ot">&lt;-</span> ds_con03 <span class="sc">%&gt;%</span>  </span>
+<span id="cb24-25"><a href="Variable.html#cb24-25" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(</span>
+<span id="cb24-26"><a href="Variable.html#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="at">disconfl =</span> <span class="fu">case_when</span>( (disconfl_com <span class="sc">==</span><span class="st">&quot;Y&quot;</span> <span class="sc">&amp;</span> disconfl_not_com <span class="sc">==</span> <span class="st">&quot;Y&quot;</span>) <span class="sc">~</span> <span class="st">&quot; &quot;</span> ,</span>
+<span id="cb24-27"><a href="Variable.html#cb24-27" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb24-28"><a href="Variable.html#cb24-28" aria-hidden="true" tabindex="-1"></a>                      (disconfl_com <span class="sc">%in%</span> <span class="cn">NA</span> <span class="sc">&amp;</span> disconfl_not_com <span class="sc">==</span> <span class="st">&quot;Y&quot;</span>) <span class="sc">~</span> <span class="st">&quot;Y&quot;</span>) , </span>
+<span id="cb24-29"><a href="Variable.html#cb24-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-30"><a href="Variable.html#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="at">dcreascd =</span> <span class="fu">ifelse</span>( disconfl <span class="sc">==</span> <span class="st">&quot; &quot;</span> ,  <span class="st">&quot;Completed&quot;</span> , </span>
+<span id="cb24-31"><a href="Variable.html#cb24-31" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>     ( disconfl <span class="sc">==</span> <span class="st">&quot;Y&quot;</span> , <span class="fu">as.character</span>(dsdecod_02) , <span class="cn">NA</span>) </span>
+<span id="cb24-32"><a href="Variable.html#cb24-32" aria-hidden="true" tabindex="-1"></a>                 ) , </span>
+<span id="cb24-33"><a href="Variable.html#cb24-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-34"><a href="Variable.html#cb24-34" aria-hidden="true" tabindex="-1"></a><span class="at">dsraefl =</span> <span class="fu">ifelse</span> (disconfl <span class="sc">==</span> <span class="st">&quot;Y&quot;</span> <span class="sc">&amp;</span> dsdecod_02 <span class="sc">==</span><span class="st">&quot;ADVERSE EVENT&quot;</span> , <span class="st">&quot;Y&quot;</span> , <span class="st">&quot; &quot;</span> ) </span>
+<span id="cb24-35"><a href="Variable.html#cb24-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-36"><a href="Variable.html#cb24-36" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-37"><a href="Variable.html#cb24-37" aria-hidden="true" tabindex="-1"></a>       <span class="fu">distinct</span>(usubjid , <span class="at">.keep_all =</span>  <span class="cn">TRUE</span>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-38"><a href="Variable.html#cb24-38" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span> (usubjid , disconfl , dcreascd , dsraefl )</span>
+<span id="cb24-39"><a href="Variable.html#cb24-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-40"><a href="Variable.html#cb24-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-41"><a href="Variable.html#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="co">#merge back </span></span>
+<span id="cb24-42"><a href="Variable.html#cb24-42" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, ds_con04 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>) </span>
+<span id="cb24-43"><a href="Variable.html#cb24-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-44"><a href="Variable.html#cb24-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-45"><a href="Variable.html#cb24-45" aria-hidden="true" tabindex="-1"></a>adsl_chk <span class="ot">&lt;-</span> <span class="fu">select</span> (adsl , usubjid, disconfl , dcreascd , dsraefl )</span></code></pre></div>
+<p><strong><code>NOTE: Using the as.Date(as.Character ()) is creating numerical dates and date formats are not being , need to learn more about the as.Date .using the</code></strong></p>
+<p><strong><code>as.Date( as.character () ) is creating numerical dates and date formats are not Below Logic is how you conditionally create a new column trtedt based DSSTDTC and exendtc_orig</code></strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="Variable.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects whose does dates are missing </span></span>
+<span id="cb25-2"><a href="Variable.html#cb25-2" aria-hidden="true" tabindex="-1"></a>exendtc_1 <span class="ot">&lt;-</span> exendtc <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="Variable.html#cb25-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">mutate</span> ( <span class="at">flag =</span> <span class="fu">ifelse</span> (exendtc   <span class="sc">%in%</span> <span class="cn">NA</span>  ,  <span class="st">&quot;N&quot;</span> ,<span class="st">&quot;Y&quot;</span>   ) ,</span>
+<span id="cb25-4"><a href="Variable.html#cb25-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">trtedt =</span>   <span class="fu">ifelse</span>(flag <span class="sc">==</span> <span class="st">&quot;N&quot;</span>, <span class="fu">as.character</span>(dsstdtc), </span>
+<span id="cb25-5"><a href="Variable.html#cb25-5" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">ifelse</span> (flag <span class="sc">==</span><span class="st">&quot;Y&quot;</span> ,<span class="fu">as.character</span>(exendtc_orig)  , <span class="cn">NA</span>  ))  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-6"><a href="Variable.html#cb25-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">filter</span> (visitnum <span class="sc">&gt;=</span> <span class="dv">3</span> )</span></code></pre></div>
 </div>
+<div id="getting-the-first-and-last-observations" class="section level2" number="7.6">
+<h2><span class="header-section-number">7.6</span> <strong>Getting the First and Last observations</strong></h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Variable.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One of the ways to get the First and Last group by values </span></span>
+<span id="cb26-2"><a href="Variable.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure you use the right variables used group_by </span></span>
+<span id="cb26-3"><a href="Variable.html#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="Variable.html#cb26-4" aria-hidden="true" tabindex="-1"></a>exendtc_2  <span class="ot">&lt;-</span> exendtc_1 <span class="sc">%&gt;%</span> </span>
+<span id="cb26-5"><a href="Variable.html#cb26-5" aria-hidden="true" tabindex="-1"></a>         <span class="fu">group_by</span> (usubjid) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-6"><a href="Variable.html#cb26-6" aria-hidden="true" tabindex="-1"></a>         dplyr<span class="sc">::</span> <span class="fu">mutate</span>(</span>
+<span id="cb26-7"><a href="Variable.html#cb26-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">first =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(trtedt) , </span>
+<span id="cb26-8"><a href="Variable.html#cb26-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">last  =</span> dplyr<span class="sc">::</span><span class="fu">last</span> (trtedt)</span>
+<span id="cb26-9"><a href="Variable.html#cb26-9" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-10"><a href="Variable.html#cb26-10" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarise</span>(<span class="at">trtedt =</span> <span class="fu">last</span>(trtedt) )</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="Variable.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#exendtc &lt;- select(exendtc,usubjid ,visitnum , trtedt, trtedt_c  )</span></span></code></pre></div>
+<p>Merging back with ADSL data set</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="Variable.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Final dates check </span></span>
+<span id="cb29-2"><a href="Variable.html#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="Variable.html#cb29-3" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(adsl_deri01, exendtc_2 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>) </span></code></pre></div>
+<div id="note" class="notechk" style="red">
+<p>NOTE : Variables that are not calculated</p>
+<ol style="list-style-type: decimal">
+<li><p>AVGDD (Avg Daily Dose (as planned )) and<br />
+</p></li>
+<li><p>CUMDOSE (Cumulative Dose (as planned) )<br />
+</p></li>
+<li><p>COMP8FL , COMP16FL , COMP24FL ,</p></li>
+<li><p>VISNUMEN ( End of Trt Visit (Vis 12 or Early )</p></li>
+</ol>
+</div>
+<p>Population Flag</p>
+<p><strong><code>1. SAFFL(Safety Population Flag ) 2. EFFFL (Efficacy Population Flag ) 3. DSRAEFL (Discontinued due to AE ? )</code></strong></p>
+<p>Y if SAFFL=’Y AND subject has at least one record in QS for ADAS-Cog with VISITNUM&gt;3 AND at least one record in QS for CIBIC+ with VISITNUM&gt;3, N otherwise</p>
+<div class="notechk" style="red">
+<p><strong>NOTE: try using <u>‘and’</u> ( gives an error ) , while <u>‘&amp;’ Not</u><br />
+For example when (25&lt;= bmibl &lt; 30 ) or (25&lt;= bmibl and bmibl &lt;30 ) we get an error use (25&lt;= bmibl &amp; bmibl &lt;30 )</strong></p>
+</div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="Variable.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Saffl (safety flag)</span></span>
+<span id="cb30-2"><a href="Variable.html#cb30-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb30-3"><a href="Variable.html#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="Variable.html#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="Variable.html#cb30-5" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> adsl_deri01 <span class="sc">%&gt;%</span> </span>
+<span id="cb30-6"><a href="Variable.html#cb30-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>( <span class="at">rfendt =</span> <span class="fu">as.Date</span>(<span class="fu">as.character</span>(rfendtc)) ,</span>
+<span id="cb30-7"><a href="Variable.html#cb30-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">saffl =</span>   <span class="fu">case_when</span> ((ittfl <span class="sc">%in%</span> <span class="st">&quot;Y&quot;</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(trtsdt))<span class="sc">~</span> <span class="st">&quot;Y&quot;</span> ) , </span>
+<span id="cb30-8"><a href="Variable.html#cb30-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">trtdur =</span> <span class="fu">as.numeric</span> ( <span class="fu">as.Date</span>(trtedt)  <span class="sc">-</span> <span class="fu">as.Date</span> (trtsdt) ) <span class="sc">+</span> <span class="dv">1</span> ) </span>
+<span id="cb30-9"><a href="Variable.html#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="Variable.html#cb30-10" aria-hidden="true" tabindex="-1"></a>effi_01 <span class="ot">&lt;-</span>qs <span class="sc">%&gt;%</span> </span>
+<span id="cb30-11"><a href="Variable.html#cb30-11" aria-hidden="true" tabindex="-1"></a>          <span class="fu">filter</span>( qstestcd <span class="sc">==</span><span class="st">&quot;ACTOT&quot;</span> <span class="sc">&amp;</span> visitnum <span class="sc">&gt;</span> <span class="dv">3</span>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-12"><a href="Variable.html#cb30-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>( <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-13"><a href="Variable.html#cb30-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">distinct</span>(usubjid , <span class="at">.keep_all =</span>  <span class="cn">TRUE</span> )  <span class="sc">%&gt;%</span> </span>
+<span id="cb30-14"><a href="Variable.html#cb30-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">select</span> ( usubjid , qstestcd )</span>
+<span id="cb30-15"><a href="Variable.html#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="Variable.html#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="Variable.html#cb30-17" aria-hidden="true" tabindex="-1"></a>adsl_deri01 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri01, effi_01 , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span>
+<span id="cb30-18"><a href="Variable.html#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="Variable.html#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Efficacy flag (safety flag)</span></span>
+<span id="cb30-20"><a href="Variable.html#cb30-20" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb30-21"><a href="Variable.html#cb30-21" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> adsl_deri01 <span class="sc">%&gt;%</span>  </span>
+<span id="cb30-22"><a href="Variable.html#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">efffl =</span>   <span class="fu">case_when</span> ((saffl <span class="sc">%in%</span> <span class="st">&quot;Y&quot;</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(qstestcd) )<span class="sc">~</span> <span class="st">&quot;Y&quot;</span> ) )  </span></code></pre></div>
+</div>
+<div id="baseline-variables" class="section level2" number="7.7">
+<h2><span class="header-section-number">7.7</span> Baseline Variables</h2>
+<p><strong>DISONSDT Date of Onset of disease</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="Variable.html#cb31-1" aria-hidden="true" tabindex="-1"></a>disonsdt <span class="ot">&lt;-</span> mh <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="Variable.html#cb31-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(mhcat <span class="sc">==</span><span class="st">&quot;PRIMARY DIAGNOSIS&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="Variable.html#cb31-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span> (<span class="at">disonsdt =</span>  <span class="fu">as.Date</span>(<span class="fu">as.character</span>(mhstdtc) )  , </span>
+<span id="cb31-4"><a href="Variable.html#cb31-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-5"><a href="Variable.html#cb31-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">select</span> (usubjid , disonsdt)</span></code></pre></div>
+<p><strong>Baseline Height</strong></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="Variable.html#cb32-1" aria-hidden="true" tabindex="-1"></a>heightbl  <span class="ot">&lt;-</span> vs <span class="sc">%&gt;%</span>  </span>
+<span id="cb32-2"><a href="Variable.html#cb32-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span> ( vstestcd <span class="sc">==</span> <span class="st">&quot;HEIGHT&quot;</span> <span class="sc">&amp;</span> visitnum <span class="sc">==</span> <span class="dv">1</span> ) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="Variable.html#cb32-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">heightbl =</span> <span class="fu">round</span>(vsstresn, <span class="dv">1</span>)  , </span>
+<span id="cb32-4"><a href="Variable.html#cb32-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="Variable.html#cb32-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> ( usubjid , heightbl)</span></code></pre></div>
+<p><strong>Baseline Weight</strong></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="Variable.html#cb33-1" aria-hidden="true" tabindex="-1"></a>weightbl  <span class="ot">&lt;-</span> vs <span class="sc">%&gt;%</span>  </span>
+<span id="cb33-2"><a href="Variable.html#cb33-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">filter</span> ( vstestcd <span class="sc">==</span> <span class="st">&quot;WEIGHT&quot;</span> <span class="sc">&amp;</span> visitnum <span class="sc">==</span> <span class="dv">3</span> ) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="Variable.html#cb33-3" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">weightbl =</span> <span class="fu">round</span>(vsstresn, <span class="dv">1</span>)  , </span>
+<span id="cb33-4"><a href="Variable.html#cb33-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="Variable.html#cb33-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> ( usubjid , weightbl)</span></code></pre></div>
+<p><strong>Years of Education</strong></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="Variable.html#cb34-1" aria-hidden="true" tabindex="-1"></a>educlvl <span class="ot">&lt;-</span>  sc <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="Variable.html#cb34-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">educlvl =</span> scstresn   ,</span>
+<span id="cb34-3"><a href="Variable.html#cb34-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">usubjid =</span> <span class="fu">as.character</span>(usubjid) ) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="Variable.html#cb34-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">select</span> ( usubjid , educlvl )</span></code></pre></div>
+<p><strong>Getting derived variables into main dataset</strong></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="Variable.html#cb35-1" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri02 , disonsdt , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>) </span>
+<span id="cb35-2"><a href="Variable.html#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="Variable.html#cb35-3" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri02 , heightbl , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)            </span>
+<span id="cb35-4"><a href="Variable.html#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="Variable.html#cb35-5" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri02 , weightbl , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)        </span>
+<span id="cb35-6"><a href="Variable.html#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="Variable.html#cb35-7" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri02 , educlvl , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>) </span>
+<span id="cb35-8"><a href="Variable.html#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="Variable.html#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="Variable.html#cb35-10" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span>  adsl_deri02 <span class="sc">%&gt;%</span> </span>
+<span id="cb35-11"><a href="Variable.html#cb35-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span> (<span class="at">bmibl =</span> <span class="fu">round</span>((weightbl<span class="sc">/</span>((heightbl<span class="sc">*</span>heightbl ))<span class="sc">*</span><span class="dv">100</span><span class="sc">*</span><span class="dv">100</span>  ) , <span class="dv">1</span> ) , </span>
+<span id="cb35-12"><a href="Variable.html#cb35-12" aria-hidden="true" tabindex="-1"></a>         </span>
+<span id="cb35-13"><a href="Variable.html#cb35-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">bmiblgr1  =</span> <span class="fu">case_when</span>(  (bmibl<span class="sc">&lt;</span><span class="dv">25</span>) <span class="sc">~</span> <span class="st">&quot;Normal&quot;</span> , </span>
+<span id="cb35-14"><a href="Variable.html#cb35-14" aria-hidden="true" tabindex="-1"></a>                            </span>
+<span id="cb35-15"><a href="Variable.html#cb35-15" aria-hidden="true" tabindex="-1"></a>                                (<span class="dv">25</span><span class="sc">&lt;=</span> bmibl <span class="sc">&amp;</span> bmibl <span class="sc">&lt;</span><span class="dv">30</span> ) <span class="sc">~</span> <span class="st">&quot;Overweight&quot;</span> , </span>
+<span id="cb35-16"><a href="Variable.html#cb35-16" aria-hidden="true" tabindex="-1"></a>                                ( bmibl <span class="sc">&gt;=</span> <span class="dv">30</span> ) <span class="sc">~</span> <span class="st">&quot;Obese&quot;</span></span>
+<span id="cb35-17"><a href="Variable.html#cb35-17" aria-hidden="true" tabindex="-1"></a>                              ) </span>
+<span id="cb35-18"><a href="Variable.html#cb35-18" aria-hidden="true" tabindex="-1"></a>                         </span>
+<span id="cb35-19"><a href="Variable.html#cb35-19" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+<p>Number of months difference between the two dates, in SAS</p>
+<p>when the difference is 43 months and 26 days INTCK function calculates 26 days is what fraction is 26 days in a month while R gives just 43 months</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="Variable.html#cb36-1" aria-hidden="true" tabindex="-1"></a>adsl_durdis <span class="ot">&lt;-</span> adsl_deri02  <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="Variable.html#cb36-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mutate</span> (<span class="at">visit1dt2 =</span>   <span class="fu">as.Date</span>(visit1dt)  ,</span>
+<span id="cb36-3"><a href="Variable.html#cb36-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">disonsdt2 =</span>   <span class="fu">as.Date</span>(disonsdt)  , </span>
+<span id="cb36-4"><a href="Variable.html#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">durdis    =</span> <span class="fu">interval</span>( disonsdt2  ,  visit1dt2) <span class="sc">%/%</span> <span class="fu">months</span>(<span class="dv">1</span>) , </span>
+<span id="cb36-5"><a href="Variable.html#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">durdsgr1 =</span> <span class="fu">case_when</span> ( durdis <span class="sc">&lt;</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">&quot;&lt;12&quot;</span> , </span>
+<span id="cb36-6"><a href="Variable.html#cb36-6" aria-hidden="true" tabindex="-1"></a>                           durdis <span class="sc">&gt;=</span> <span class="dv">12</span> <span class="sc">~</span> <span class="st">&quot;&gt;=12&quot;</span>  )</span>
+<span id="cb36-7"><a href="Variable.html#cb36-7" aria-hidden="true" tabindex="-1"></a>                     ) <span class="sc">%&gt;%</span></span>
+<span id="cb36-8"><a href="Variable.html#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span> (  usubjid , visit1dt  , disonsdt  , durdis , durdsgr1 )</span>
+<span id="cb36-9"><a href="Variable.html#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="Variable.html#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="Variable.html#cb36-11" aria-hidden="true" tabindex="-1"></a>adsl_deri02 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(adsl_deri02 , adsl_durdis , <span class="at">by =</span> <span class="st">&quot;usubjid&quot;</span>)</span></code></pre></div>
+</div>
+<div id="comparing-the-values-generated-against-the-production-data-set" class="section level2" number="7.8">
+<h2><span class="header-section-number">7.8</span> Comparing the values generated against the production data set</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="Variable.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages(&quot;arsenal&quot;)</span></span>
+<span id="cb37-2"><a href="Variable.html#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="Variable.html#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-4"><a href="Variable.html#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># adsl_deri02 &lt;- adsl_deri02 %&gt;% </span></span>
+<span id="cb37-5"><a href="Variable.html#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                 mutate( usubjid = as.character(usubjid) , </span></span>
+<span id="cb37-6"><a href="Variable.html#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                         trtedt = as.character(trtedt) , </span></span>
+<span id="cb37-7"><a href="Variable.html#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                         trtdur = as.numeric( trtdur) , </span></span>
+<span id="cb37-8"><a href="Variable.html#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                         saffl  = as.character(saffl ) , </span></span>
+<span id="cb37-9"><a href="Variable.html#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co">#                         efffl  = as.character(efffl ) , </span></span>
+<span id="cb37-10"><a href="Variable.html#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="co">#                         disonsdt = as.character(disonsdt)</span></span>
+<span id="cb37-11"><a href="Variable.html#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co">#                   )%&gt;% </span></span>
+<span id="cb37-12"><a href="Variable.html#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb37-13"><a href="Variable.html#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="co"># select (usubjid , saffl , efffl , trtdur, disconfl ,dcreascd , dsraefl , heightbl , weightbl , bmibl , bmiblgr1 , educlvl , disonsdt </span></span>
+<span id="cb37-14"><a href="Variable.html#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         ) %&gt;% </span></span>
+<span id="cb37-15"><a href="Variable.html#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># arrange( usubjid)</span></span>
+<span id="cb37-16"><a href="Variable.html#cb37-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="Variable.html#cb37-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb37-18"><a href="Variable.html#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-19"><a href="Variable.html#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-20"><a href="Variable.html#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-21"><a href="Variable.html#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-22"><a href="Variable.html#cb37-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-23"><a href="Variable.html#cb37-23" aria-hidden="true" tabindex="-1"></a><span class="co"># adsl_prog  &lt;-   clinicalfd::adsl %&gt;%</span></span>
+<span id="cb37-24"><a href="Variable.html#cb37-24" aria-hidden="true" tabindex="-1"></a><span class="co">#                 mutate( usubjid = as.character(usubjid) , </span></span>
+<span id="cb37-25"><a href="Variable.html#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co">#                         trtedt = as.character(trtedt) , </span></span>
+<span id="cb37-26"><a href="Variable.html#cb37-26" aria-hidden="true" tabindex="-1"></a><span class="co">#                         trtdur = as.numeric( trtdur) , </span></span>
+<span id="cb37-27"><a href="Variable.html#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="co">#                         saffl  = as.character(saffl ) , </span></span>
+<span id="cb37-28"><a href="Variable.html#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="co">#                         efffl  = as.character(efffl ) , </span></span>
+<span id="cb37-29"><a href="Variable.html#cb37-29" aria-hidden="true" tabindex="-1"></a><span class="co">#                         disonsdt = as.character(disonsdt)</span></span>
+<span id="cb37-30"><a href="Variable.html#cb37-30" aria-hidden="true" tabindex="-1"></a><span class="co">#                         </span></span>
+<span id="cb37-31"><a href="Variable.html#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="co">#                   )%&gt;%</span></span>
+<span id="cb37-32"><a href="Variable.html#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="co"># select (usubjid , saffl , efffl  , trtdur , disconfl ,                             dcreascd , dsraefl , heightbl ,weightbl , bmibl , bmiblgr1 , educlvl ,disonsdt  )%&gt;% </span></span>
+<span id="cb37-33"><a href="Variable.html#cb37-33" aria-hidden="true" tabindex="-1"></a><span class="co"># arrange( usubjid)</span></span>
+<span id="cb37-34"><a href="Variable.html#cb37-34" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-35"><a href="Variable.html#cb37-35" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-36"><a href="Variable.html#cb37-36" aria-hidden="true" tabindex="-1"></a><span class="co"># adsl_orig &lt;- clinicalfd::adsl</span></span>
+<span id="cb37-37"><a href="Variable.html#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-38"><a href="Variable.html#cb37-38" aria-hidden="true" tabindex="-1"></a><span class="co">#  arsenal::comparedf ( adsl_prog , adsl_deri02 )</span></span>
+<span id="cb37-39"><a href="Variable.html#cb37-39" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb37-40"><a href="Variable.html#cb37-40" aria-hidden="true" tabindex="-1"></a><span class="co">#  summary(comparedf ( adsl_prog , adsl_deri02 ))</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="Variable.html#cb38-1" aria-hidden="true" tabindex="-1"></a>adsl_orig <span class="ot">&lt;-</span> clinicalfd<span class="sc">::</span>adsl</span>
+<span id="cb38-2"><a href="Variable.html#cb38-2" aria-hidden="true" tabindex="-1"></a>adsl_durdis <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span> (adsl_orig , usubjid , visit1dt, disonsdt , durdis )</span>
+<span id="cb38-3"><a href="Variable.html#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="Variable.html#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="Variable.html#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">#adsl_durdis &lt;- select ( adsl_deri02 , usubjid , disonsdt , durdis )</span></span>
+<span id="cb38-6"><a href="Variable.html#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="co">#names(adsl_orig)</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="Variable.html#cb39-1" aria-hidden="true" tabindex="-1"></a>ds_orig <span class="ot">&lt;-</span> ds </span></code></pre></div>
+
 </div>
 </div>
             </section>

@@ -16,8 +16,11 @@ overview
 important-functions
 your-turn
 adsl-derivation-code-part-1
-date-of-first-exposure-to-treatment-trtsdt
+date-of-first-exposure-to-treatment
 date-of-last-exposure-to-treatment-trtedt
+getting-the-first-and-last-observations
+baseline-variables
+comparing-the-values-generated-against-the-production-data-set
 methods
 applications
 example-one
